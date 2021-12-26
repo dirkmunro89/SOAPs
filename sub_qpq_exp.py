@@ -6,7 +6,7 @@ from scipy.optimize import minimize
 #
 # Generalised exponential QP: dual subproblem
 #
-def sub_qpl_exp(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel, con_exp, x_1, dg_1):
+def sub_qpq_exp(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel, con_exp, x_1, dg_1):
 #
     dx_l=np.ones(n,dtype=np.float64)
     dx_u=np.ones(n,dtype=np.float64)
@@ -17,12 +17,11 @@ def sub_qpl_exp(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel, con_exp, x_1, dg_
     else:
         for i in range(n):
             for j in range(m+1):
-#               a[j][i]=1.+np.log(dg_1[j][i]/dg[j][i])/np.log(x_1[i]/(x_k[i]+1e-6))
+                a[j][i]=1.+np.log(dg_1[j][i]/dg[j][i])/np.log(x_1[i]/(x_k[i]+1e-6))
                 a[j][i]=max(min(-1e-6,1+np.log(dg_1[j][i]/dg[j][i])/np.log(x_1[i]/(x_k[i]+1e-6))),-6)
 #
     c0=np.zeros(n,dtype=np.float64)
     cj=np.zeros((m,n),dtype=np.float64)
-    ddL=np.zeros(n,dtype=np.float64)
     for i in range(n):
 #       if dg[0][i] < 0e0:
 #           c0[i]=dg[0][i]/x_k[i]*min((a[0][i]-1e0),1.0)
@@ -35,8 +34,6 @@ def sub_qpl_exp(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel, con_exp, x_1, dg_
 #           else:
 #               cj[j][i]=dg[j][i]/x_k[i]*max((a[j+1][i]-1e0),1.0)
             cj[j][i]=-abs(dg[j][i])/x_k[i]*(a[j+1][i]-1e0)
-            ddL[i]=ddL[i]+cj[j][i]*x_d[j]
-        ddL[i]=ddL[i]+c0[i]
 #
     for i in range(n):
         if mov < 0e0:
@@ -47,20 +44,26 @@ def sub_qpl_exp(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel, con_exp, x_1, dg_
             dx_u[i] = min(x_k[j]+mov*(x_u[j]-x_l[j]),x_u[j])
 #
     bds=[[0e0,1e8] for i in range(m)]; tup_bds=tuple(bds)
-    sol=minimize(con_qpl_dual,x_d,args=(n,m,x_k,g,dg,dx_l,dx_u, ddL), \
-        jac=dcon_qpl_dual,method='L-BFGS-B',bounds=tup_bds, options={'disp':False})
+    sol=minimize(con_qpq_dual,x_d,args=(n,m,x_k,g,dg,dx_l,dx_u, c0, cj), \
+        jac=dcon_qpq_dual,method='L-BFGS-B',bounds=tup_bds, options={'disp':False})
 #
     x_d[:]=sol.x
 #
-    x=x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL)
+    x=x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, c0, cj)
 #
     return [x,x_d,dx_l,dx_u]
 #
 # Generalised exponential QP: x in terms of dual variables 
 #
-def x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL):
+def x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, c0, cj):
 #
     x = np.zeros(n,dtype=np.float64)
+#
+    ddL=np.zeros(n,dtype=np.float64)
+    for i in range(n):
+        ddL[i]=ddL[i]+c0[i]
+        for j in range(m):
+            ddL[i]=ddL[i]+cj[j][i]*x_d[j]
 #
     tmp=np.zeros(n,dtype=np.float64)
     for i in range(n):
@@ -74,9 +77,15 @@ def x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL):
 #
 # Generalised exponential QP: Dual function value
 #
-def con_qpl_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL):
+def con_qpq_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, c0, cj):
 #
-    x=x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL)
+    x=x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, c0, cj)
+#
+    ddL=np.zeros(n,dtype=np.float64)
+    for i in range(n):
+        ddL[i]=ddL[i]+c0[i]
+        for j in range(m):
+            ddL[i]=ddL[i]+cj[j][i]*x_d[j]
 #
     W = g[0]
     for i in range(n):
@@ -88,16 +97,16 @@ def con_qpl_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL):
 #
 # Generalised expoential QP: Dual gradient
 #
-def dcon_qpl_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL):
+def dcon_qpq_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, c0, cj):
 #
-    x=x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL)
+    x=x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, c0, cj)
 #
     dW = np.zeros(m,dtype=np.float64)
 #
     for j in range(m):
         dW[j] = dW[j] + g[j+1]
         for i in range(n):
-            dW[j] = dW[j] + dg[j+1][i]*(x[i]-x_k[i])# + cj[j][i]/2e0*(x[i]-x_k[i])**2e0
+            dW[j] = dW[j] + dg[j+1][i]*(x[i]-x_k[i]) + cj[j][i]/2e0*(x[i]-x_k[i])**2e0
 #
     return -dW
 #
