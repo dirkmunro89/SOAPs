@@ -74,9 +74,10 @@ def init():
     mov=-0.1e0
     mov_rel=2e0
     asy_fac=1e0/2e0#*1e-6
+    con_exp=2e0
 #
     f_a=1.510
     kmax=20
 #
-    return n,m,x_i,x_l,x_u,f_a,kmax,sub,mov,mov_rel,asy_fac
+    return n,m,x_i,x_l,x_u,f_a,kmax,sub,mov,mov_rel,asy_fac,con_exp
 #
