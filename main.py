@@ -7,13 +7,13 @@ from subs import subs
 if __name__ == "__main__":
 #
 #   Initializations
-    [n,m,x_p,x_l,x_u,f_a,sub,mov,mov_rel,asy_fac]=init()
+    [n,m,x_p,x_l,x_u,f_a,kmax,sub,mov,mov_rel,asy_fac]=init()
     x_o=x_p; x_d=1e8*np.ones(m,dtype=np.float64)
 #
 #   Screen output
     print(''); print(('%3s%14s%9s%11s%11s%11s%11s')%\
         ('k', 'Obj', 'Vio', 'Mov', '|dX|', '||dX||', '|kkt|'))
-    for k in range(20):
+    for k in range(kmax):
 #
 #       Simulation: function and gradient values
         [g,dg]=simu(n,m,x_p)
@@ -45,5 +45,6 @@ if __name__ == "__main__":
             print(''); print('Termination at X =', x_p); print(''); break
 #
 #   If max. iter
-    print(''); print('Max. Iter. at X =', x_p); print('')
+    if k == kmax-1:
+        print(''); print('Max. Iter. at X =', x_p); print('')
 #
