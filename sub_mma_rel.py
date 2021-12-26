@@ -8,7 +8,7 @@ from scipy.optimize import minimize
 #
 def sub_mma_rel(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel, asy_fac):
 #
-    [t, d_scl]=params
+    d_scl=1e2
     L=np.zeros(n,dtype=np.float64)
     U=np.zeros(n,dtype=np.float64)
     dx_l=np.ones(n,dtype=np.float64)

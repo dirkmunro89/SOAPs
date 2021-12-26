@@ -7,8 +7,12 @@ from subs import subs
 if __name__ == "__main__":
 #
 #   Initializations
-    [n,m,x_p,x_l,x_u,f_a,kmax,sub,mov,mov_rel,asy_fac]=init()
-    x_o=x_p; x_d=1e8*np.ones(m,dtype=np.float64)
+    [n,m,x_p,x_l,x_u,f_a,kmax,sub,mov,mov_rel,asy_fac,con_exp]=init()
+    x_k=np.zeros(n,dtype=np.float64) 
+    x_1=np.zeros(n,dtype=np.float64)
+    x_d=1e8*np.ones(m,dtype=np.float64)
+    dg_k=np.zeros((m+1,n),dtype=np.float64)
+    dg_1=np.zeros((m+1,n),dtype=np.float64)
 #
 #   Screen output
     print(''); print(('%3s%14s%9s%11s%11s%11s%11s')%\
@@ -17,13 +21,16 @@ if __name__ == "__main__":
 #
 #       Simulation: function and gradient values
         [g,dg]=simu(n,m,x_p)
+        if k == 0: dg_1[:]=dg; x_1[:]=x_p[:]
 #
 #       Subproblem setup
-        x_o[:]=x_p
-        [x_p,x_d,dx_l,dx_u]=subs(sub, n, m, x_p, x_d, x_l, x_u, g, dg, mov, mov_rel, asy_fac)
+        x_k[:]=x_p; dg_k[:]=dg
+        [x_p,x_d,dx_l,dx_u]=subs(sub, n, m, x_k, x_d, x_l, x_u, g, dg, x_1, dg_1, \
+            mov, mov_rel, asy_fac, con_exp)
+        x_1[:]=x_k; dg_1[:]=dg_k
 #
 #       Metrics; infinity, Euclidean norm, max KKT viol., and effective move limit
-        d_xi=max(abs(x_p-x_o)); d_xe=np.linalg.norm(x_p-x_o); kkt=np.zeros(n)
+        d_xi=max(abs(x_p-x_k)); d_xe=np.linalg.norm(x_p-x_k); kkt=np.zeros(n)
         for i in range(n):
             if (x_p[i]-x_l[i])>1e-6 and (x_u[i]-x_p[i])>1e-6: 
                 kkt[i]= kkt[i] + dg[0][i]

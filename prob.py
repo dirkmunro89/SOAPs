@@ -35,14 +35,15 @@ def init():
     x_l=1e-6*np.ones(n,dtype=np.float64)
     x_u=10e0*np.ones(n,dtype=np.float64)
 #
-    sub=1
+    sub=4
     mov=-0.1e0
     mov_rel=2e0
     asy_fac=1e0/16e0
+    con_exp=2e0
 #
     f_a=1.340
 #
     kmax=20
 #
-    return n,m,x_i,x_l,x_u,f_a,kmax,sub,mov,mov_rel,asy_fac
+    return n,m,x_i,x_l,x_u,f_a,kmax,sub,mov,mov_rel,asy_fac,con_exp
 #

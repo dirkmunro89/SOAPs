@@ -6,10 +6,18 @@ from scipy.optimize import minimize
 #
 # CONLIN: dual subproblem
 #
-def sub_con(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel):
+def sub_con_exp(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel, con_exp, x_1, dg_1):
 #
     dx_l=np.ones(n,dtype=np.float64)
     dx_u=np.ones(n,dtype=np.float64)
+#
+    if con_exp < 0e0:
+        a=np.ones(n,dtype=np.float64)*con_exp
+    else:
+        a=np.ones(n,dtype=np.float64)-1e-1
+        for i in range(n):
+            for j in range(m+1):
+                a[i]=max(min(a[i],1e0+np.log(dg_1[j][i]/dg[j][i])/np.log(x_1[i]/(x_k[i]+1e-6))),-6e0)
 #
     for i in range(n):
         if mov < 0e0:
@@ -20,17 +28,17 @@ def sub_con(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel):
             dx_u[i] = min(x_k[j]-mov*(x_u[j]-x_l[j]),x_u[j])
 #
     bds=[[0e0,1e8] for i in range(m)]; tup_bds=tuple(bds)
-    sol=minimize(con_dual,x_d,args=(n,m,x_k,g,dg,dx_l,dx_u), \
-        jac=dcon_dual,method='L-BFGS-B',bounds=tup_bds, options={'disp':False})
+    sol=minimize(con_exp_dual,x_d,args=(n,m,x_k,g,dg,dx_l,dx_u, a), \
+        jac=dcon_exp_dual,method='L-BFGS-B',bounds=tup_bds, options={'disp':False})
 #
     x_d[:]=sol.x
-    x=x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u)
+    x=x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, a)
 #
     return [x,x_d,dx_l,dx_u]
 #
-# CONLIN: x in terms of dual variables 
+# CONLIN EXP.: x in terms of dual variables 
 #
-def x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u):
+def x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, a):
 #
     x = np.zeros(n,dtype=np.float64)
 #
@@ -41,25 +49,25 @@ def x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u):
         if dg[0][j] > 0e0:
             tmpp[j] = tmpp[j] + dg[0][j]
         else:
-            tmpn[j] = tmpn[j] - dg[0][j]#*x_k[j]**2e0
+            tmpn[j] = tmpn[j] + dg[0][j]#*x_k[j]**2e0
         for i in range(m):
             if dg[i+1][j] > 0e0:
                 tmpp[j] = tmpp[j] + dg[i+1][j]*x_d[i]
             else:
-                tmpn[j] = tmpn[j] - dg[i+1][j]*x_d[i]#*x_k[j]**2e0
-        tmpp[j]=max(tmpp[j],1e-6)
-        tmpn[j]=max(tmpn[j],0e0)
+                tmpn[j] = tmpn[j] + dg[i+1][j]*x_d[i]#*x_k[j]**2e0
+        tmpp[j]=max(tmpp[j],0e0)
+        tmpn[j]=min(tmpn[j],-1e-6)
 #
     for j in range(n):
-        x[j] = min(max(np.sqrt(tmpn[j]/tmpp[j])*x_k[j],dx_l[j]),dx_u[j])
+        x[j] = min(max(x_k[j]*(-tmpp[j]/tmpn[j])**(1e0/(a[j]-1e0)),dx_l[j]),dx_u[j])
 #
     return x
 #
-# CONLIN: Dual function value
+# CONLIN EXP.: Dual function value
 #
-def con_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u):
+def con_exp_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, a):
 #
-    x=x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u)
+    x=x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, a)
 #
     W = g[0]
     for i in range(m):
@@ -68,20 +76,20 @@ def con_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u):
         if dg[0][j] > 0e0:
             W = W + dg[0][j]*(x[j]-x_k[j])
         else:
-            W = W - dg[0][j]*(1e0/x[j]-1e0/x_k[j])*(x_k[j])**2e0
+            W = W + dg[0][j]*(x[j]**a[j]-x_k[j]**a[j])/a[j]*(x_k[j])**(1e0-a[j])
         for i in range(m):
             if dg[i+1][j] > 0e0:
                 W = W + dg[i+1][j]*(x[j]-x_k[j])*x_d[i]
             else:
-                W = W - dg[i+1][j]*(1e0/x[j]-1e0/x_k[j])*(x_d[i])*(x_k[j])**2e0
+                W = W + dg[i+1][j]*(x[j]**a[j]-x_k[j]**a[j])/a[j]*(x_d[i])*(x_k[j])**(1e0-a[j])
 #
     return -W
 #
-# CONLIN: Dual gradient
+# CONLIN EXP.: Dual gradient
 #
-def dcon_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u):
+def dcon_exp_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, a):
 #
-    x=x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u)
+    x=x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, a)
 #
     dW = np.zeros(m,dtype=np.float64)
 #
@@ -91,7 +99,7 @@ def dcon_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u):
             if dg[i+1][j] > 0e0:
                 dW[i] = dW[i] + dg[i+1][j]*(x[j]-x_k[j])
             else:
-                dW[i] = dW[i] - dg[i+1][j]*(1e0/x[j]-1e0/x_k[j])*(x_k[j])**2e0
+                dW[i] = dW[i] + dg[i+1][j]*(x[j]**a[j]-x_k[j]**a[j])/a[j]*(x_k[j])**(1e0-a[j])
 #
     return -dW
 #
