@@ -75,21 +75,22 @@ def init():
     m=16
     x_i=np.ones(n,dtype=np.float64)*400e0
     x_l=np.ones(n,dtype=np.float64)*100e0
-    x_u=np.ones(n,dtype=np.float64)*1000e0
+    x_u=np.ones(n,dtype=np.float64)*1e8
 #
 #   x_i[0]=880.; x_i[1]=720.; x_i[2]=260.; x_i[3]=520.
 #   x_i[4]=100.; x_i[5]=100.; x_i[6]=100.; x_i[7]=100.
 #
     sub=11
-    mov=0.1e0
+    mov=-0.1e0
     mov_rel=2e0
-    asy_fac=1e0/2e0#*1e-6
+    asy_fac=1e0/2e0
     con_exp=2e0
+    s=1/2
 #
-    cnv=1e-3
+    cnv=1e0
     f_a=-1.510e8
     kmax=100
     fin_dif=1
 #
-    return n,m,x_i,x_l,x_u,cnv,f_a,kmax,sub,fin_dif,mov,mov_rel,asy_fac,con_exp
+    return n,m,x_i,x_l,x_u,cnv,f_a,kmax,sub,fin_dif,mov,mov_rel,asy_fac,con_exp,s
 #

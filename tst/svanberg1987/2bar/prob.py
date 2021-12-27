@@ -82,5 +82,10 @@ def init():
     f_a=1.510
     kmax=20
 #
-    return n,m,x_i,x_l,x_u,f_a,kmax,sub,mov,mov_rel,asy_fac,con_exp
+    cnv=1e-6
+    kmax=20
+    fin_dif=0
+    s=0
+#
+    return n,m,x_i,x_l,x_u,cnv,f_a,kmax,sub,fin_dif,mov,mov_rel,asy_fac,con_exp,s
 #
