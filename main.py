@@ -3,14 +3,15 @@ import numpy as np
 from scipy.optimize import minimize
 from prob import init, simu
 from subs import subs
+from dsim import dsim
 #
 if __name__ == "__main__":
 #
 #   Initializations
-    [n,m,x_p,x_l,x_u,f_a,kmax,sub,mov,mov_rel,asy_fac,con_exp]=init()
+    [n,m,x_p,x_l,x_u,cnv,f_a,kmax,sub,fin_dif,mov,mov_rel,asy_fac,con_exp]=init()
     x_k=np.zeros(n,dtype=np.float64) 
     x_1=np.zeros(n,dtype=np.float64)
-    x_d=0e0*np.ones(m,dtype=np.float64)
+    x_d=1e8*np.ones(m,dtype=np.float64)
     dg_k=np.zeros((m+1,n),dtype=np.float64)
     dg_1=np.zeros((m+1,n),dtype=np.float64)
 #
@@ -21,6 +22,8 @@ if __name__ == "__main__":
 #
 #       Simulation: function and gradient values
         [g,dg]=simu(n,m,x_p)
+        if fin_dif == 1:
+            dg[:]=dsim(n,m,x_p)
         if k == 0: dg_1[:]=dg; x_1[:]=x_p[:]
 #
 #       Subproblem setup
@@ -49,6 +52,8 @@ if __name__ == "__main__":
 #
 #       Termination
         if g[1] < 0.001 and g[0] < 1.001*(f_a):
+            print(''); print('Termination at X =', x_p); print(''); break
+        if d_xe < cnv:
             print(''); print('Termination at X =', x_p); print(''); break
 #
 #   If max. iter

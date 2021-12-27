@@ -17,22 +17,14 @@ def sub_qpq_exp(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel, con_exp, x_1, dg_
     else:
         for i in range(n):
             for j in range(m+1):
-                a[j][i]=1.+np.log(dg_1[j][i]/dg[j][i])/np.log(x_1[i]/(x_k[i]+1e-6))
-                a[j][i]=max(min(-1e-6,1+np.log(dg_1[j][i]/dg[j][i])/np.log(x_1[i]/(x_k[i]+1e-6))),-6)
+                a_tmp=1e0+np.log(abs(dg_1[j][i]/dg[j][i]))/np.log(x_1[i]/(x_k[i]+1e-6))
+                a[j][i]=max(min(-1e-6,a_tmp),-6e0)
 #
     c0=np.zeros(n,dtype=np.float64)
     cj=np.zeros((m,n),dtype=np.float64)
     for i in range(n):
-#       if dg[0][i] < 0e0:
-#           c0[i]=dg[0][i]/x_k[i]*min((a[0][i]-1e0),1.0)
-#       else:
-#           c0[i]=dg[0][i]/x_k[i]*max((a[0][i]-1e0),1.0)
         c0[i]=-abs(dg[0][i]/x_k[i])*(a[0][i]-1e0)
         for j in range(m):
-#           if dg[j][i] < 0e0:
-#               cj[j][i]=dg[j][i]/x_k[i]*min((a[j+1][i]-1e0),1.0)
-#           else:
-#               cj[j][i]=dg[j][i]/x_k[i]*max((a[j+1][i]-1e0),1.0)
             cj[j][i]=-abs(dg[j][i])/x_k[i]*(a[j+1][i]-1e0)
 #
     for i in range(n):
@@ -40,8 +32,8 @@ def sub_qpq_exp(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel, con_exp, x_1, dg_
             dx_l[i] = max(x_k[i]/mov_rel,x_l[i])
             dx_u[i] = min(mov_rel*x_k[i],x_u[i])
         else:
-            dx_l[i] = max(x_k[j]-mov*(x_u[j]-x_l[j]),x_l[j])
-            dx_u[i] = min(x_k[j]+mov*(x_u[j]-x_l[j]),x_u[j])
+            dx_l[i] = max(x_k[i]-mov*(x_u[i]-x_l[i]),x_l[i])
+            dx_u[i] = min(x_k[i]+mov*(x_u[i]-x_l[i]),x_u[i])
 #
     bds=[[0e0,1e8] for i in range(m)]; tup_bds=tuple(bds)
     sol=minimize(con_qpq_dual,x_d,args=(n,m,x_k,g,dg,dx_l,dx_u, c0, cj), \

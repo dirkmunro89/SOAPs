@@ -8,6 +8,9 @@ from scipy.optimize import minimize
 #
 def simu(n,m,x_p):
 #
+#   index transform to enable copy-paste
+#   of functions and gradients from
+#   (Fortran) SAOi
 #
     x=np.zeros(n+1)
     for i in range(n):

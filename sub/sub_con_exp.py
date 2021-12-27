@@ -17,15 +17,16 @@ def sub_con_exp(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel, con_exp, x_1, dg_
         a=np.ones(n,dtype=np.float64)-1e-1
         for i in range(n):
             for j in range(m+1):
-                a[i]=max(min(a[i],1e0+np.log(dg_1[j][i]/dg[j][i])/np.log(x_1[i]/(x_k[i]+1e-6))),-6e0)
+                a_tmp=1e0+np.log(abs(dg_1[j][i]/dg[j][i]))/np.log(x_1[i]/(x_k[i]+1e-6))
+                a[i]=max(min(a[i],a_tmp),-6e0)
 #
     for i in range(n):
         if mov < 0e0:
             dx_l[i] = max(x_k[i]/mov_rel,x_l[i])
             dx_u[i] = min(mov_rel*x_k[i],x_u[i])
         else:
-            dx_l[i] = max(x_k[j]+mov*(x_u[j]-x_l[j]),x_l[j])
-            dx_u[i] = min(x_k[j]-mov*(x_u[j]-x_l[j]),x_u[j])
+            dx_l[i] = max(x_k[i]-mov*(x_u[i]-x_l[i]),x_l[i])
+            dx_u[i] = min(x_k[i]+mov*(x_u[i]-x_l[i]),x_u[i])
 #
     bds=[[0e0,1e8] for i in range(m)]; tup_bds=tuple(bds)
     sol=minimize(con_exp_dual,x_d,args=(n,m,x_k,g,dg,dx_l,dx_u, a), \
