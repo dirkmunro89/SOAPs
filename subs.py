@@ -1,11 +1,11 @@
 #
 import numpy as np  
-from sub_mma import sub_mma
-from sub_mma_rel import sub_mma_rel
-from sub_con import sub_con
-from sub_con_exp import sub_con_exp
-from sub_qpq_exp import sub_qpq_exp
-from sub_qpl_exp import sub_qpl_exp
+from sub.sub_mma import sub_mma
+from sub.sub_mma_rel import sub_mma_rel
+from sub.sub_con import sub_con
+from sub.sub_con_exp import sub_con_exp
+from sub.sub_qpq_exp import sub_qpq_exp
+from sub.sub_qpl_exp import sub_qpl_exp
 #
 def subs(sub, n, m, x_k, x_d, x_l, x_u, g, dg, x_1, dg_1, mov, mov_rel, asy_fac, con_exp):
 #

@@ -35,7 +35,7 @@ def init():
     x_l=1e-6*np.ones(n,dtype=np.float64)
     x_u=10e0*np.ones(n,dtype=np.float64)
 #
-    sub=6
+    sub=21
     mov=-0.1e0
     mov_rel=2e0
     asy_fac=1e0/16e0
