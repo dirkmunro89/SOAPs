@@ -1,6 +1,8 @@
 # SOAPs
 Sequential Optimization Approximate subProblems
 
+THIS REPO IS UNDER CONSTRUCTION; THE CODE IS SUBJECT TO TESTING AND CLEANING UP
+
 "...the **go to** statement should be abolished..." [[1]](#1).
 
 ## References
