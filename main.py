@@ -49,15 +49,15 @@ def loop():
 #
 #       Termination
         if g[1] < 0.001 and g[0] < 1.001*(f_a):
-            if glo == 0: print('\nTermination at X = x_opt.txt\n'); np.savetxt('x_opt.txt',x_p)
+            if glo == 0: print('\nTermination at X = xopt.txt\n'); np.savetxt('xopt.txt',x_p)
             cnv=1; break
         if d_xe < c_t:
-            if glo == 0: print('\nTermination at X = x_opt.txt\n'); np.savetxt('x_opt.txt',x_p)
+            if glo == 0: print('\nTermination at X = xopt.txt\n'); np.savetxt('xopt.txt',x_p)
             cnv=1; break
 #
 #   If max. iter
     if k == m_k-1:
-        if glo == 0: print('\nMax. Iter. at X = x_opt.txt\n')
+        if glo == 0: print('\nMax. Iter. at X = xopt.txt\n'); np.savetxt('xopt.txt',x_p)
 #
     return g[0], max(g[1:]), cnv, x_p, k
 #
@@ -100,6 +100,6 @@ if __name__ == "__main__":
             print('Total number of subproblems in runs which converged\t:\t%d'%kcv)
             print('Total number of times the best known solution was found\t:\t%d'%hit)
             print('Probability of having found the global optimum\t\t:\t%1.2f\n'%bayes(kcv,hit))
-            np.savetxt('x_opt.txt',x_o)
-            print('Solution written to x_opt.txt\n')
+            np.savetxt('xopt.txt',x_o)
+            print('Solution written to xopt.txt\n')
 #
