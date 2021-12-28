@@ -87,7 +87,7 @@ def init():
     f_a=-1.510e8
     m_k=20
 #
-    sub=13
+    sub=11
 #
     mov_abs=-0.1e0
     mov_rel=2e0

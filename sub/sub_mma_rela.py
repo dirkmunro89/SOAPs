@@ -9,7 +9,6 @@ from scipy.optimize import minimize
 def sub_mma_rela(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,x_2,L_k,U_k,k,mov,asy):
 #
     mov_rel=mov['mov_rel']
-    asy_fac=asy['asy_fac']
     asy_adp=asy['asy_adp']
 #
     d_scl=1e2
