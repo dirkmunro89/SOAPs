@@ -6,8 +6,11 @@ from scipy.optimize import minimize
 #
 # CONLIN: dual subproblem
 #
-def sub_con(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel):
+def sub_con(n, m, x_k, x_d, x_l, x_u, g, dg, mov):
 #
+    mov_rel=mov['mov_rel']
+    mov_abs=mov['mov_rel']
+
     dx_l=np.ones(n,dtype=np.float64)
     dx_u=np.ones(n,dtype=np.float64)
 #
@@ -16,8 +19,8 @@ def sub_con(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel):
             dx_l[i] = max(x_k[i]/mov_rel,x_l[i])
             dx_u[i] = min(mov_rel*x_k[i],x_u[i])
         else:
-            dx_l[i] = max(x_k[i]-mov*(x_u[i]-x_l[i]),x_l[i])
-            dx_u[i] = min(x_k[i]+mov*(x_u[i]-x_l[i]),x_u[i])
+            dx_l[i] = max(x_k[i]-mov_abs*(x_u[i]-x_l[i]),x_l[i])
+            dx_u[i] = min(x_k[i]+mov_abs*(x_u[i]-x_l[i]),x_u[i])
 #
     bds=[[0e0,1e8] for i in range(m)]; tup_bds=tuple(bds)
     sol=minimize(con_dual,x_d,args=(n,m,x_k,g,dg,dx_l,dx_u), \

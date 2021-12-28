@@ -6,27 +6,33 @@ from scipy.optimize import minimize
 #
 # CONLIN: dual subproblem
 #
-def sub_con_exp(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel, con_exp, x_1, dg_1):
+def sub_con_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
+#
+    mov_rel=mov['mov_rel']
+    mov_abs=mov['mov_abs']
+    exp_set=mov['exp_set']
+    exp_min=mov['exp_min']
+    exp_max=mov['exp_max']
 #
     dx_l=np.ones(n,dtype=np.float64)
     dx_u=np.ones(n,dtype=np.float64)
 #
     if con_exp < 0e0:
-        a=np.ones(n,dtype=np.float64)*con_exp
+        a=np.ones(n,dtype=np.float64)*exp_set
     else:
-        a=np.ones(n,dtype=np.float64)-1e-1
+        a=np.ones(n,dtype=np.float64)*exp_max
         for i in range(n):
             for j in range(m+1):
                 a_tmp=1e0+np.log(abs(dg_1[j][i]/dg[j][i]))/np.log(x_1[i]/(x_k[i]+1e-6))
-                a[i]=max(min(a[i],a_tmp),-6e0)
+                a[i]=max(min(a[i],a_tmp),exp_min)
 #
     for i in range(n):
-        if mov < 0e0:
+        if mov_abs < 0e0:
             dx_l[i] = max(x_k[i]/mov_rel,x_l[i])
             dx_u[i] = min(mov_rel*x_k[i],x_u[i])
         else:
-            dx_l[i] = max(x_k[i]-mov*(x_u[i]-x_l[i]),x_l[i])
-            dx_u[i] = min(x_k[i]+mov*(x_u[i]-x_l[i]),x_u[i])
+            dx_l[i] = max(x_k[i]-mov_abs*(x_u[i]-x_l[i]),x_l[i])
+            dx_u[i] = min(x_k[i]+mov_abs*(x_u[i]-x_l[i]),x_u[i])
 #
     bds=[[0e0,1e8] for i in range(m)]; tup_bds=tuple(bds)
     sol=minimize(con_exp_dual,x_d,args=(n,m,x_k,g,dg,dx_l,dx_u, a), \

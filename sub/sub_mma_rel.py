@@ -6,7 +6,10 @@ from scipy.optimize import minimize
 #
 # MMA: dual subproblem
 #
-def sub_mma_rel(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel, asy_fac):
+def sub_mma_rel(n, m, x_k, x_d, x_l, x_u, g, dg, mov, asy):
+#
+    mov_rel=mov['mov_rel']
+    asy_fac=mov['asy_fac']
 #
     d_scl=1e2
     L=np.zeros(n,dtype=np.float64)

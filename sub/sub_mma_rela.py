@@ -6,7 +6,7 @@ from scipy.optimize import minimize
 #
 # MMA: dual subproblem
 #
-def sub_mma_rela(n, m, x_k, x_d, x_l, x_u, g, dg, mov, mov_rel, asy_fac, k, s, x_1, x_2, L_k, U_k):
+def sub_mma_rela(n, m, x_k, x_d, x_l, x_u, g, dg, mov_rel, asy_fac, k, s, x_1, x_2, L_k, U_k):
 #
     d_scl=1e2
     L=np.zeros(n,dtype=np.float64)
