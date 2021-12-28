@@ -28,7 +28,7 @@ This repository contains a simple procedural representation of a general optimiz
 
 - *inequality constraints*, representing geometric restrictions, a restriction on material usage, or the maximum displacement and/or stress permitted in the structure;
 
-- repeated evaluation of computionally expensive *structural analysis routines* (often external FE packages); *simulation-based*, in general, insofar as *simulation* refers to the modelling of a physical system via solution of partial differential equations (PDE);
+- repeated evaluation of computionally expensive *structural analysis routines* (often external finite element modelling packages); *simulation-based*, in general, insofar as *simulation* refers to the modelling of a physical system via solution of partial differential equations (PDE);
 
 - utilization of *intervening variables (variable transformations) and function approximation concepts* to arrive at computationally tractable yet reasonably convergent approximate subproblems;
 
