@@ -9,13 +9,13 @@ from scipy.optimize import minimize
 def sub_con(n, m, x_k, x_d, x_l, x_u, g, dg, mov):
 #
     mov_rel=mov['mov_rel']
-    mov_abs=mov['mov_rel']
+    mov_abs=mov['mov_abs']
 
     dx_l=np.ones(n,dtype=np.float64)
     dx_u=np.ones(n,dtype=np.float64)
 #
     for i in range(n):
-        if mov < 0e0:
+        if mov_abs < 0e0:
             dx_l[i] = max(x_k[i]/mov_rel,x_l[i])
             dx_u[i] = min(mov_rel*x_k[i],x_u[i])
         else:

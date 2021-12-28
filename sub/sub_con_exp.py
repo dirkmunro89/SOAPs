@@ -10,14 +10,14 @@ def sub_con_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
 #
     mov_rel=mov['mov_rel']
     mov_abs=mov['mov_abs']
-    exp_set=mov['exp_set']
-    exp_min=mov['exp_min']
-    exp_max=mov['exp_max']
+    exp_set=exp['exp_set']
+    exp_min=exp['exp_min']
+    exp_max=exp['exp_max']
 #
     dx_l=np.ones(n,dtype=np.float64)
     dx_u=np.ones(n,dtype=np.float64)
 #
-    if con_exp < 0e0:
+    if exp_set < 0e0:
         a=np.ones(n,dtype=np.float64)*exp_set
     else:
         a=np.ones(n,dtype=np.float64)*exp_max

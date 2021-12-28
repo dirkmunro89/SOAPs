@@ -4,9 +4,10 @@ from scipy.optimize import minimize
 #
 ####################################################################################################
 #
-#   Functions: Objective and constraints function value given x
+#   Simulation: Objective and constraints function value given x
+#               derivatives if possible, else finite differences (f_d)
 #
-def simu(n,m,x_p):
+def simu(n,m,x_p,aux):
 #
     C1=0.0624e0
     C2=1e0
@@ -22,8 +23,20 @@ def simu(n,m,x_p):
     dg[1][3]=-3e0*7e0/x_p[3]**4e0; dg[1][4]=-3e0*1e0/x_p[4]**4e0
 #
     return [g,dg]
+####################################################################################################
 #
 #   Initialisation: Set problem size and starting point
+#
+#   Subproblem flags (sub)
+#   10  :   MMA
+#   11  :   MMA with asymptote adaptation heuristic (as per Svanberg 1987) 
+#   12  :   Same as 10, but with constraint relaxation (as per Svanverg 1987)
+#   13  :   Same as 11, but with constraint relaxation (as per Svanberg 1987)
+#   20  :   CONLIN
+#   21  :   CONLIN with adaptive exponent
+#   30  :   QCQP reciprocal adaptive
+#   31  :   QPLP reciprocal adaptive
+#
 #
 def init():
 #
@@ -35,18 +48,27 @@ def init():
     x_l=1e-6*np.ones(n,dtype=np.float64)
     x_u=10e0*np.ones(n,dtype=np.float64)
 #
-    sub=4
-    mov=-0.1e0
-    mov_rel=2e0
-    asy_fac=1e0/16e0
-    con_exp=2e0
-#
+    f_d=0
+    c_t=1e-8
     f_a=1.340
+    m_k=20
 #
-    cnv=1e-6
-    kmax=20
-    fin_dif=0
-    s=0
+    sub=10
 #
-    return n,m,x_i,x_l,x_u,cnv,f_a,kmax,sub,fin_dif,mov,mov_rel,asy_fac,con_exp,s
+    mov_abs=-0.1e0
+    mov_rel=2e0
+#
+    asy_fac=3e0/4e0#*1e-6
+    asy_adp=1e0/2e0
+#
+    exp_set=2e0
+    exp_min=-6e0
+    exp_max=-0.1
+#
+    mov={'mov_abs': mov_abs, 'mov_rel': mov_rel}
+    exp={'exp_set': exp_set, 'exp_min': exp_min, 'exp_max': exp_max}
+    asy={'asy_fac': asy_fac,'asy_adp': asy_adp}
+    aux={}
+#
+    return n,m,x_i,x_l,x_u,c_t,f_a,m_k,f_d,sub,mov,asy,exp,aux
 #
