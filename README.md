@@ -32,9 +32,9 @@ This repository contains a simple procedural representation of a general optimiz
 
 - utilization of *intervening variables (variable transformations) and function approximation concepts* to arrive at computationally tractable yet reasonably convergent approximate subproblems;
 
-- and *dual subproblem formulations* (e.g. Falk), permitting simple numerical solution by readily available bounded function minimization routines (e.g. L-BFGS-B). (This is true in a traditional sense, at least. Primal-dual (*e.g.* interior-point) methods are increasingly available, at the expense of the elegance and the simplicity of the classic dual formulations.)
+- and *dual subproblem formulations* (e.g. Falk [[3]](#3)), permitting simple numerical solution by readily available bounded function minimization routines (e.g. L-BFGS-B). (This is true in a traditional sense, at least. Primal-dual (*e.g.* interior-point) methods are increasingly available, at the expense of the elegance and the simplicity of the classic dual formulations.)
 
-It
+It should however be noted that the nonlinear programming paradigm represented here, is not in general restricted to: *(i)* inequality constraints [[4]](#4), *(ii)* positive (and natural) design variables (see *e.g.* simultaneous analysis and design (SAND) formulations [[5]](#5)), and/or *(iii)* as already mentioned, dual subproblem formulations [[6]](#6).
 
 ## Keywords (in work)
 
@@ -48,11 +48,32 @@ Dual method (Falk)
 Bayesian Optimization Global
 
 ## References
-<a id="1">[1]</a> 
-Fleury, C. (1979).
+<a id="1">[1]</a>
+Fleury, C. (1979)
 Structural weight optimization by dual methods of convex programming.
 International Journal for Numerical Methods in Engineering, 14(12):1761–1783.
 
-<a id="2">[2]</a> 
+<a id="2">[2]</a>
 Wikipedia (2002).
 [Newton's method](https://en.wikipedia.org/wiki/Newton%27s_method).
+
+<a id="3">[3]</a>
+Falk, J.E. (1967)
+Lagrange multipliers and nonlinear programming.
+Journal of Mathematical Analysis and Applications, 19(1):141–159.
+
+<a id="4">[4]</a>
+Cronje, M. *et al.* (2019)
+Brief note on equality constraints in pure dual SAO settings.
+Structural and Multidisciplinary Optimization, 59(5):1853–1861.
+
+<a id="5">[5]</a>
+Haftka, R.T. (1985) 
+Simultaneous analysis and design. 
+American Institute of Aeronautics and Astronautics Journal, 23(7):1099–1103.
+
+<a id="6">[6]</a>
+Zillober, C. (2001) 
+A combined convex approximation&mdash;interior point approach for large scale
+nonlinear programming. 
+Optimization and Engineering, 2(1):51–73.
