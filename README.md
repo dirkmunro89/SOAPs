@@ -32,7 +32,7 @@ This repository contains a simple procedural representation of a general optimiz
 
 - utilization of *intervening variables (variable transformations) and function approximation concepts* to arrive at computationally tractable yet reasonably convergent approximate subproblems;
 
-- and *dual formulations of the subproblems* (e.g. Falk), permitting simple numerical solution by readily available bounded minimization routines (e.g. L-BFGS-B). (This is true in a traditional sense, at least; primal-dual solution methods are increasingly available, at the expense of the elegance and simplicity of the classical dual formulations.)
+- and *dual formulations of the subproblems* (e.g. Falk), permitting simple numerical solution by readily available bounded minimization routines (e.g. L-BFGS-B). (This is true in a traditional sense, at least. Primal-dual (*e.g.* interior-point) solution methods are increasingly available, at the expense of the elegance and simplicity of the classical dual formulations.)
 
 ## Keywords (in work)
 
