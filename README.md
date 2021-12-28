@@ -34,7 +34,7 @@ This repository contains a simple procedural representation of a general optimiz
 
 - and *dual subproblem formulations* (e.g. Falk [[3]](#3)), permitting simple numerical solution by readily available bounded function minimization routines (e.g. L-BFGS-B). (This is true in a traditional sense, at least. Primal-dual (*e.g.* interior-point) methods are increasingly available, at the expense of the elegance and the simplicity of the classic dual formulations.)
 
-It should however be noted that the nonlinear programming paradigm represented here, is not in general restricted to: *(i)* inequality constraints [[4]](#4), *(ii)* positive (and natural) design variables (see *e.g.* simultaneous analysis and design (SAND) formulations [[5]](#5)), and/or *(iii)* as already mentioned, dual subproblem formulations [[6]](#6).
+It should however be noted that the nonlinear programming paradigm represented here, is not in general restricted to: *(i)* inequality constraints [[4]](#4), *(ii)* positive (and natural) design variables (see *e.g.* simultaneous analysis and design (SAND) [[5]](#5) and Space-Time [[6]](#6) formulations formulations ), and/or *(iii)* as already mentioned, dual subproblem formulations [[7]](#7).
 
 ## Keywords (in work)
 
@@ -73,6 +73,11 @@ Simultaneous analysis and design.
 American Institute of Aeronautics and Astronautics Journal, 23(7):1099–1103.
 
 <a id="6">[6]</a>
+Wu, J. (2020) 
+[Space-time topology optimization for additive manufacturing](https://doi.org/10.1007/s00158-019-02420-6). 
+Structural and Multidisciplinary Optimization, 61:1-18.
+
+<a id="7">[7]</a>
 Zillober, C. (2001) 
 A combined convex approximation&mdash;interior point approach for large scale
 nonlinear programming. 
