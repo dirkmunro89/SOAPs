@@ -23,7 +23,7 @@ def sub_qpl_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
     else:
         for i in range(n):
             for j in range(m+1):
-                a_tmp=1e0+np.log(abs(dg_1[j][i]/dg[j][i]))/np.log(x_1[i]/(x_k[i]+1e-6))
+                a_tmp=1e0+np.log(abs((dg_1[j][i]+1e-6)/(dg[j][i]+1e-6)))/np.log(x_1[i]/(x_k[i]+1e-6))
                 a[j][i]=max(min(exp_max,a_tmp),exp_min)
 #
     c0=np.zeros(n,dtype=np.float64)

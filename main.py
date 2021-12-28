@@ -10,7 +10,7 @@ if __name__ == "__main__":
 #   Initializations
     [n,m,x_p,x_l,x_u,c_t,f_a,m_k,f_d,sub,mov,asy,exp,aux]=init()
     x_k=np.zeros(n,dtype=np.float64); x_1=np.zeros(n,dtype=np.float64)
-    x_2=np.zeros(n,dtype=np.float64); x_d=1e8*np.ones(m,dtype=np.float64)
+    x_2=np.zeros(n,dtype=np.float64); x_d=1e0*np.ones(m,dtype=np.float64)
     dg_k=np.zeros((m+1,n),dtype=np.float64); dg_1=np.zeros((m+1,n),dtype=np.float64)
     L_k=np.zeros(n,dtype=np.float64); U_k=np.zeros(n,dtype=np.float64)
 #
@@ -28,7 +28,7 @@ if __name__ == "__main__":
 #       Subproblem solve
         x_k[:]=x_p; dg_k[:]=dg
         [x_p,x_d,dx_l,dx_u,L_k,U_k]=subs(sub, n, m, x_k, x_d, x_l, x_u, g, dg, x_1, dg_1, \
-        x_2 , L_k, U_k, k, mov, asy, exp)
+        x_2 , L_k, U_k, k, mov, asy, exp, aux)
         x_2[:]=x_1; x_1[:]=x_k; dg_1[:]=dg_k
 #
 #       Metrics; infinity, Euclidean norm, max KKT viol., and effective move limit
