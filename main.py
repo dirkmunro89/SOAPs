@@ -5,17 +5,19 @@ from prob import init, simu
 from subs import subs
 from dsim import dsim
 #
-if __name__ == "__main__":
+def loop():
 #
 #   Initializations
-    [n,m,x_p,x_l,x_u,c_t,f_a,m_k,f_d,sub,mov,asy,exp,aux]=init()
+    [n,m,x_p,x_l,x_u,c_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo]=init()
+    if glo > 0:
+        x_p = np.random.rand(n)*(x_u-x_l) + x_l
     x_k=np.zeros(n,dtype=np.float64); x_1=np.zeros(n,dtype=np.float64)
     x_2=np.zeros(n,dtype=np.float64); x_d=1e0*np.ones(m,dtype=np.float64)
     dg_k=np.zeros((m+1,n),dtype=np.float64); dg_1=np.zeros((m+1,n),dtype=np.float64)
-    L_k=np.zeros(n,dtype=np.float64); U_k=np.zeros(n,dtype=np.float64)
+    L_k=np.zeros(n,dtype=np.float64); U_k=np.zeros(n,dtype=np.float64); cnv=0
 #
 #   Screen output
-    print(''); print(('%3s%14s%9s%11s%11s%11s%11s')%\
+    if glo==0: print(('\n%3s%14s%9s%11s%11s%11s%11s')%\
         ('k', 'Obj', 'Vio', 'Mov', '|dX|', '||dX||', '|kkt|'))
     for k in range(m_k):
 #
@@ -42,16 +44,62 @@ if __name__ == "__main__":
         d_kkt=max(abs(kkt))
 #
 #       Screen output
-        print('%3d%14.3e%9.3f%11.1e%11.1e%11.1e%11.1e'%\
+        if glo == 0: print('%3d%14.3e%9.3f%11.1e%11.1e%11.1e%11.1e'%\
             (k, g[0], max(g[1:]),mov_min,d_xi,d_xe,d_kkt))
 #
 #       Termination
         if g[1] < 0.001 and g[0] < 1.001*(f_a):
-            print(''); print('Termination at X =', x_p); print(''); break
+            if glo == 0: print('\nTermination at X = x_opt.txt\n'); np.savetxt('x_opt.txt',x_p)
+            cnv=1; break
         if d_xe < c_t:
-            print(''); print('Termination at X =', x_p); print(''); break
+            if glo == 0: print('\nTermination at X = x_opt.txt\n'); np.savetxt('x_opt.txt',x_p)
+            cnv=1; break
 #
 #   If max. iter
     if k == m_k-1:
-        print(''); print('Max. Iter. at X =', x_p); print('')
+        if glo == 0: print('\nMax. Iter. at X = x_opt.txt\n')
+#
+    return g[0], max(g[1:]), cnv, x_p, k
+#
+def bayes(it,ir):
+#
+#   See Bolton (2004)
+#
+    a=1e0
+    b=5e0
+    a_bar=a+b-1
+    b_bar=b-ir-1
+    tmp=1e0
+    for i in range(it):
+        tmp=tmp*(it+i+1+b_bar)/(it+i+1+a_bar)
+#
+    return 1e0-tmp
+#
+if __name__ == "__main__":
+#
+    [n,_,_,_,_,_,_,_,_,_,_,_,_,_,glo]=init()
+    if glo == 0:
+        [_,_,_,_,_]=loop()
+    else:
+        print('\nRunning Bayesian global optimization ... ')
+        res=[]; fopt=1e8; g=0; kcv=0; kot=0; x_o=np.zeros(n,dtype=np.float64)
+        for s in range(glo):
+            [f0,vio,cnv,x_p,k]=loop()
+            if cnv==1 and vio < 1e-3 and f0 < fopt: fopt=min(fopt, f0); g=s; x_o[:]=x_p
+            if cnv==1 and vio < 1e-3: kcv=kcv+k
+            res.append([f0,vio,cnv,k]); kot=kot+k
+# 
+        hit=-1
+        for s in range(glo):
+            if abs(fopt-res[s][0])/abs(fopt) <= 1e-3 and res[s][1] < 1e-3 and res[s][2] == 1:
+                hit=hit+1
+#
+        if hit <= 0: print('Based on convergence criteria, not a single solution was found.')
+        else:
+            print('\nTotal number of subproblems (function evaluations)\t:\t%d'%kot)
+            print('Total number of subproblems in runs which converged\t:\t%d'%kcv)
+            print('Total number of times the best known solution was found\t:\t%d'%hit)
+            print('Probability of having found the global optimum\t\t:\t%1.2f\n'%bayes(kcv,hit))
+            np.savetxt('x_opt.txt',x_o)
+            print('Solution written to x_opt.txt\n')
 #

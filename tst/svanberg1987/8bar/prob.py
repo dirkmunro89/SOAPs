@@ -133,6 +133,8 @@ def init():
     f_a=-1.510e8
     m_k=20
 #
+    glo=0
+#
     sub=11
 #
     mov_abs=-0.1e0
