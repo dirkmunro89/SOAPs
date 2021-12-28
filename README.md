@@ -34,7 +34,7 @@ This repository contains a simple procedural representation of a general optimiz
 
 - and *dual subproblem formulations* (e.g. Falk [[3]](#3)), permitting simple numerical solution by readily available bounded function minimization routines (e.g. L-BFGS-B). (This is true in a traditional sense, at least. Primal-dual (*e.g.* interior-point) methods are increasingly available, at the expense of the elegance and the simplicity of the classic dual formulations.)
 
-It should however be noted that the nonlinear programming paradigm represented here, is not in general restricted to: *(i)* inequality constraints [[4]](#4), *(ii)* positive (and natural) design variables (see *e.g.* simultaneous analysis and design (SAND) [[5]](#5) and Space-Time [[6]](#6) formulations formulations ), and/or *(iii)* as already mentioned, dual subproblem formulations [[7]](#7).
+It should however be noted that the nonlinear programming paradigm represented here, is not in general restricted to: *(i)* inequality constraints [[4]](#4), *(ii)* positive (and natural) design variables (see *e.g.* simultaneous analysis and design (SAND) [[5]](#5) and Space-Time [[6]](#6) formulations), and *(iii)* as already mentioned, dual subproblem formulations [[7]](#7).
 
 ## Keywords (in work)
 
