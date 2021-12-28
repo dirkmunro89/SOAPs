@@ -26,7 +26,9 @@ This repository contains a simple procedural representation of a general optimiz
 
 - *positive* (and bounded) *design variables*, representing physical quantities such as structural member thickness, cross-sectional area, or material density;
 
-- *inequality constraints*, representing geometric restrictions, the amount of material, or the maximum displacements and/or stresses permitted in the structure;
+- *inequality constraints*, representing geometric restrictions, a restriction on material usage, or the maximum displacement and/or stress permitted in the structure;
+
+- repeated evaluation of computionally expensive *structural analysis routines* (often external FE packages); *simulation-based*, in general, insofar as *simulation* refers to the modelling of a physical system via solution of partial differential equations (PDE);
 
 - utilization of *intervening variables (variable transformations) and function approximation concepts* to arrive at computationally tractable yet reasonably convergent approximate subproblems;
 
