@@ -9,7 +9,7 @@ from scipy.optimize import minimize
 def sub_mma(n, m, x_k, x_d, x_l, x_u, g, dg, mov, asy):
 #
     mov_rel=mov['mov_rel']
-    asy_fac=mov['asy_fac']
+    asy_fac=asy['asy_fac']
 #
     L=np.zeros(n,dtype=np.float64)
     U=np.zeros(n,dtype=np.float64)

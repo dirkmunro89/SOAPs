@@ -6,7 +6,11 @@ from scipy.optimize import minimize
 #
 # MMA: dual subproblem
 #
-def sub_mmaa(n, m, x_k, x_d, x_l, x_u, g, dg, mov_rel, asy_fac, k, s, x_1, x_2, L_k, U_k):
+def sub_mmaa(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,x_2,L_k,U_k,k,mov,asy):
+#
+    mov_rel=mov['mov_rel']
+    asy_fac=asy['asy_fac']
+    asy_adp=asy['asy_adp']
 #
     L=np.zeros(n,dtype=np.float64)
     U=np.zeros(n,dtype=np.float64)
@@ -15,15 +19,15 @@ def sub_mmaa(n, m, x_k, x_d, x_l, x_u, g, dg, mov_rel, asy_fac, k, s, x_1, x_2, 
 #
     for i in range(n):
         if k <= 1:
-            L[i]=0e0
-            U[i]=5e0*x_k[i]
+            L[i]=0e0        ##TEST PROBLEM SPECIFIC
+            U[i]=5e0*x_k[i] ##TEST PROBLEM SPECIFIC
         else:
             if (x_k[i]-x_1[i])*(x_1[i]-x_2[i]) < 0e0:
-                L[i] = x_k[i] - s*(x_1[i] - L_k[i])
-                U[i] = x_k[i] + s*(U_k[i] - x_1[i])
+                L[i] = x_k[i] - asy_adp*(x_1[i] - L_k[i])
+                U[i] = x_k[i] + asy_adp*(U_k[i] - x_1[i])
             else:
-                L[i] = x_k[i] - (x_1[i] - L_k[i])/s
-                U[i] = x_k[i] + (U_k[i] - x_1[i])/s
+                L[i] = x_k[i] - (x_1[i] - L_k[i])/asy_adp
+                U[i] = x_k[i] + (U_k[i] - x_1[i])/asy_adp
 #           
         L[i]=max(min(0.4*x_k[i],L[i]),-50.*x_k[i])
         U[i]=max(min(50.*x_k[i],U[i]),2.5*x_k[i])
