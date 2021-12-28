@@ -2,6 +2,7 @@
 Sequential Optimization Approximate subProblems
 
 run with 
+
 >python3 main.py | tee history.txt
 
 THIS REPO IS UNDER CONSTRUCTION; THE CODE IS SUBJECT TO TESTING AND CLEANING UP
