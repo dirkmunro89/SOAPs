@@ -49,10 +49,14 @@ def loop():
 #
 #       Termination
         if g[1] < 0.001 and g[0] < 1.001*(f_a):
-            if glo == 0: print('\nTermination at X = xopt.txt\n'); np.savetxt('xopt.txt',x_p)
-            cnv=1; break
+            if glo == 0: 
+                print('\nTermination at X = xopt.txt\n'); np.savetxt('xopt.txt',x_p)
+                print('...based on a priori specified function value at analytic solution') 
+                break
         if d_xe < c_t:
-            if glo == 0: print('\nTermination at X = xopt.txt\n'); np.savetxt('xopt.txt',x_p)
+            if glo == 0: 
+                print('\nTermination at X = xopt.txt\n'); np.savetxt('xopt.txt',x_p)
+                print('...based on convergence limit and step-size') 
             cnv=1; break
 #
 #   If max. iter

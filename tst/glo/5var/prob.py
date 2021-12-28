@@ -96,13 +96,13 @@ def init():
     x_u=10e0*np.ones(n,dtype=np.float64)
 #
     f_d=0
-    c_t=1e-8
+    c_t=1e-3
     f_a=1.340
     m_k=20
 #
     glo=99
 #
-    sub=10
+    sub=11
 #
     mov_abs=-0.1e0
     mov_rel=2e0

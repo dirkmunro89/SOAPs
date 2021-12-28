@@ -1,0 +1,10 @@
+
+Running Bayesian global optimization ... 
+
+Total number of subproblems (function evaluations)	:	1557
+Total number of subproblems in runs which converged	:	760
+Total number of times the best known solution was found	:	56
+Probability of having found the global optimum		:	1.00
+
+Solution written to xopt.txt
+
