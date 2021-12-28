@@ -34,6 +34,8 @@ This repository contains a simple procedural representation of a general optimiz
 
 - and *dual subproblem formulations* (e.g. Falk), permitting simple numerical solution by readily available bounded function minimization routines (e.g. L-BFGS-B). (This is true in a traditional sense, at least. Primal-dual (*e.g.* interior-point) methods are increasingly available, at the expense of the elegance and the simplicity of the classic dual formulations.)
 
+It
+
 ## Keywords (in work)
 
 Sequential Approximate Optimization (SAO)
@@ -54,5 +56,3 @@ International Journal for Numerical Methods in Engineering, 14(12):1761–1783.
 <a id="2">[2]</a> 
 Wikipedia (2002).
 [Newton's method](https://en.wikipedia.org/wiki/Newton%27s_method).
-International Journal for Numerical Methods in Engineering, 14(12):1761–1783.
-
