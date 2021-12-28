@@ -1,11 +1,14 @@
 # SOAPs
 Sequential Optimization Approximate subProblems
 
-run with 
+THIS REPO IS UNDER CONSTRUCTION; THE CODE IS SUBJECT TO TESTING AND CLEANING UP
+
+Run with 
 
 `python3 main.py | tee history.txt`
 
-THIS REPO IS UNDER CONSTRUCTION; THE CODE IS SUBJECT TO TESTING AND CLEANING UP
+Tested on Ubuntu 20 with Scipy and Numpy packages installed.
+
 
 Sequential Approximate Optimization (SAO)
 Method of Moving Asymptotes (MMA)
