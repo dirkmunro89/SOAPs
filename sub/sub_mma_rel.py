@@ -9,7 +9,7 @@ from scipy.optimize import minimize
 def sub_mma_rel(n, m, x_k, x_d, x_l, x_u, g, dg, mov, asy):
 #
     mov_rel=mov['mov_rel']
-    asy_fac=mov['asy_fac']
+    asy_fac=asy['asy_fac']
 #
     d_scl=1e2
     L=np.zeros(n,dtype=np.float64)
@@ -85,7 +85,8 @@ def mma_dual_rel(x_d, n, m, r, p, q, dx_l, dx_u, L, U, d):
 #
     W = r[0] + tmp11 + tmp22
     for i in range(m):
-        W = W - x_d[i]*(0e0-r[i+1]) 
+        W = W + d*z[i] + d*z[i]**2e0
+        W = W - x_d[i]*(0e0-r[i+1] + z[i])  
 #
     return -W
 #
@@ -102,7 +103,7 @@ def dmma_dual_rel(x_d, n, m, r, p, q, dx_l, dx_u, L, U, d):
 #
     dW = np.zeros(m,dtype=np.float64)
     for i in range(m):
-        dW[i] = dW[i] -(0e0-r[i+1]) + tmp11[i] + tmp22[i]
+        dW[i] = dW[i] -(0e0-r[i+1] + z[i]) + tmp11[i] + tmp22[i]
 #
     return -dW
 #

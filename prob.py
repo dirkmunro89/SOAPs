@@ -4,7 +4,8 @@ from scipy.optimize import minimize
 #
 ####################################################################################################
 #
-#   Functions: Objective and constraints function value given x
+#   Simulation: Objective and constraints function value given x
+#               derivatives if possible, else finite differences (f_d)
 #
 def simu(n,m,x_p,aux):
 #
@@ -21,19 +22,17 @@ def simu(n,m,x_p,aux):
     c[8]=np.array([0.,-375.,0.])
 #
     d={}
-    d[0]=[0,4]; d[1]=[1,4]; d[2]=[2,4]; d[3]=[3,4]; d[4]=[5,4]
-    d[5]=[6,4]; d[6]=[7,4]; d[7]=[8,4]
+    d[0]=[0,4]; d[1]=[1,4]; d[2]=[2,4]; d[3]=[3,4] 
+    d[4]=[5,4]; d[5]=[6,4]; d[6]=[7,4]; d[7]=[8,4]
 #
     L=np.zeros(n,dtype=np.float64)
     K=np.zeros((3,3),dtype=np.float64)
     for i in range(n):
 #
         L[i]=np.linalg.norm(c[d[i]][1]-c[d[i][0]])
-#
         cx = (c[d[i][0]][0] - c[d[i][1]][0])/L[i]
         cy = (c[d[i][0]][1] - c[d[i][1]][1])/L[i]
         cz = (c[d[i][0]][2] - c[d[i][1]][2])/L[i]
-#
         K=K+x_p[i]/L[i]*np.array([[cx**2.,cx*cy,cx*cz],[cx*cy,cy**2.,cy*cz],[cx*cz,cy*cz,cz**2.]])
 #
     u=np.matmul(np.linalg.inv(K),f)
@@ -57,7 +56,20 @@ def simu(n,m,x_p,aux):
 #
     return [g,dg]
 #
+####################################################################################################
+#
 #   Initialisation: Set problem size and starting point
+#
+#   Subproblem flags (sub)
+#   10  :   MMA
+#   11  :   MMA with asymptote adaptation heuristic (as per Svanberg 1987) 
+#   12  :   Same as 10, but with constraint relaxation (as per Svanverg 1987)
+#   13  :   Same as 11, but with constraint relaxation (as per Svanberg 1987)
+#   20  :   CONLIN
+#   21  :   CONLIN with adaptive exponent
+#   30  :   QCQP reciprocal adaptive
+#   31  :   QPLP reciprocal adaptive
+#
 #
 def init():
 #
@@ -73,9 +85,9 @@ def init():
     f_d=1
     c_t=1e0
     f_a=-1.510e8
-    m_k=100
+    m_k=20
 #
-    sub=11
+    sub=13
 #
     mov_abs=-0.1e0
     mov_rel=2e0
@@ -93,4 +105,3 @@ def init():
     aux={}
 #
     return n,m,x_i,x_l,x_u,c_t,f_a,m_k,f_d,sub,mov,asy,exp,aux
-#
