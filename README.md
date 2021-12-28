@@ -1,5 +1,5 @@
 # SOAPs
-Sequential Optimization Approximate subProblems
+**S**equential **O**ptimization **A**pproximate sub**P**roblem**s**
 
 THIS REPO IS UNDER CONSTRUCTION; THE CODE IS SUBJECT TO TESTING AND CLEANING UP
 
