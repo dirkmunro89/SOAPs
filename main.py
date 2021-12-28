@@ -86,11 +86,11 @@ if __name__ == "__main__":
         [_,_,_,_,_]=loop()
     else:
         print('\nRunning Bayesian global optimization ... ')
-        res=[]; fopt=1e8; g=0; kcv=0; kot=0; x_o=np.zeros(n,dtype=np.float64)
+        res=[]; fopt=1e8; g=0; kcv=0; kot=0; c=0; x_o=np.zeros(n,dtype=np.float64)
         for s in range(glo):
             [f0,vio,cnv,x_p,k]=loop()
             if cnv==1 and vio < 1e-3 and f0 < fopt: fopt=min(fopt, f0); g=s; x_o[:]=x_p
-            if cnv==1 and vio < 1e-3: kcv=kcv+k
+            if cnv==1 and vio < 1e-3: kcv=kcv+k; c=c+1
             res.append([f0,vio,cnv,k]); kot=kot+k
 # 
         hit=-1
@@ -100,10 +100,12 @@ if __name__ == "__main__":
 #
         if hit <= 0: print('Based on convergence criteria, not a single solution was found.')
         else:
-            print('\nTotal number of subproblems (function evaluations)\t:\t%d'%kot)
-            print('Total number of subproblems in runs which converged\t:\t%d'%kcv)
-            print('Total number of times the best known solution was found\t:\t%d'%hit)
-            print('Probability of having found the global optimum\t\t:\t%1.2f\n'%bayes(kcv,hit))
+            print('\nTotal number of runs\t\t\t\t\t:\t%6d'%glo)
+            print('Total number of converged (also feasible) solutions\t:\t%6d'%c)
+            print('Total number of subproblems (function evaluations)\t:\t%6d'%kot)
+            print('Total number of subproblems in runs which converged\t:\t%6d'%kcv)
+            print('Total number of times the best solution was found\t:\t%6d'%hit)
+            print('Probability of having found the global optimum\t\t:\t~%5.2f\n'%bayes(kcv,hit))
             np.savetxt('xopt.txt',x_o)
             print('Solution written to xopt.txt\n')
 #

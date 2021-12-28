@@ -100,7 +100,7 @@ def init():
     f_a=1.340
     m_k=20
 #
-    glo=99
+    glo=10
 #
     sub=11
 #
