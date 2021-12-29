@@ -20,16 +20,16 @@ def sub_usr(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,x_2,L_k,U_k,k,mov,asy,aux):
     L[0]=asy_fac*x_k[0]
     U[0]=x_k[0]/asy_fac
 #   if k ==0:
-#       L[1]=asy_fac*x_k[0]
-#       U[1]=x_k[0]/asy_fac
+#       L[1]=asy_fac*x_k[1]
+#       U[1]=x_k[1]/asy_fac
 #
     s_l=aux['s_l']
     s_u=aux['s_u']
 #
     i=1
-    if k <= -1:
-        L[i]=x_k[i] - (x_1[i] - L_k[i])
-        U[i]=x_k[i] + (U_k[i] - x_1[i])
+    if k <= 1:
+        L[i]=x_k[i] - (x_u[i] - x_l[i])
+        U[i]=x_k[i] + (x_u[i] - x_l[i])
     else:
         if (x_k[i]-x_1[i])*(x_1[i]-x_2[i]) < 0e0:
             L[i] = x_k[i] - s_l*(x_1[i] - L_k[i])
@@ -38,13 +38,13 @@ def sub_usr(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,x_2,L_k,U_k,k,mov,asy,aux):
             L[i] = x_k[i] - (x_1[i] - L_k[i])/s_u
             U[i] = x_k[i] + (U_k[i] - x_1[i])/s_u
 #
-#   L[0]=max(min(0.4*x_k[0],L[0]),-50.*x_k[0])
-#   U[0]=max(min(50.*x_k[0],U[0]),2.5e0*x_k[0])
+    L[0]=max(min(0.4*x_k[0],L[0]),-50.*x_k[0])
+    U[0]=max(min(50.*x_k[0],U[0]),2.5e0*x_k[0])
     L[1]=max(min(0.4*x_k[1],L[1]),-50.*x_k[1])
     U[1]=max(min(50.*x_k[1],U[1]),2.5e0*x_k[1])
     for i in range(n):
-        dx_l[i] =max(max(x_k[i]/mov_rel, 1.01*L[i]),x_l[i])
-        dx_u[i] =min(min(mov_rel*x_k[i], 0.99*U[i]),x_u[i])
+        dx_l[i] = max(max(x_k[i]/mov_rel, 1.01*L[i]),x_l[i])
+        dx_u[i] = min(min(mov_rel*x_k[i], 0.99*U[i]),x_u[i])
 #       dx_l[i] = max(max(x_k[i]/mov_rel, 1.01*L[i]),x_l[i])
 #       dx_u[i] = min(min(mov_rel*x_k[i], 0.99*U[i]),x_u[i])
 #
@@ -93,7 +93,7 @@ def x_dual(x_d, n, m, r, p, q, dx_l, dx_u, L, U, d):
     for i in range(m):
         z[i]=(x_d[i]-d[i])/2e0/d[i]
         z[i]=max(z[i],0e0)
-        z[i]=0e0
+#       z[i]=0e0
 #
     return x, z
 #

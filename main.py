@@ -14,10 +14,7 @@ def loop():
     x_k=np.zeros(n,dtype=np.float64); x_1=np.zeros(n,dtype=np.float64)
     x_2=np.zeros(n,dtype=np.float64); x_d=1e0*np.ones(m,dtype=np.float64)
     dg_k=np.zeros((m+1,n),dtype=np.float64); dg_1=np.zeros((m+1,n),dtype=np.float64)
-#
-    L_k=-np.ones(n,dtype=np.float64)*2.5e-1
-    U_k=np.ones(n,dtype=np.float64)*2.5e-1
-    cnv=0
+    L_k=np.zeros(n,dtype=np.float64); U_k=np.zeros(n,dtype=np.float64); cnv=0
 #
 #   Screen output
     if glo==0: print(('\n%3s%14s%9s%11s%11s%11s%11s')%\

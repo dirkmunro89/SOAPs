@@ -136,11 +136,11 @@ def init():
     f_d=0
     c_t=1e-8
     f_a=1.51
-    m_k=20
+    m_k=9
 #
     glo=0
 #
-    sub=21
+    sub=99
 #
     mov_abs=-0.1e0
     mov_rel=2e0
@@ -149,7 +149,7 @@ def init():
     exp_min=-6e0
     exp_max=-0.1#0.9
 #
-    asy_fac=1e0/5e0*1e-6
+    asy_fac=1e0/5e0#*1e-6
     asy_adp=1e0/2e0
 #
     aux={'s_l':0.5,'s_u':0.75}
