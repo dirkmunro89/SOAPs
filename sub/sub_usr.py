@@ -11,7 +11,7 @@ def sub_usr(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,x_2,L_k,U_k,k,mov,asy,aux):
     mov_rel=mov['mov_rel']
     asy_fac=asy['asy_fac']
 #
-    d_scl=1e1
+    d_scl=1e2
     L=np.zeros(n,dtype=np.float64)
     U=np.zeros(n,dtype=np.float64)
     dx_l=np.ones(n,dtype=np.float64)
@@ -19,14 +19,15 @@ def sub_usr(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,x_2,L_k,U_k,k,mov,asy,aux):
 #
     L[0]=asy_fac*x_k[0]
     U[0]=x_k[0]/asy_fac
-#   L[1]=asy_fac*x_k[0]
-#   U[1]=x_k[0]/asy_fac
+#   if k ==0:
+#       L[1]=asy_fac*x_k[0]
+#       U[1]=x_k[0]/asy_fac
 #
     s_l=aux['s_l']
     s_u=aux['s_u']
 #
     i=1
-    if k <= 1:
+    if k <= -1:
         L[i]=x_k[i] - (x_1[i] - L_k[i])
         U[i]=x_k[i] + (U_k[i] - x_1[i])
     else:
@@ -37,11 +38,15 @@ def sub_usr(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,x_2,L_k,U_k,k,mov,asy,aux):
             L[i] = x_k[i] - (x_1[i] - L_k[i])/s_u
             U[i] = x_k[i] + (U_k[i] - x_1[i])/s_u
 #
+#   L[0]=max(min(0.4*x_k[0],L[0]),-50.*x_k[0])
+#   U[0]=max(min(50.*x_k[0],U[0]),2.5e0*x_k[0])
+    L[1]=max(min(0.4*x_k[1],L[1]),-50.*x_k[1])
+    U[1]=max(min(50.*x_k[1],U[1]),2.5e0*x_k[1])
     for i in range(n):
-        L[i]=max(min(0.4*x_k[i],L[i]),-50.*x_k[i])
-        U[i]=max(min(50.*x_k[i],U[i]),2.5*x_k[i])
-        dx_l[i] = max(max(x_k[i]/mov_rel, 1.01*L[i]),x_l[i])
-        dx_u[i] = min(min(mov_rel*x_k[i], 0.99*U[i]),x_u[i])
+        dx_l[i] =max(max(x_k[i]/mov_rel, 1.01*L[i]),x_l[i])
+        dx_u[i] =min(min(mov_rel*x_k[i], 0.99*U[i]),x_u[i])
+#       dx_l[i] = max(max(x_k[i]/mov_rel, 1.01*L[i]),x_l[i])
+#       dx_u[i] = min(min(mov_rel*x_k[i], 0.99*U[i]),x_u[i])
 #
     r = np.zeros((m+1),dtype=np.float64)
     p = np.zeros((m+1,n),dtype=np.float64)

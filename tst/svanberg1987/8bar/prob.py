@@ -152,4 +152,4 @@ def init():
     asy={'asy_fac': asy_fac,'asy_adp': asy_adp}
     aux={}
 #
-    return n,m,x_i,x_l,x_u,c_t,f_a,m_k,f_d,sub,mov,asy,exp,aux
+    return n,m,x_i,x_l,x_u,c_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo
