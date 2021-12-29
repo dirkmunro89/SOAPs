@@ -5,11 +5,15 @@ THIS REPO IS UNDER CONSTRUCTION; THE CODE IS SUBJECT TO TESTING AND CLEANING UP
 
 ## Execution
 
-Run with
+Scipy and Numpy required. 
+
+Tested on Ubuntu 20.04 LTS with
 
 `python3 main.py | tee history.txt`
 
-Scipy and Numpy packages required. Tested on Ubuntu 20.04 LTS.
+and on Raspbian GNU/Linux 10 with
+
+`python main.py | tee history.txt`
 
 ## Problem setup
 
