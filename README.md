@@ -11,7 +11,7 @@ Tested on Ubuntu 20.04 LTS with
 
 `python3 main.py | tee history.txt`
 
-and on Raspbian GNU/Linux 10 with
+and on Raspbian GNU/Linux 11 with
 
 `python main.py | tee history.txt`
 
@@ -22,7 +22,6 @@ The optimization problem to be solved is defined in `prob.py`:
 - in the function `init()` the problem size is set in terms of number of variables (`n`) and the number of constraints (`m`). A starting point `x_i` and global bounds on the design variables (`x_l` and `x_u`) is specified. Beyond this, various subproblem formulations and algorithmic parameters is set&mdash;see documentation for a details.
 
 - in the function `simu()` the computations which yield function values `g` (objective at index 0, followed by constraints), for a given design variable array `x_p`, is set. (And of course, external analysis packages may easily be called.) If available, the computations which yield the first-order derivatives `dg` of each function to each variable is also set&mdash;the derivative of function index `j` to variable `i` sits in row `j` and column `i`, of the 2D array `dg`. Alternatively, a finite difference scheme may be activated in `init()`, at the expense of computational resources.
-
 
 ## Description
 
