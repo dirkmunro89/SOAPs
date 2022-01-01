@@ -17,7 +17,7 @@ from scipy.optimize import minimize
 #           in row 0, followed by the gradients of constraints wrt design variables
 #           (not used if finite differences are requested)
 #
-def simu(n,m,x_p,aux):
+def simu(n,m,x_p,aux,out):
 #
     C1=0.0624e0
     C2=1e0
@@ -102,17 +102,17 @@ def init():
 #
     glo=0
 #
-    sub=10
+    sub=31
 #
-    mov_abs=-0.1e0
+    mov_abs=0.1e0
     mov_rel=2e0
 #
     asy_fac=3e0/4e0#*1e-6
     asy_adp=1e0/2e0
 #
     exp_set=2e0
-    exp_min=-6e0
-    exp_max=-0.1
+    exp_min=-4e0
+    exp_max=1e0
 #
     mov={'mov_abs': mov_abs, 'mov_rel': mov_rel}
     exp={'exp_set': exp_set, 'exp_min': exp_min, 'exp_max': exp_max}

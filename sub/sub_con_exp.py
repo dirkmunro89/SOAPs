@@ -23,7 +23,9 @@ def sub_con_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
         a=np.ones(n,dtype=np.float64)*exp_max
         for i in range(n):
             for j in range(m+1):
-                a_tmp=1e0+np.log(abs((dg_1[j][i]+1e-6)/(dg[j][i]+1e-6)))/np.log(x_1[i]/(x_k[i]+1e-6))
+                a_tmp=1e0+np.log(abs(dg_1[j][i]/dg[j][i]))/np.log(x_1[i]/(x_k[i]+1e-6))
+                if abs(x_k[i] - x_l[i]) < 1e-6:# or abs(x_k[i] - x_u[i]) < 1e-3:
+                    a_tmp=1.0e0-x_l[i]#1e-3
                 a[i]=max(min(a[i],a_tmp),exp_min)
 #
     for i in range(n):
@@ -62,12 +64,12 @@ def x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, a):
                 tmpp[j] = tmpp[j] + dg[i+1][j]*x_d[i]
             else:
                 tmpn[j] = tmpn[j] + dg[i+1][j]*x_d[i]#*x_k[j]**2e0
-        tmpp[j]=max(tmpp[j],0e0)
+        tmpp[j]=max(tmpp[j],1e-6)
         tmpn[j]=min(tmpn[j],-1e-6)
 #
     for j in range(n):
         x[j] = min(max(x_k[j]*(-tmpp[j]/tmpn[j])**(1e0/(a[j]-1e0)),dx_l[j]),dx_u[j])
-#
+#       
     return x
 #
 # CONLIN EXP.: Dual function value

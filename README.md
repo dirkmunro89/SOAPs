@@ -5,7 +5,7 @@ THIS REPO IS UNDER CONSTRUCTION; THE CODE IS SUBJECT TO TESTING AND CLEANING UP
 
 ## Execution
 
-Scipy and Numpy required. 
+Numpy and Scipy packages required. 
 
 Tested on Ubuntu 20.04 LTS with
 
@@ -14,6 +14,12 @@ Tested on Ubuntu 20.04 LTS with
 and on Raspbian GNU/Linux 11 with
 
 `python main.py | tee history.txt`
+
+(For large or long running problems the *unbuffer* command 
+
+`unbuffer python main.py | tee history.txt`
+
+as provided by the Expect package, may be convenient.)
 
 ## Problem setup
 
