@@ -144,7 +144,7 @@ def init():
     c_v=1e-1
     f_t=0e0
     f_a=-1e8
-    m_k=2000
+    m_k=1000
 #
     sub=2  #!
     glo=0
@@ -155,7 +155,7 @@ def init():
     asy_fac=1e0/2e0
     asy_adp=1e0/2e0
 #
-    exp_set=2e0
+    exp_set=-3e0
     exp_min=-3e0 #!
     exp_max=1.0e0#1e0
 #
@@ -241,7 +241,6 @@ def topopt_init(nelx,nely,volfrac,rmin,penal,ft):
 	fig,ax = plt.subplots()
 	im = ax.imshow(-xPhys.reshape((nelx,nely)).T, cmap='gray',\
 	interpolation='none',norm=colors.Normalize(vmin=-1,vmax=0))
-	fig.show()
 #
 	return nelx,nely,volfrac,rmin,penal,ft,Emin,Emax,ndof,KE,H,Hs,iK,jK,edofMat,fixed,free,f,u,im,fig
 #

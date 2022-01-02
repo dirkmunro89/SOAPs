@@ -12,14 +12,14 @@ from sub.sub_mmaa import sub_mmaa
 from sub.sub_mma_rela import sub_mma_rela
 from sub.sub_usr import sub_usr
 from sub.sub_oc_comp import sub_oc_comp
-from sub.sub_oc_comp2 import sub_oc_comp2
+from sub.sub_oc_exp import sub_oc_exp
 #
 def subs(sub, n, m, x_k, x_d, x_l, x_u, g, dg, x_1, dg_1, x_2, L_k, U_k, k, mov, asy, exp, aux):
 #
     if sub == 1:
         [x_p,x_d,dx_l,dx_u]=sub_oc_comp(aux,n,m,x_k,dg,g,mov)
     elif sub == 2:
-        [x_p,x_d,dx_l,dx_u]=sub_oc_comp2(n,m,x_k,x_d,x_l,x_u,g,dg,mov,exp)
+        [x_p,x_d,dx_l,dx_u]=sub_oc_exp(n,m,x_k,x_d,x_l,x_u,g,dg,mov,exp)
     elif sub == 10:
         [x_p,x_d,dx_l,dx_u]=sub_mma(n,m,x_k,x_d,x_l,x_u,g,dg,mov,asy)
     elif sub == 11:
