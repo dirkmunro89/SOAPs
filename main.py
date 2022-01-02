@@ -54,28 +54,28 @@ def loop(s):
 #       Termination
         if g[1] < c_v and g[0] < (1.+1e-3)*(f_a):
             if glo == 0: 
-                print('\nTermination at X = xopt.txt\n'); np.savetxt('xopt_%d.txt'%s,x_p)
+                print('\nTermination at X = xopt_*.txt\n'); np.savetxt('xopt_%d.txt'%s,x_p)
                 print('...based on a priori specified function value at analytic solution\n') 
                 break
         if d_xe < c_e and max(g[1:]) < c_v:
             if glo == 0: 
-                print('\nTermination at X = xopt.txt\n'); np.savetxt('xopt_%d.txt'%s,x_p)
+                print('\nTermination at X = xopt_*.txt\n'); np.savetxt('xopt_%d.txt'%s,x_p)
                 print('...based on convergence limit and Euclidean norm of last step\n') 
             cnv=1; break
         if d_xi < c_i and max(g[1:]) < c_v:
             if glo == 0: 
-                print('\nTermination at X = xopt.txt\n'); np.savetxt('xopt_%d.txt'%s,x_p)
+                print('\nTermination at X = xopt_*.txt\n'); np.savetxt('xopt_%d.txt'%s,x_p)
                 print('...based on convergence limit and Infinity norm of last step\n') 
             cnv=1; break
         if k>1 and d_f0 < f_t and max(g[1:]) < c_v:
             if glo == 0: 
-                print('\nTermination at X = xopt.txt\n'); np.savetxt('xopt_%d.txt'%s,x_p)
+                print('\nTermination at X = xopt_*.txt\n'); np.savetxt('xopt_%d.txt'%s,x_p)
                 print('...based on objective significant digit change\n') 
             cnv=1; break
 #
 #   If max. iter
     if k == m_k-1:
-        if glo == 0: print('\nMax. Iter. at X = xopt.txt\n'); np.savetxt('xopt.txt',x_p)
+        if glo == 0: print('\nMax. Iter. at X = xopt_*.txt\n'); np.savetxt('xopt_%d.txt'%s,x_p)
 #
     [g,dg]=simu(n,m,x_p,aux,s,1)
 #
@@ -132,6 +132,6 @@ if __name__ == "__main__":
             print('Total number of subproblems in runs which converged\t:\t%6d'%kcv)
             print('Total number of times the best solution was found\t:\t%6d'%hit)
             print('Probability of having found the global optimum\t\t:\t~%5.2f\n'%bayes(kcv,hit,1,p))
-            np.savetxt('xopt.txt',x_o)
-            print('Solution written to xopt.txt\n')
+            np.savetxt('xopt_g.txt',x_o)
+            print('Solution written to xopt_g.txt\n')
 #

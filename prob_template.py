@@ -17,9 +17,13 @@ from scipy.optimize import minimize
 #           in row 0, followed by the gradients of constraints wrt design variables
 #           (not used if finite differences are requested)
 #
-def simu(n,m,x_p):
+def simu(n,m,x_p,aux,glo,out):
 #
 #   call Abaqus
+#
+    if out == 1:
+        # make analysis specific output / figures etc.
+        # glo gives the sample number if multi-start is active; else 0
 #
     return [g,dg]
 #
@@ -84,8 +88,11 @@ def init():
     x_u=10e0*np.ones(n,dtype=np.float64)
 #
     f_d=0
-    c_t=1e-8
-    f_a=1.340
+    c_e=1e-2
+    c_i=1e-2
+    c_v=1e-1
+    f_t=0e0
+    f_a=-1e8
     m_k=20
 #
     sub=10
@@ -106,6 +113,6 @@ def init():
     asy={'asy_fac': asy_fac,'asy_adp': asy_adp}
     aux={}
 #
-    return n,m,x_i,x_l,x_u,c_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo
+    return n,m,x_i,x_l,x_u,c_e,c_i,c_v,f_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo
 #
 
