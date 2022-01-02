@@ -16,6 +16,9 @@ import cvxopt ;import cvxopt.cholmod
 #   n   :   number of design variables
 #   m   :   number of constraints
 #   x_p :   current evaluation point (design variables)
+#   aux :   auxilliary data passed from init (also available in subproblem)
+#   glo :   sample number if multi-starts selected (else 0)
+#   out :   flag used to activate output; called with flag = 1 after termination, else 0
 #   
 #   g   :   1D array of size m + 1, containing function value of objective (at index 0),
 #           followed by constraint function values
@@ -72,8 +75,7 @@ def simu(n,m,x_p,aux,glo,out):
     if out == 1:
         im.set_array(-xPhys.reshape((nelx,nely)).T)
         fig.canvas.draw()
-        plt.show()
-        input("Press any key...")
+        plt.savefig('topo_%d.png'%glo)
 #
     return [g,dg]
 #
@@ -86,11 +88,14 @@ def simu(n,m,x_p,aux,glo,out):
 #   x_i :   starting point
 #   x_l :   global lower bounds on design variables
 #   x_u :   global upper bounds on design variables
-#   aux :   auxiliary dictionary which may be used for custom parameters (passing of)
+#   aux :   auxiliary dictionary / list which may be used for custom parameters 
+#           (passed to simu, and the subsolver)
+#   glo :   Number of samples in multi-start run
 #
 #   Subproblem flags (sub)
 #
 #   1   :   OC (restricted to min. comp. problem)
+#   2   :   generalised OC (restricted to min. comp. problem)
 #   10  :   MMA
 #   11  :   MMA with asymptote adaptation heuristic (as per Svanberg 1987) 
 #   12  :   Same as 10, but with constraint relaxation (as per Svanverg 1987)
@@ -124,10 +129,13 @@ def simu(n,m,x_p,aux,glo,out):
 #   Global flags and parameters
 #
 #   f_d=1   :   activate gradient calculation via finite differences (dont if 0)
-#   c_t=*   :   convergence limit in terms of step size (Euclidean norm)
-#   f_a=*   :   a priori known (analytic) solution; used in termination criteria (set to large 
-#               negative number if not applicable)
-#   m_k     :   maximum outer iterations
+#   c_e=*   :   convergence threshold in terms of Euclidean norm of step size
+#   c_i=*   :   convergence threshold in terms of Infinity norm of step size
+#   c_v=*   :   threshold for constraint violation (else no termination)
+#   f_t=*   :   threshold for termination on objective value change (not recommended)
+#   f_a=*   :   a priori known (analytic) solution; used as termination criteria in some tests
+#               (set to large negative number otherwise, as it is not recommended)
+#   m_k     :   maximum number of iterations
 #
 def init():
 #
