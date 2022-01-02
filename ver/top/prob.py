@@ -154,7 +154,7 @@ def init():
     f_a=-1e8
     m_k=1000
 #
-    sub=2 
+    sub=2   # 1,2,3
     glo=0
 #
     mov_abs=0.2e0

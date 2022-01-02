@@ -2,7 +2,13 @@
 import numpy as np
 from scipy.optimize import minimize
 #
-###################################################################################################
+from matplotlib import colors
+import matplotlib.pyplot as plt
+from scipy.sparse import coo_matrix
+from scipy.sparse.linalg import spsolve
+import cvxopt ;import cvxopt.cholmod
+#
+####################################################################################################
 #
 #   Simulation: Objective and constraints function value given x
 #               derivatives if possible, else finite differences (f_d)
@@ -22,49 +28,54 @@ from scipy.optimize import minimize
 #
 def simu(n,m,x_p,aux,glo,out):
 #
-#   index transform to enable copy-paste
-#   of functions and gradients from
-#   (Fortran) SAOi
-#
-    x=np.zeros(n+1)
-    for i in range(n):
-        x[i+1]=x_p[i]
-#
     g=np.zeros((1+m),dtype=np.float64)
-#
-# some often occurring terms
-    temp0 = 0.124e0
-    temp1 = np.sqrt(1.e0 + x[2]**2)
-    temp2 = 8.e0/x[1] + 1.e0/(x[1]*x[2])
-    temp3 = 8.e0/x[1] - 1.e0/(x[1]*x[2])
-#
-# the objective function
-    g[0]    = x[1]*temp1
-#
-# the first constraint
-    g[1] = temp0*temp1*temp2 - 1.e0
-#
-# the second constraint
-    g[2] = temp0*temp1*temp3 - 1.e0
-#
     dg=np.zeros((1+m,n),dtype=np.float64)
 #
-# some often occurring terms
-    tmp0 = 0.124e0
-    tmp1 = np.sqrt(1.e0 + x[2]**2)
-    tmp2 = 8.e0/x[1] + 1.e0/(x[1]*x[2])
-    tmp3 = 8.e0/x[1] - 1.e0/(x[1]*x[2])
-    tmp4 = 2.e0*x[2]
+    [nelx,nely,volfrac,rmin,penal,ft,Emin,Emax,ndof,KE,H,Hs,iK,jK,edofMat,fixed,free,f,u,im,fig]=aux
 #
-# derivatives of the objective function
-    dg[0][0] = tmp1
-    dg[0][1] = x[1]/(2.e0*tmp1)*tmp4
+    ce=np.zeros(n,dtype=np.float64)
+    dc=np.zeros(n,dtype=np.float64)
+    xPhys=np.zeros(n,dtype=np.float64)
+    x=np.zeros(n,dtype=np.float64)
+    x=x_p[:]
 #
-# derivatives of the inequality constraints
-    dg[1][0] = -tmp0*tmp1*(8.e0/x[1]**2 + 1.e0/(x[1]**2*x[2]))
-    dg[1][1] = tmp0/(2.e0*tmp1)*tmp4*tmp2 - tmp0*tmp1/(x[1]*x[2]**2)
-    dg[2][0] = -tmp0*tmp1*(8.e0/x[1]**2 - 1.e0/(x[1]**2*x[2]))
-    dg[2][1] = tmp0/(2.e0*tmp1)*tmp4*tmp3 + tmp0*tmp1/(x[1]*x[2]**2)
+    # Filter design variables
+    if ft==0:   xPhys[:]=x
+    elif ft==1: xPhys[:]=np.asarray(H*x[np.newaxis].T/Hs)[:,0]
+#
+    # Setup and solve FE problem
+    sK=((KE.flatten()[np.newaxis]).T*(Emin+(xPhys)**penal*(Emax-Emin))).flatten(order='F')
+    K = coo_matrix((sK,(iK,jK)),shape=(ndof,ndof)).tocsc()
+    # Remove constrained dofs from matrix and convert to coo
+    K = deleterowcol(K,fixed,fixed).tocoo()
+    # Solve system 
+    K = cvxopt.spmatrix(K.data,K.row.astype(np.int),K.col.astype(np.int))
+    B = cvxopt.matrix(f[free,0])
+    cvxopt.cholmod.linsolve(K,B)
+    u[free,0]=np.array(B)[:,0]
+
+    # Objective and sensitivity
+    ce[:] = (np.dot(u[edofMat].reshape(nelx*nely,8),KE) * u[edofMat].reshape(nelx*nely,8) ).sum(1)
+    obj=( (Emin+xPhys**penal*(Emax-Emin))*ce ).sum()
+    dc[:]=(-penal*xPhys**(penal-1)*(Emax-Emin))*ce
+#
+    g[0]=obj
+#
+    dv=np.ones(nely*nelx,dtype=np.float64)
+    g[1]=np.sum(x)-volfrac*float(n)
+#
+    # Sensitivity filtering:
+    if ft==0:
+        dg[0][:] = np.asarray((H*(x*dc))[np.newaxis].T/Hs)[:,0] / np.maximum(0.001,x)
+        dg[1][:] = dv
+    elif ft==1:
+        dg[0][:] = np.asarray(H*(dc[np.newaxis].T/Hs))[:,0]
+        dg[1][:] = np.asarray(H*(dv[np.newaxis].T/Hs))[:,0]
+#
+    if out == 1:
+        im.set_array(-xPhys.reshape((nelx,nely)).T)
+        fig.canvas.draw()
+        plt.savefig('topo_%d.png'%glo)
 #
     return [g,dg]
 #
@@ -128,47 +139,141 @@ def simu(n,m,x_p,aux,glo,out):
 #
 def init():
 #
-    n=2
-    m=2
-    x_i=np.ones(n,dtype=np.float64)
-    x_l=np.ones(n,dtype=np.float64)
-    x_u=np.ones(n,dtype=np.float64)
+    n=180*60
+    m=1
 #
-    x_i[0]=1.5
-    x_i[1]=0.5
-#
-    x_l[0]=0.2
-    x_l[1]=0.1
-#
-    x_u[0]=4.0
-    x_u[1]=1.6
+    x_i=0.4*np.ones(n,dtype=np.float64)
+    x_l=0e0*np.ones(n,dtype=np.float64)
+    x_u=1e0*np.ones(n,dtype=np.float64)
 #
     f_d=0
-    c_e=1e-8
-    c_i=1e-8
-    c_v=1e-3
+    c_e=1e-2
+    c_i=1e-2
+    c_v=1e-1
     f_t=0e0
-    f_a=1.51
-    m_k=8
+    f_a=-1e8
+    m_k=2000
 #
-    sub=99 # set to conlin (20), to reproduce column 2 in TABLE 3; see sub_usr for SLP mod.
+    sub=3 
     glo=0
 #
-    mov_abs=-0.1e0
+    mov_abs=0.2e0
     mov_rel=2e0
 #
-    exp_set=2e0
-    exp_min=-6e0
-    exp_max=-0.1#0.9
-#
-    asy_fac=1e0/5e0
+    asy_fac=1e0/2e0
     asy_adp=1e0/2e0
 #
-    aux={'s_l':0.5,'s_u':0.75}
+    exp_set=-3e0#-1e0
+#
+    exp_min=-3e0 
+    exp_max=1.0e0
 #
     mov={'mov_abs': mov_abs, 'mov_rel': mov_rel}
     exp={'exp_set': exp_set, 'exp_min': exp_min, 'exp_max': exp_max}
     asy={'asy_fac': asy_fac,'asy_adp': asy_adp}
 #
+    aux=[]
+#
+    aux=topopt_init(180,60,0.4,5.4,3.0,1)
+#
     return n,m,x_i,x_l,x_u,c_e,c_i,c_v,f_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo
+#
+def topopt_init(nelx,nely,volfrac,rmin,penal,ft):
+#
+	# Max and min stiffness
+	Emin=1e-9
+	Emax=1.0
+
+	# dofs:
+	ndof = 2*(nelx+1)*(nely+1)
+
+	# Allocate design variables (as array), initialize and allocate sens.
+	x=volfrac * np.ones(nely*nelx,dtype=float)
+	xold=x.copy()
+	xPhys=x.copy()
+
+	g=0 # must be initialized to use the NGuyen/Paulino OC approach
+	dc=np.zeros((nely,nelx), dtype=float)
+
+	# FE: Build the index vectors for the for coo matrix format.
+	KE=lk()
+	edofMat=np.zeros((nelx*nely,8),dtype=int)
+	for elx in range(nelx):
+		for ely in range(nely):
+			el = ely+elx*nely
+			n1=(nely+1)*elx+ely
+			n2=(nely+1)*(elx+1)+ely
+			edofMat[el,:]=np.array([2*n1+2, 2*n1+3, 2*n2+2, 2*n2+3,2*n2, 2*n2+1, 2*n1, 2*n1+1])
+	# Construct the index pointers for the coo format
+	iK = np.kron(edofMat,np.ones((8,1))).flatten()
+	jK = np.kron(edofMat,np.ones((1,8))).flatten()    
+
+	# Filter: Build (and assemble) the index+data vectors for the coo matrix format
+	nfilter=int(nelx*nely*((2*(np.ceil(rmin)-1)+1)**2))
+	iH = np.zeros(nfilter)
+	jH = np.zeros(nfilter)
+	sH = np.zeros(nfilter)
+	cc=0
+	for i in range(nelx):
+		for j in range(nely):
+			row=i*nely+j
+			kk1=int(np.maximum(i-(np.ceil(rmin)-1),0))
+			kk2=int(np.minimum(i+np.ceil(rmin),nelx))
+			ll1=int(np.maximum(j-(np.ceil(rmin)-1),0))
+			ll2=int(np.minimum(j+np.ceil(rmin),nely))
+			for k in range(kk1,kk2):
+				for l in range(ll1,ll2):
+					col=k*nely+l
+					fac=rmin-np.sqrt(((i-k)*(i-k)+(j-l)*(j-l)))
+					iH[cc]=row
+					jH[cc]=col
+					sH[cc]=np.maximum(0.0,fac)
+					cc=cc+1
+	# Finalize assembly and convert to csc format
+	H=coo_matrix((sH,(iH,jH)),shape=(nelx*nely,nelx*nely)).tocsc()	
+	Hs=H.sum(1)
+
+	# BC's and support
+	dofs=np.arange(2*(nelx+1)*(nely+1))
+	fixed=np.union1d(dofs[0:2*(nely+1):2],np.array([2*(nelx+1)*(nely+1)-1]))
+	free=np.setdiff1d(dofs,fixed)
+
+	# Solution and RHS vectors
+	f=np.zeros((ndof,1))
+	u=np.zeros((ndof,1))
+
+	# Set load
+	f[1,0]=-1
+#
+	# Initialize plot and plot the initial design
+	plt.ion() # Ensure that redrawing is possible
+	fig,ax = plt.subplots()
+	im = ax.imshow(-xPhys.reshape((nelx,nely)).T, cmap='gray',\
+	interpolation='none',norm=colors.Normalize(vmin=-1,vmax=0))
+#
+	return nelx,nely,volfrac,rmin,penal,ft,Emin,Emax,ndof,KE,H,Hs,iK,jK,edofMat,fixed,free,f,u,im,fig
+#
+#element stiffness matrix
+def lk():
+	E=1
+	nu=0.3
+	k=np.array([1/2-nu/6,1/8+nu/8,-1/4-nu/12,-1/8+3*nu/8,-1/4+nu/12,-1/8-nu/8,nu/6,1/8-3*nu/8])
+	KE = E/(1-nu**2)*np.array([ [k[0], k[1], k[2], k[3], k[4], k[5], k[6], k[7]],
+	[k[1], k[0], k[7], k[6], k[5], k[4], k[3], k[2]],
+	[k[2], k[7], k[0], k[5], k[6], k[3], k[4], k[1]],
+	[k[3], k[6], k[5], k[0], k[7], k[2], k[1], k[4]],
+	[k[4], k[5], k[6], k[7], k[0], k[1], k[2], k[3]],
+	[k[5], k[4], k[3], k[2], k[1], k[0], k[7], k[6]],
+	[k[6], k[3], k[4], k[1], k[2], k[7], k[0], k[5]],
+	[k[7], k[2], k[1], k[4], k[3], k[6], k[5], k[0]] ]);
+	return (KE)
+#
+def deleterowcol(A, delrow, delcol):
+    # Assumes that matrix is in symmetric csc form !
+    m = A.shape[0]
+    keep = np.delete (np.arange(0, m), delrow)
+    A = A[keep, :]
+    keep = np.delete (np.arange(0, m), delcol)
+    A = A[:, keep]
+    return A
 #
