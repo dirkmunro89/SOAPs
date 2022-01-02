@@ -11,10 +11,8 @@ def sub_mmaa(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,x_2,L_k,U_k,k,mov,asy):
     mov_rel=mov['mov_rel']
     asy_adp=asy['asy_adp']
 #
-    L=np.zeros(n,dtype=np.float64)
-    U=np.zeros(n,dtype=np.float64)
-    dx_l=np.ones(n,dtype=np.float64)
-    dx_u=np.ones(n,dtype=np.float64)
+    L=np.zeros(n,dtype=np.float64); U=np.zeros(n,dtype=np.float64)
+    dx_l=np.ones(n,dtype=np.float64); dx_u=np.ones(n,dtype=np.float64)
 #
     for i in range(n):
         if k <= 1:

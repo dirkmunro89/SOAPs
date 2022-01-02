@@ -114,13 +114,14 @@ def init():
     f_a=1.340
     m_k=20
 #
-    sub=10
+    sub=10  # set to 20 (CONLIN) to verify column 1 / or set asy_fac to a small positive number,
+            # while leaving sub at 10
     glo=0
 #
     mov_abs=-0.1e0
     mov_rel=2e0
 #
-    asy_fac=3e0/4e0   # CHANGE THIS NUMBER TO REFLECT EXPERIMENTS IN TABLE 1; Svanberg (1987)
+    asy_fac=3e0/4e0  # CHANGE THIS NUMBER TO REFLECT EXPERIMENTS IN TABLE 1; Svanberg (1987)
     asy_adp=1e0/2e0
 #
     exp_set=2e0

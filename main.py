@@ -26,7 +26,7 @@ def loop(s):
 #       Simulation: function and gradient values
         [g,dg]=simu(n,m,x_p,aux,s,0)
         if f_d == 1: # if finite diff. required
-            dg[:]=dsim(n,m,x_p,aux)
+            dg[:]=dsim(n,m,x_p,aux,s,0)
         if k == 0: dg_1[:]=dg; x_1[:]=x_p
         d_f0=abs(g[0]-g_1[0])/abs(g[0])
 #
