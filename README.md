@@ -5,9 +5,10 @@ THIS REPO IS UNDER CONSTRUCTION; THE CODE IS SUBJECT TO TESTING AND CLEANING
 
 Verification examples available in ./ver/
 
-- Python (cholmod) Topology Optimization code by DTU; available [here](https://www.topopt.mek.dtu.dk/apps-and-software/topology-optimization-codes-written-in-python); minimum compliance problem subject to a material limit, solved with the Optimality Criteria (OC) method. Generalised exponential OC method verified against.
+- The three example problems of Svanberg [[1]](#9). MMA and CONLIN implementations verified against.
 
-- All three example problems of Svanberg [[1]](#9)
+- Python Topology Optimization code by DTU, available [here](https://www.topopt.mek.dtu.dk/apps-and-software/topology-optimization-codes-written-in-python). Minimum compliance problem subject to a material limit, solved with the Optimality Criteria (OC) method. Generalised exponential OC method verified against.
+
 
 ## Execution
 
