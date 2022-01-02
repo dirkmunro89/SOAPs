@@ -154,18 +154,19 @@ def init():
     f_a=-1e8
     m_k=1000
 #
-    sub=2  #!
+    sub=2 
     glo=0
 #
-    mov_abs=0.2e0 #!
+    mov_abs=0.2e0
     mov_rel=2e0
 #
     asy_fac=1e0/2e0
     asy_adp=1e0/2e0
 #
-    exp_set=-3e0
-    exp_min=-3e0 #!
-    exp_max=1.0e0#1e0
+    exp_set=-1e0
+#
+    exp_min=-3e0 
+    exp_max=1.0e0
 #
     mov={'mov_abs': mov_abs, 'mov_rel': mov_rel}
     exp={'exp_set': exp_set, 'exp_min': exp_min, 'exp_max': exp_max}
