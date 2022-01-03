@@ -156,7 +156,8 @@ def init():
     m_k=999
 #
     sub=1
-    glo=6
+    glo=100
+    cpu=12
 #
     mov_abs=0.2e0
     mov_rel=2e0
@@ -177,7 +178,7 @@ def init():
 #
     aux=topopt_init(180,60,0.4,5.4,3.0,1)
 #
-    return n,m,x_i,x_l,x_u,c_e,c_i,c_v,f_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo
+    return n,m,x_i,x_l,x_u,c_e,c_i,c_v,f_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo,cpu
 #
 def topopt_init(nelx,nely,volfrac,rmin,penal,ft):
 #

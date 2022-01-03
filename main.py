@@ -99,12 +99,12 @@ def P_f(ni,ri,a,b):
 #
 if __name__ == "__main__":
 #
-    [n,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,glo]=init()
-    if glo == 0: [_,_,_,_,_]=loop(0)
+    [n,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,glo,cpu]=init()
+    if glo == 0: [_,_,_,_,_,_]=loop(0)
     else:
 #
-        print('\nRunning Bayesian global optimization ... ')
-        res = Parallel(n_jobs=6)(delayed(loop)(i) for i in range(glo))
+        print('\nRunning Bayesian global optimization with %d cpus ... '%cpu)
+        res = Parallel(n_jobs=cpu)(delayed(loop)(i) for i in range(glo))
         fopt=1e8; g=0; kcv=0; kot=0; c=0; x_o=np.zeros(n,dtype=np.float64)
         print('###')
         for s in range(glo):
