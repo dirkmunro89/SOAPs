@@ -74,7 +74,7 @@ def simu(n,m,x_p,aux,glo,out):
 #
     if out == 1:
         im.set_array(-xPhys.reshape((nelx,nely)).T)
-        fig.canvas.draw()
+#       fig.canvas.draw()
         plt.savefig('topo_%d.png'%glo)
 #
     return [g,dg]
@@ -145,6 +145,7 @@ def init():
     x_i=0.4*np.ones(n,dtype=np.float64)
     x_l=0e0*np.ones(n,dtype=np.float64)
     x_u=1e0*np.ones(n,dtype=np.float64)
+#   x_i = (np.random.rand(n)*(x_u-x_l) + x_l)
 #
     f_d=0
     c_e=1e-2
@@ -152,10 +153,10 @@ def init():
     c_v=1e-1
     f_t=0e0
     f_a=-1e8
-    m_k=2000
+    m_k=999
 #
-    sub=3 
-    glo=0
+    sub=1
+    glo=6
 #
     mov_abs=0.2e0
     mov_rel=2e0
@@ -163,7 +164,7 @@ def init():
     asy_fac=1e0/2e0
     asy_adp=1e0/2e0
 #
-    exp_set=-3e0#-1e0
+    exp_set=-1e0
 #
     exp_min=-3e0 
     exp_max=1.0e0

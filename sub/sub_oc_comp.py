@@ -23,7 +23,7 @@ def sub_oc_comp(aux,n,m,x_p,dg,g,mov):
     dx_l[:]=np.maximum(x_p-move,0e0)
     dx_u[:]=np.minimum(x_p+move,1e0)
 #
-    while (l2-l1)/(l1+l2)>1e-3:
+    while (l2-l1)/(l1+l2)>1e-12:
 #
         lmid=0.5*(l2+l1)
 #
@@ -35,8 +35,6 @@ def sub_oc_comp(aux,n,m,x_p,dg,g,mov):
             l1=lmid
         else:
             l2=lmid
-#
-    print((g[1]+volfrac*n)/float(n))
 #
     x_d[0]=lmid
 #

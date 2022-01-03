@@ -52,30 +52,33 @@ def loop(s):
             (k, g[0], max(g[1:]),mov_min,mov_max,d_xi,d_xe,d_kkt))
 #
 #       Termination
-        if g[1] < c_v and g[0] < (1.+1e-3)*(f_a):
-            if glo == 0: 
-                print('\nTermination at X = xopt_*.txt\n'); np.savetxt('xopt_%d.txt'%s,x_p)
-                print('...based on a priori specified function value at analytic solution\n') 
-                break
+        if g[1] < c_v and g[0] < (1.+1e-3)*(f_a) and glo==0:
+            np.savetxt('xopt_%d.txt'%s,x_p)
+            print('\nTermination at X = xopt_*.txt\n') 
+            print('...based on a priori specified function value at analytic solution\n') 
+            break
         if d_xe < c_e and max(g[1:]) < c_v:
+            np.savetxt('xopt_%d.txt'%s,x_p)
             if glo == 0: 
-                print('\nTermination at X = xopt_*.txt\n'); np.savetxt('xopt_%d.txt'%s,x_p)
+                print('\nTermination at X = xopt_*.txt\n')
                 print('...based on convergence limit and Euclidean norm of last step\n') 
             cnv=1; break
         if d_xi < c_i and max(g[1:]) < c_v:
+            np.savetxt('xopt_%d.txt'%s,x_p)
             if glo == 0: 
-                print('\nTermination at X = xopt_*.txt\n'); np.savetxt('xopt_%d.txt'%s,x_p)
+                print('\nTermination at X = xopt_*.txt\n')
                 print('...based on convergence limit and Infinity norm of last step\n') 
             cnv=1; break
         if k>1 and d_f0 < f_t and max(g[1:]) < c_v:
+            np.savetxt('xopt_%d.txt'%s,x_p)
             if glo == 0: 
-                print('\nTermination at X = xopt_*.txt\n'); np.savetxt('xopt_%d.txt'%s,x_p)
+                print('\nTermination at X = xopt_*.txt\n')
                 print('...based on objective significant digit change\n') 
             cnv=1; break
 #
 #   If max. iter
     if k == m_k-1:
-        if glo == 0: print('\nMax. Iter. at X = xopt_*.txt\n'); np.savetxt('xopt_%d.txt'%s,x_p)
+        if glo == 0:print('\nMax. Iter. at X = xopt_*.txt\n');np.savetxt('xopt_%d.txt'%s,x_p); cnv=0
 #
     [g,dg]=simu(n,m,x_p,aux,s,1)
 #
@@ -84,14 +87,13 @@ def loop(s):
 #
     return g[0], max(g[1:]), cnv, x_p, k
 #
-def bayes(it,ir,a,b):
+def P_f(ni,ri,a,b):
 #
-#   See Bolton (2004)
+#see Bolton (2004)
 #
-#   a=1e0; b=5e2
-    a_bar=a+b-1; b_bar=b-ir-1; tmp=1e0
-    for i in range(it):
-        tmp=tmp*(it+i+1+b_bar)/(it+i+1+a_bar)
+    tmp=1e0; abar=a+b-1; bbar=b-ri-1
+    for i in range(1,ni+1):
+        tmp=tmp*(ni+i+bbar)/(ni+i+abar)
 #
     return 1e0-tmp
 #
@@ -102,36 +104,33 @@ if __name__ == "__main__":
     else:
 #
         print('\nRunning Bayesian global optimization ... ')
-        res = Parallel(n_jobs=5)(delayed(loop)(i) for i in range(glo))
+        res = Parallel(n_jobs=6)(delayed(loop)(i) for i in range(glo))
         fopt=1e8; g=0; kcv=0; kot=0; c=0; x_o=np.zeros(n,dtype=np.float64)
         print('###')
         for s in range(glo):
-#           [f0,vio,cnv,x_p,k]=loop(s)
             f0=res[s][0]; vio=res[s][1]; cnv=res[s][2]; x_p=res[s][3]; k=res[s][4]
             if cnv==1 and vio < 1e-3: 
                 kcv=kcv+k; c=c+1
                 if f0 < fopt: 
                     fopt=min(fopt, f0); g=s; x_o[:]=x_p
             res.append([f0,vio,cnv,k]); kot=kot+k
-            print(s,f0,vio,cnv,k)
 # 
-        hit=-1; loc=1
+        hit=0; loc=1
         for s in range(glo):
             if abs(fopt-res[s][0])/abs(fopt)<=1e-3 and res[s][1]<1e-3 and res[s][2]==1: hit=hit+1
             else:
                 if res[s][1] < 1e-3 and res[s][2] == 1: loc=loc+1
 #
-        p=1e6 # 1/(TBD; number of local minima)
+        p=1e3 # 1/(TBD; number of local minima)
 #
-        if hit < 0: print('Based on convergence criteria, not a single solution was found.')
-        elif hit == 0: print('Best solution found only once')
+        if hit == 0: print('Not a single best solution was found.')
         else:
             print('\nTotal number of runs\t\t\t\t\t:\t%6d'%glo)
             print('Total number of converged (also feasible) solutions\t:\t%6d'%c)
             print('Total number of subproblems (function evaluations)\t:\t%6d'%kot)
             print('Total number of subproblems in runs which converged\t:\t%6d'%kcv)
             print('Total number of times the best solution was found\t:\t%6d'%hit)
-            print('Probability of having found the global optimum\t\t:\t~%5.2f\n'%bayes(kcv,hit,1,p))
+            print('Probability of having found the optimum\t\t:\t~%5.2f\n'%P_f(c,hit,1,1000))
             np.savetxt('xopt_g.txt',x_o)
             print('Solution written to xopt_g.txt\n')
 #
