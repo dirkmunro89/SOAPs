@@ -50,6 +50,9 @@ def loop(s):
 #       Screen output
         if glo==0: print('%3d%14.3e%9.3f%11.1e|%5.1e%11.1e%11.1e%11.1e'%\
             (k, g[0], max(g[1:]),mov_min,mov_max,d_xi,d_xe,d_kkt))
+        else:
+            if k%100 == 0: print('! %3d%14.3e%9.3f%11.1e|%5.1e%11.1e%11.1e%11.1e'%\
+            (k, g[0], max(g[1:]),mov_min,mov_max,d_xi,d_xe,d_kkt))
 #
 #       Termination
         if g[1] < c_v and g[0] < (1.+1e-3)*(f_a) and glo==0:
@@ -78,14 +81,15 @@ def loop(s):
 #
 #   If max. iter
     if k == m_k-1:
-        if glo == 0:print('\nMax. Iter. at X = xopt_*.txt\n');np.savetxt('xopt_%d.txt'%s,x_p); cnv=0
+        if glo == 0: print('\nMax. Iter. at X = xopt_*.txt\n')
+        cnv=0; np.savetxt('xnot_%d.txt'%s,x_p)
 #
     [g,dg]=simu(n,m,x_p,aux,s,1)
 #
     if glo != 0:
-        print('.. done with ',s,g[0],max(g[1:]),cnv,k)
+        print('* %3d%14.3e%9.3f%5d%10d'%(s,g[0],max(g[1:]),cnv,k))
 #
-    return g[0], max(g[1:]), cnv, x_p, k
+    return g[0], max(g[1:]), cnv, k
 #
 def P_f(ni,ri,a,b):
 #
@@ -100,19 +104,18 @@ def P_f(ni,ri,a,b):
 if __name__ == "__main__":
 #
     [n,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,glo,cpu]=init()
-    if glo == 0: [_,_,_,_,_]=loop(0)
+    if glo == 0: [_,_,_,_]=loop(0)
     else:
 #
-        print('\nRunning Bayesian global optimization with %d cpus on %d runs... '%(cpu,glo+1))
-        res = Parallel(n_jobs=cpu)(delayed(loop)(i) for i in range(glo))
-        fopt=1e8; g=0; kcv=0; kot=0; c=0; x_o=np.zeros(n,dtype=np.float64)
-        print('###')
+        print('\nBayesian global optimization %d runs with %d in parallel... \n'%(glo,cpu))
+        res = Parallel(n_jobs=cpu,verbose=0)(delayed(loop)(i+1) for i in range(glo))
+        fopt=1e8; g=0; kcv=0; kot=0; c=0
         for s in range(glo):
-            f0=res[s][0]; vio=res[s][1]; cnv=res[s][2]; x_p=res[s][3]; k=res[s][4]
+            f0=res[s][0]; vio=res[s][1]; cnv=res[s][2]; k=res[s][3]
             if cnv==1 and vio < 1e-3: 
                 kcv=kcv+k; c=c+1
                 if f0 < fopt: 
-                    fopt=min(fopt, f0); g=s; x_o[:]=x_p
+                    fopt=min(fopt, f0); glo_s=s+1
             res.append([f0,vio,cnv,k]); kot=kot+k
 # 
         hit=0; loc=1
@@ -126,11 +129,10 @@ if __name__ == "__main__":
         if hit == 0: print('Not a single best solution was found.')
         else:
             print('\nTotal number of runs\t\t\t\t\t:\t%6d'%glo)
+            print('Best solution ID \t\t\t\t\t:\t%6d'%glo_s)
             print('Total number of converged (also feasible) solutions\t:\t%6d'%c)
             print('Total number of subproblems (function evaluations)\t:\t%6d'%kot)
             print('Total number of subproblems in runs which converged\t:\t%6d'%kcv)
             print('Total number of times the best solution was found\t:\t%6d'%hit)
             print('Probability of having found the optimum\t\t:\t~%5.2f\n'%P_f(c,hit,1,1000))
-            np.savetxt('xopt_g.txt',x_o)
-            print('Solution written to xopt_g.txt\n')
 #

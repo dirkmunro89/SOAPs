@@ -10,15 +10,15 @@ Verification examples available in ./ver/
 - Python Topology Optimization code by DTU, available [here](https://www.topopt.mek.dtu.dk/apps-and-software/topology-optimization-codes-written-in-python). Minimum compliance problem subject to a material limit, solved with the Optimality Criteria (OC) method. Generalised exponential OC method verified against.
 
 
-## Execution
+## Requirements and Execution
 
-Numpy and Scipy packages required. 
+For the optimization algorithm, Numpy, Scipy and Joblib packages are required. For the topology optimization examples, Matplotlib and CVXOPT (used for linear FE solve) is required in addition.
 
 Tested on Ubuntu 20.04 LTS with
 
 `python3 main.py | tee history.txt`
 
-and on Raspbian GNU/Linux 11 with
+and on Raspbian GNU/Linux 11 with (default Python 3)
 
 `python main.py | tee history.txt`
 

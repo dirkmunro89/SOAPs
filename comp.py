@@ -6,6 +6,7 @@ nelx=180
 nely=60
 #
 xs={}
+g=0
 for file in os.listdir("./"):
     filename = os.fsdecode(file)
     if 'xopt_' in filename:
@@ -13,8 +14,13 @@ for file in os.listdir("./"):
         if s != 'g':
             xs[int(s)]=np.loadtxt(filename)
         else:
+            g=1
             x_b=np.loadtxt(filename)
             g_b=x_b.reshape((nelx,nely))
+#
+if g==0:
+    print('best solution file not found')
+    exit()
 #
 TV=0e0
 for i in range(nelx-1):
@@ -40,3 +46,4 @@ for s in xs:
 #
     print(s,dff[-1],abs(TV-TVs)/TV)
 #
+#   0.05 seems to be a good measure of similarity

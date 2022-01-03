@@ -153,11 +153,11 @@ def init():
     c_v=1e-1
     f_t=0e0
     f_a=-1e8
-    m_k=999
+    m_k=1000
 #
     sub=1
-    glo=99
-    cpu=6
+    glo=100
+    cpu=3
 #
     mov_abs=0.2e0
     mov_rel=2e0
