@@ -10,7 +10,7 @@ from joblib import Parallel, delayed
 def loop(s):
 #
 #   Initializations
-    [n,m,x_p,x_l,x_u,c_e,c_i,c_v,f_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo]=init()
+    [n,m,x_p,x_l,x_u,c_e,c_i,c_v,f_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo,cpu]=init()
     if glo > 0: x_p = (np.random.rand(n)*(x_u-x_l) + x_l)#*0.5 + 0.25
     x_k=np.zeros(n,dtype=np.float64); x_1=np.zeros(n,dtype=np.float64)
     x_2=np.zeros(n,dtype=np.float64); x_d=np.ones(m,dtype=np.float64)#*1e-6
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     if glo == 0: [_,_,_,_,_,_]=loop(0)
     else:
 #
-        print('\nRunning Bayesian global optimization with %d cpus ... '%cpu)
+        print('\nRunning Bayesian global optimization with %d cpus on %d runs... '%(cpu,glo+1))
         res = Parallel(n_jobs=cpu)(delayed(loop)(i) for i in range(glo))
         fopt=1e8; g=0; kcv=0; kot=0; c=0; x_o=np.zeros(n,dtype=np.float64)
         print('###')

@@ -156,7 +156,7 @@ def init():
     m_k=999
 #
     sub=1
-    glo=100
+    glo=99
     cpu=12
 #
     mov_abs=0.2e0
