@@ -31,7 +31,7 @@ def simu(n,m,x_p,aux,glo,out):
     g=np.zeros((1+m),dtype=np.float64)
     dg=np.zeros((1+m,n),dtype=np.float64)
 #
-    [nelx,nely,volfrac,rmin,penal,ft,Emin,Emax,ndof,KE,H,Hs,iK,jK,edofMat,fixed,free,f,u,im,fig]=aux
+    [nelx,nely,volfrac,rmin,penal,ft,Emin,Emax,ndof,KE,H,Hs,iK,jK,edofMat,fixed,free,f,u,ax,fig]=aux
 #
     ce=np.zeros(n,dtype=np.float64)
     dc=np.zeros(n,dtype=np.float64)
@@ -73,8 +73,10 @@ def simu(n,m,x_p,aux,glo,out):
         dg[1][:] = np.asarray(H*(dv[np.newaxis].T/Hs))[:,0]
 #
     if out == 1:
-        im.set_array(-xPhys.reshape((nelx,nely)).T)
+#       im.set_array(-xPhys.reshape((nelx,nely)).T)
 #       fig.canvas.draw()
+        im = ax.imshow(-xPhys.reshape((nelx,nely)).T, cmap='gray',\
+        interpolation='none',norm=colors.Normalize(vmin=-1,vmax=0))
         plt.savefig('topo_%d.png'%glo)
 #
     return [g,dg]
@@ -157,7 +159,7 @@ def init():
 #
     sub=1
     glo=100
-    cpu=3
+    cpu=4
 #
     mov_abs=0.2e0
     mov_rel=2e0
@@ -250,10 +252,8 @@ def topopt_init(nelx,nely,volfrac,rmin,penal,ft):
 	# Initialize plot and plot the initial design
 	plt.ion() # Ensure that redrawing is possible
 	fig,ax = plt.subplots()
-	im = ax.imshow(-xPhys.reshape((nelx,nely)).T, cmap='gray',\
-	interpolation='none',norm=colors.Normalize(vmin=-1,vmax=0))
 #
-	return nelx,nely,volfrac,rmin,penal,ft,Emin,Emax,ndof,KE,H,Hs,iK,jK,edofMat,fixed,free,f,u,im,fig
+	return nelx,nely,volfrac,rmin,penal,ft,Emin,Emax,ndof,KE,H,Hs,iK,jK,edofMat,fixed,free,f,u,ax,fig
 #
 #element stiffness matrix
 def lk():

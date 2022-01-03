@@ -134,5 +134,5 @@ if __name__ == "__main__":
             print('Total number of subproblems (function evaluations)\t:\t%6d'%kot)
             print('Total number of subproblems in runs which converged\t:\t%6d'%kcv)
             print('Total number of times the best solution was found\t:\t%6d'%hit)
-            print('Probability of having found the optimum\t\t:\t~%5.2f\n'%P_f(c,hit,1,1000))
+            print('Probability of having found the optimum\t\t\t:\t~%5.2f\n'%P_f(c,hit,1,1000))
 #
