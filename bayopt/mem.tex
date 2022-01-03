@@ -96,6 +96,8 @@
 \begin{document}
 \maketitle
 
+\section{Can we develop confidence in the global optimality of a solution?}
+
 Assume that we have an optimization problem and a search algorithm (e.g. gradient-based) to solve it. That is, for a given starting position $\bx_0$ the algorithm will return a stationary point $\bx_\ast$, a candidate optimum from all the potential optima---\emph{i.e.} local optima, expect for the one global optima. 
 
 Assume that the optimization problem has a finite but unknown number of optima $\bx^j_\ast$, with $j=1,2,\ldots, s$, and that from a particular starting point $\bx_0$, the algorithm will converge to one of them. This procedure which transforms a given $\bx_0$ to one of the the optima $\bx^j_\ast$ is deterministic, yet unpredictable. In other words, given a new $\bx_0$ (pulled `from a hat', so to speak), we do not know \emph{a priori} which $\bx^j_\ast$ will be returned; however, given the same $\bx_0$ again, the same $\bx^j_\ast$ (from before) will be returned.
@@ -177,7 +179,7 @@ then it follows that
 \begin{equation}
 \P \left[ r_\ast \ge 1 | \left[ n, r \right] \right] \ge \P \left[ \rho_\ast \ge 1 | \left[ n, r \right] \right] \: .
 \end{equation}
-That is, the probability of having had at least one absolute `success' $r_\ast$, after $n$ experiments, is greater than the probability of having at least one `relative success' $\rho_\ast$. This is property that may have to be justified in the optimization algorithm; \emph(e.g.), move-limits should be sufficiently large?
+That is, the probability of having had at least one absolute `success' $r_\ast$, after $n$ experiments, is greater than the probability of having at least one `relative success' $\rho_\ast$. This is property that may have to be justified in the optimization algorithm; \emph{e.g.}, move-limits should be sufficiently large?
 
 Substitution of (\ref{eqn:al1}) and (\ref{eqn:bay}) in (\ref{eqn:al2}), and, in turn, substitution of the binomial (\ref{eqn:binom}) and beta (\ref{eqn:beta}) distributions, permits straight-forward cancellations and simplification \cite{snyman1987} to
 \begin{multline}
@@ -217,6 +219,8 @@ def P_f(ni,ri,a,b):
     return 1e0-tmp
 #
 \end{verbatim}
+
+\section{Topology optimization experiments}
 
 % BIBLIOGRAPHY
 \bibliographystyle{unsrt} 

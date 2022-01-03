@@ -100,7 +100,7 @@ def P_f(ni,ri,a,b):
 if __name__ == "__main__":
 #
     [n,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,glo,cpu]=init()
-    if glo == 0: [_,_,_,_,_,_]=loop(0)
+    if glo == 0: [_,_,_,_,_]=loop(0)
     else:
 #
         print('\nRunning Bayesian global optimization with %d cpus on %d runs... '%(cpu,glo+1))
