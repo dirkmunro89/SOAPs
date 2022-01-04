@@ -13,4 +13,16 @@ F.M. Dekking, C.~Kraaikamp, H.~P. Lopuha{\"a}, and L.~E. Meester.
   understanding why and how}.
 \newblock Springer Science \& Business Media, 2005.
 
+\bibitem{sigmund2001m}
+O.~Sigmund.
+\newblock A 99 line topology optimization code written in matlab.
+\newblock {\em Structural and multidisciplinary optimization}, 21(2):120--127,
+  2001.
+
+\bibitem{munro2018design}
+D.~Munro and A.A. Groenwold.
+\newblock On design-set restriction in sand topology optimization.
+\newblock {\em Structural and Multidisciplinary Optimization},
+  57(4):1579--1592, 2018.
+
 \end{thebibliography}

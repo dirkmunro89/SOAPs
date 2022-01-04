@@ -96,9 +96,9 @@
 \begin{document}
 \maketitle
 
-\section{Can we develop confidence in the global optimality of a solution?}
+\section{Confidence-based global optimization}
 
-Assume that we have an optimization problem and a search algorithm (e.g. gradient-based) to solve it. That is, for a given starting position $\bx_0$ the algorithm will return a stationary point $\bx_\ast$, a candidate optimum from all the potential optima---\emph{i.e.} local optima, expect for the one global optima. 
+Assume that we have an optimization problem and a search algorithm (e.g. gradient-based) to solve it. That is, for a given starting position $\bx_0$ the algorithm will return a stationary point $\bx_\ast$, a candidate optimum from all the potential optima---in general there are plenty of local optima, and one global optimum. 
 
 Assume that the optimization problem has a finite but unknown number of optima $\bx^j_\ast$, with $j=1,2,\ldots, s$, and that from a particular starting point $\bx_0$, the algorithm will converge to one of them. This procedure which transforms a given $\bx_0$ to one of the the optima $\bx^j_\ast$ is deterministic, yet unpredictable. In other words, given a new $\bx_0$ (pulled `from a hat', so to speak), we do not know \emph{a priori} which $\bx^j_\ast$ will be returned; however, given the same $\bx_0$ again, the same $\bx^j_\ast$ (from before) will be returned.
 
@@ -168,10 +168,10 @@ In the end, we want to have a measure of confidence in whether we may have found
 which follows from the binomial distribution (\ref{eqn:binom}) of the complementary probability: 1 minus the probability of not finding the true optimum at all ($r=0$, after $n$ experiments). On the other hand, we have a probability density function $\p\left[\P_\ast | \left[ n, r \right] \right]$, updated with the results $r$ of $n$ experiments, as per Bayes' theorem (\ref{eqn:bay}). Applying a change-of-variable \cite{dekking2005} to $\p\left[P_\ast | \ldots\right]$ from Eq. (\ref{eqn:bay}), with Eq. (\ref{eqn:al1}) the transformation function, the probability of having found the optimum at least once, in terms of $n$ and $r$, is
 \begin{equation}
 \label{eqn:al2}
-\P \left[ r_\ast \ge 1 | \left[ n, r \right] \right] = \int^1_0 \P \left[ r^\ast \ge 1 | \left[ n, \P_\ast \right] \right] \p\left[\P_\ast | \left[ n, r \right] \right] \textrm{d}P_\ast \:.
+\P \left[ r_\ast \ge 1 | \left[ n, r \right] \right] = \int^1_0 \P \left[ r_\ast \ge 1 | \left[ n, \P_\ast \right] \right] \p\left[\P_\ast | \left[ n, r \right] \right] \textrm{d}P_\ast \:.
 \end{equation}
 
-Now, the issue of being able to count the number of `successes' $r_\ast$ from $n$ experiments is addressed. The objective value of a particular optima may be evaluated, $\F_j \left[ \bx^j_\ast \right]$, and values amongst different optima may be compared: \emph{e.g.} is $\F_c \left[ \bx^c_\ast \right]$ a better optima than $\F_d \left[ \bx^d_\ast \right]$? Hence, from $n$ experiments, we can determine what was relatively the best optimum solution found $\bchi_\ast$, and we can count how many solutions $\rho_\ast$ (`relative successes') correspond to this $\bchi_\ast$. If we assume that the probability of finding the global optimum from a random starting point $\P_\ast$, is \emph{at least} the probability of finding any other $\P^j_\ast$
+Now, the issue of being able to count the number of `successes' $r_\ast$ from $n$ experiments is addressed. The objective value of a particular optima may be evaluated, $\F \left[ \bx^j_\ast \right]$, and values amongst different optima may be compared: \emph{e.g.} is $\F \left[ \bx^c_\ast \right]$ a better optima than $\F \left[ \bx^d_\ast \right]$? Hence, from $n$ experiments, we can determine what was relatively the best optimum solution found $\bchi_\ast$, and we can count how many solutions $\rho_\ast$ (`relative successes') correspond to this $\bchi_\ast$. If we assume that the probability of finding the global optimum from a random starting point $\P_\ast$, is \emph{at least} the probability of finding any other $\P^j_\ast$
 \begin{equation}
 \P_\ast \ge \P^j_\ast \: \forall \: j \:,
 \end{equation}
@@ -189,9 +189,8 @@ Substitution of (\ref{eqn:al1}) and (\ref{eqn:bay}) in (\ref{eqn:al2}), and, in 
 
 Further cancellations are made in the factorials, and, in numerical terms, the calculation is dealt with as per the Python function given verbatim below. 
 
-In Table \ref{tab:exp} some example calculations are given with a severely pessimistic estimate of $\p[\P_\ast]$, with $a=1$ and $b=1000$ (see Fig. \ref{fig:beta}). We can see how the confidence in having found the global optimum $\P_f$ changes for different values of $n$ and $r$. For example, with 10 experiments ($n$), even if we have a success rater of 1 in 2 ($r=5$), our confidence barely rounds-up to 1 \%.  However, if we do 100 experiments, and we have only between 5 and 10 successes, then the confidence of having found the global optimum increases to about 50\%. This is not bad, given a prior expectation of $\frac{1}{1 + 1000} \approx \frac{1}{1000}$ (0.1 \%). Given 200 experiments, and 10 successes, our confidence increases to a fairly comfortable 80\%, \emph{etc.}.
-
-\begin{table}[!h]
+In Table \ref{tab:exp} some example calculations are given with a severely pessimistic estimate of $\p[\P_\ast]$, with $a=1$ and $b=1000$ (see Fig. \ref{fig:beta}). 
+\begin{table}
 \centering
 \caption{\label{tab:exp}Example calculations using Eq. (\ref{eqn:res}), with $a=1$ and $b=1000$ in the prior $\p[\P_\ast]$ . }
 \begin{tabular}{ll|r|ll|r|ll|r|ll|r|}
@@ -206,6 +205,10 @@ $n$  & $r$  & $\P_f$  & $n$   & $r$  & $\P_f$  & $n$    & $r$  & $\P_f$ & $n$   
 \end{tabular}
 \end{table}
 
+
+We can see how the confidence in having found the global optimum $\P_f$ changes for different values of $n$ and $r$. For example, with 10 experiments ($n$), even if we have a success rate of 1 in 2 ($r=5$), our confidence is about 5 \%.  However, if we do 100 experiments, and we have only between 5 and 10 successes, then the confidence of having found the global optimum increases to about 50\%. This is not bad, given a prior expectation of $\frac{1}{1 + 1000} \approx \frac{1}{1000}$ (0.1 \%). Given 200 experiments, and 10 successes, our confidence increases to a fairly comfortable 80\%, \emph{etc.}.
+
+\begin{minipage}{\linewidth}
 \begin{verbatim}
 #
 def P_f(ni,ri,a,b):
@@ -219,8 +222,28 @@ def P_f(ni,ri,a,b):
     return 1e0-tmp
 #
 \end{verbatim}
+\end{minipage}
 
-\section{Topology optimization experiments}
+\section{Applied to simple topology optimization}
+Fittingly avoiding the details of the optimization problem, the procedure is tested on the well-known Python implementation of the classical topology optimization problem \cite{sigmund2001m}. The implementation is taken as is, the starting point is set to an array of values, with each individual element sampled from a uniform distribution between the lower and upper bounds of the problem, and the problem is executed 100 times (embarrassingly parallel). Throughout solutions will be characterized/compared based on objective function values and a measure of the number-of-holes' the topology has (a discrete version of a `perimeter' quantity).
+
+Based on a 1\% threshold in the relative objective function values, the best solution---see Figure \ref{fig:top02}---is found $r=33$ times. Based on a 5\% difference in the perimeter quantity, the best solution was found $r=37$ times. (We have been able to visually inspect whether these counts are representative.) Assuming a (horrible) Beta distribution prior with $a=1$ and $b=1000$, there is a 90\% probability that we have found the global optimum\footnote{Note that the particular filtering applied to the standard problem serves to explicitly restrict the number of solutions; we would have more candidate optima and fewer `successes' for a smaller value of the filter\cite{munro2018design}.}.
+\begin{figure}
+\centering
+\begin{subfigure}{0.4\textwidth}
+\centering
+\includegraphics[scale=0.55, trim={2.05cm 4cm 1cm 4cm},clip]{topo_58.png}
+\caption{Best solution found \label{fig:glo02}}
+\end{subfigure} \hfill
+\begin{subfigure}{0.4\textwidth}
+\centering
+\includegraphics[scale=0.55, trim={2.05cm 4cm 1cm 4cm},clip]{topo_11.png}
+\caption{Example of a local optima \label{fig:loc02}}
+\end{subfigure}
+\caption{Standard/default test problem; $n=100$ experiments. \label{fig:top02}}
+\end{figure}
+
+For sake of interest; repeating the 100 experiments with a move-limit of 1.0 in the OC subsolver, results in $r = 60$, almost double the number of `successes'; which brings the probability of having found the global optimum to 99\%. That is, this manner of experimentation may also be a rigorous way of comparing the success of different optimization algorithms and parameter settings---while continuously building up confidence in the best known solution. 
 
 % BIBLIOGRAPHY
 \bibliographystyle{unsrt} 
