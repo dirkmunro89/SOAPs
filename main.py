@@ -1,5 +1,6 @@
 #
 import os
+import sys
 import numpy as np
 from scipy.optimize import minimize
 from prob import init, simu
@@ -20,7 +21,7 @@ def loop(s):
 #
 #   Screen output
     if glo==0: print(('\n%3s%14s%9s%13s%17s%11s%11s')%\
-        ('k', 'Obj', 'Vio', 'Mov', '|dX|', '||dX||', '|kkt|'))
+        ('k', 'Obj', 'Vio', 'Mov', '|dX|', '||dX||', '|kkt|'),flush=True)
     for k in range(m_k):
 #
 #       Simulation: function and gradient values
@@ -49,34 +50,34 @@ def loop(s):
 #
 #       Screen output
         if glo==0: print('%3d%14.3e%9.3f%11.1e|%5.1e%11.1e%11.1e%11.1e'%\
-            (k, g[0], max(g[1:]),mov_min,mov_max,d_xi,d_xe,d_kkt))
+            (k, g[0], max(g[1:]),mov_min,mov_max,d_xi,d_xe,d_kkt),flush=True)
         else:
             if k%100 == 0: print('! %3d%14.3e%9.3f%11.1e|%5.1e%11.1e%11.1e%11.1e'%\
-            (k, g[0], max(g[1:]),mov_min,mov_max,d_xi,d_xe,d_kkt))
+            (k, g[0], max(g[1:]),mov_min,mov_max,d_xi,d_xe,d_kkt),flush=True)
 #
 #       Termination
         if g[1] < c_v and g[0] < (1.+1e-3)*(f_a) and glo==0:
             np.savetxt('xopt_%d.txt'%s,x_p)
-            print('\nTermination at X = xopt_*.txt\n') 
-            print('...based on a priori specified function value at analytic solution\n') 
+            print('\nTermination at X = xopt_*.txt\n',flush=True) 
+            print('...based on a priori specified function value at analytic solution\n',flush=True) 
             break
         if d_xe < c_e and max(g[1:]) < c_v:
             np.savetxt('xopt_%d.txt'%s,x_p)
             if glo == 0: 
-                print('\nTermination at X = xopt_*.txt\n')
-                print('...based on convergence limit and Euclidean norm of last step\n') 
+                print('\nTermination at X = xopt_*.txt\n',flush=True)
+                print('...based on convergence limit and Euclidean norm of last step\n',flush=True) 
             cnv=1; break
         if d_xi < c_i and max(g[1:]) < c_v:
             np.savetxt('xopt_%d.txt'%s,x_p)
             if glo == 0: 
-                print('\nTermination at X = xopt_*.txt\n')
-                print('...based on convergence limit and Infinity norm of last step\n') 
+                print('\nTermination at X = xopt_*.txt\n',flush=True)
+                print('...based on convergence limit and Infinity norm of last step\n',flush=True) 
             cnv=1; break
         if k>1 and d_f0 < f_t and max(g[1:]) < c_v:
             np.savetxt('xopt_%d.txt'%s,x_p)
             if glo == 0: 
-                print('\nTermination at X = xopt_*.txt\n')
-                print('...based on objective significant digit change\n') 
+                print('\nTermination at X = xopt_*.txt\n',flush=True)
+                print('...based on objective significant digit change\n',flush=True) 
             cnv=1; break
 #
 #   If max. iter
@@ -88,6 +89,8 @@ def loop(s):
 #
     if glo != 0:
         print('* %3d%14.3e%9.3f%5d%10d'%(s,g[0],max(g[1:]),cnv,k))
+#
+    sys.stdout.flush()
 #
     return g[0], max(g[1:]), cnv, k
 #
@@ -107,7 +110,7 @@ if __name__ == "__main__":
     if glo == 0: [_,_,_,_]=loop(0)
     else:
 #
-        print('\nBayesian global optimization %d runs with %d in parallel... \n'%(glo,cpu))
+        print('\nBayesian global optimization %d runs with %d in parallel...\n'%(glo,cpu),flush=True)
         res = Parallel(n_jobs=cpu,verbose=0)(delayed(loop)(i+1) for i in range(glo))
         fopt=1e8; g=0; kcv=0; kot=0; c=0
         for s in range(glo):
@@ -118,21 +121,21 @@ if __name__ == "__main__":
                     fopt=min(fopt, f0); glo_s=s+1
             res.append([f0,vio,cnv,k]); kot=kot+k
 # 
-        hit=0; loc=1
+        h=0; loc=1
         for s in range(glo):
-            if abs(fopt-res[s][0])/abs(fopt)<=1e-3 and res[s][1]<1e-3 and res[s][2]==1: hit=hit+1
+            if abs(fopt-res[s][0])/abs(fopt)<=0.02 and res[s][1]<1e-3 and res[s][2]==1: h=h+1
             else:
                 if res[s][1] < 1e-3 and res[s][2] == 1: loc=loc+1
 #
-        p=1e3 # 1/(TBD; number of local minima)
+        p=1e6 # 1/(TBD; number of local minima)
 #
-        if hit == 0: print('Not a single best solution was found.')
+        if h == 0: print('Not a single best solution was found.',flush=True)
         else:
-            print('\nTotal number of runs\t\t\t\t\t:\t%6d'%glo)
-            print('Best solution ID \t\t\t\t\t:\t%6d'%glo_s)
-            print('Total number of converged (also feasible) solutions\t:\t%6d'%c)
-            print('Total number of subproblems (function evaluations)\t:\t%6d'%kot)
+            print('\nTotal number of runs\t\t\t\t\t:\t%6d'%glo,flush=True)
+            print('Best solution ID \t\t\t\t\t:\t%6d'%glo_s,flush=True)
+            print('Total number of converged (also feasible) solutions\t:\t%6d'%c,flush=True)
+            print('Total number of subproblems (function evaluations)\t:\t%6d'%kot,flush=True)
             print('Total number of subproblems in runs which converged\t:\t%6d'%kcv)
-            print('Total number of times the best solution was found\t:\t%6d'%hit)
-            print('Probability of having found the optimum\t\t\t:\t~%5.2f\n'%P_f(c,hit,1,1000))
+            print('Total number of times the best solution was found\t:\t%6d'%h,flush=True)
+            print('Probability of having found the optimum\t\t\t:\t~%5.2f\n'%P_f(c,h,1,p),flush=True)
 #

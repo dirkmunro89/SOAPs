@@ -157,8 +157,8 @@ def init():
     f_a=-1e8
     m_k=1000
 #
-    sub=1
-    glo=100
+    sub=4
+    glo=5
     cpu=4
 #
     mov_abs=0.2e0

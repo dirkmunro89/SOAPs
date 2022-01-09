@@ -22,12 +22,6 @@ and on Raspbian GNU/Linux 11 with (default Python 3)
 
 `python main.py | tee history.txt`
 
-(For large or long running problems the *unbuffer* command 
-
-`unbuffer python main.py | tee history.txt`
-
-as provided by the Expect package, may be convenient.)
-
 ## Problem setup
 
 The optimization problem to be solved is defined in `prob.py`:
