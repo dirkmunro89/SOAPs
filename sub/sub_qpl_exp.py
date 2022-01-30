@@ -4,7 +4,7 @@ from scipy.optimize import minimize
 #
 ####################################################################################################
 #
-# Generalised exponential QP: dual subproblem
+# Generalised QP (curv approx): dual subproblem
 #
 def sub_qpl_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
 #
@@ -28,8 +28,8 @@ def sub_qpl_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
                     a_tmp=1.0e0-x_l[i]#1e-3
                 a[j][i]=max(min(exp_max,a_tmp),exp_min)
 #
-    print(a[0][0])
-    print(a[1][0])
+#   print(a[0][0])
+#   print(a[1][0])
 #
     c0=np.zeros(n,dtype=np.float64)
     cj=np.zeros((m,n),dtype=np.float64)
@@ -51,8 +51,8 @@ def sub_qpl_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
             dx_u[i] = min(x_k[i]+mov_abs*(x_u[i]-x_l[i]),x_u[i])
 #
     bds=[[0e0,1e8] for i in range(m)]; tup_bds=tuple(bds)
-    sol=minimize(con_qpl_dual,x_d,args=(n,m,x_k,g,dg,dx_l,dx_u, ddL), \
-        jac=dcon_qpl_dual,method='L-BFGS-B',bounds=tup_bds, options={'disp':False})
+    sol=minimize(qpl_dual,x_d,args=(n,m,x_k,g,dg,dx_l,dx_u, ddL), \
+        jac=dqpl_dual,method='L-BFGS-B',bounds=tup_bds, options={'disp':False})
 #
     x_d[:]=sol.x
 #
@@ -60,7 +60,7 @@ def sub_qpl_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
 #
     return [x,x_d,dx_l,dx_u]
 #
-# Generalised exponential QP: x in terms of dual variables 
+# Generalised QP (with curv approx): x in terms of dual variables 
 #
 def x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL):
 #
@@ -76,9 +76,9 @@ def x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL):
 #
     return x
 #
-# Generalised exponential QP: Dual function value
+# Generalised QP (with curv approx): Dual function value
 #
-def con_qpl_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL):
+def qpl_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL):
 #
     x=x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL)
 #
@@ -90,9 +90,9 @@ def con_qpl_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL):
 #
     return -W
 #
-# Generalised expoential QP: Dual gradient
+# Generalised QP (with curv approx): Dual gradient
 #
-def dcon_qpl_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL):
+def dqpl_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL):
 #
     x=x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL)
 #
