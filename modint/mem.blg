@@ -1,0 +1,62 @@
+This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: mem.aux
+The style file: unsrt.bst
+Database file #1: ./bib.bib
+You're missing a field name---line 462 of file ./bib.bib
+ :  
+ :  % title={Laser engineered net shaping process for SAE 4140 low alloy steel},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+I was expecting a `,' or a `}'---line 658 of file ./bib.bib
+ : 
+ : 017,
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You're missing a field name---line 793 of file ./bib.bib
+ :  
+ :  % volume={91},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You've used 4 entries,
+            1791 wiz_defined-function locations,
+            473 strings with 4193 characters,
+and the built_in function-call counts, 930 in all, are:
+= -- 86
+> -- 34
+< -- 0
++ -- 13
+- -- 9
+* -- 69
+:= -- 151
+add.period$ -- 12
+call.type$ -- 4
+change.case$ -- 3
+chr.to.int$ -- 0
+cite$ -- 4
+duplicate$ -- 37
+empty$ -- 94
+format.name$ -- 9
+if$ -- 200
+int.to.chr$ -- 0
+int.to.str$ -- 4
+missing$ -- 5
+newline$ -- 23
+num.names$ -- 4
+pop$ -- 10
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 13
+stack$ -- 0
+substring$ -- 81
+swap$ -- 4
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 10
+width$ -- 5
+write$ -- 45
+(There were 3 error messages)
