@@ -98,7 +98,7 @@
 \begin{document}
 \maketitle
 
-\section{Introduction}
+\subsection{Introduction}
 
 Assume we have an optimization problem $\mathcal{P}$ and an array of scalar decision variables $\bx$. The array of decision variables is assumed to be continuous and of length $n$, $\bx \in \mathbb{R}^n$. What is meant (herein\footnote{It is open to (largely academic) debate whether or not the definition implied here-in is traditionally correct. Traditionally, the `output' of the optimization problem $\mathcal{P}$ may be seen to be the decision variables at solution of the problem $\bx^\ast$. Herein we follow a more practical interpretation, insofar as we say that the problem $\mathcal{P}$ itself does not provide the solution $\bx^\ast$ as `output' (which is true).}) by `an optimization problem $\mathcal{P}$'? We will attempt a modern description, from a solution-method point-of-view. We assume that $\mathcal{P}$ is programmatic (numeric) entity, which may be evaluated with an array of particular decision (input) variable values $\bx$, $\mathcal{P}[\bx]$, and, in so doing, the problem returns the following information
 \begin{align}
@@ -117,25 +117,25 @@ That is
 \begin{equation}
 \mathbf{\partial c }_j = \left( \frac{\partial \c_j}{\partial \x_1 } \:,  \frac{\partial \c_j}{\partial \x_2} \: , \ldots,  \frac{\partial \c_j}{\partial \x_n} \: \right) \quad \text{for} \quad j = 0,1, \ldots, m \:.
 \end{equation}
-  \item the  lower $\underline{\bx}$ and upper $\overline{\bx}$ bounds of the decision space, respectively, collected in $\underline{\overline{\bx}}$.
+  \item the  lower $\underline{\bx}$ and upper $\overline{\bx}$ bounds of the decision space, respectively, denoted by $\underline{\overline{\bx}}$.
   %upon evaluation with a particular $\bx$, that the problem $\mathcal{P}$ returns the remaining decision space (from the current evaluation point $\bx$) to the lower-bound of each variable $\Delta \underline{\bx}$, and likewise the remaining decision space to the upper-bound $\Delta \overline{\bx}$, collected in $\Delta \underline{\overline{\bx}}$.
 \end{enumerate}
 
 In other words, beyond the information we can collect from the quantities returned for particular evaluations $\left\{\bc, \partial \bc, \underline{\overline{\bx}}\right\}=\mathcal{P}[\bx]$ we have no further information of the problem $\mathcal{P}$, except for what can be deduced from the upstream assumptions (and knowledge of the nature of the problem). Moreover, in general, a single evaluation of problem $\mathcal{P}[\bx]$ is considered computationally expensive, insofar as it is non-trivially costly to evaluate in terms of computational resources---\emph{e.g.}, simulation-based, with multiple, potentially large-scale finite-element analyses.
 
-How to find a candidate optimum solution $\bx^\ast$ of problem $\mathcal{P}$?  Well, we can start by sampling the decision space, to find an $\bx$ with a reasonable cost $\c_0 [\bx]$, while all constraints are feasible $\c_j [\bx] \leq 0$, $\forall j > 0$. Then, we can ask the question: can this sample decision $\bx$ be improved if we adjust the evaluation in the decision space by a particular amount $\bx + \Delta \bx$? If there is a $\Delta \bx$ for which $\c_0 [\bx] > \c_0 [\bx + \Delta\bx]$, while all constraints remain feasible $\c_j [\bx + \Delta \bx] \leq 0$, $\forall j > 0$, then the sample $\bx$ we started with was indeed not optimal, and we should adjust the decision to $\bx + \Delta \bx$.
+How to find a candidate optimum solution $\bx^\ast$ of problem $\mathcal{P}$?  Well, we can start by sampling the decision space $\underline{\overline{\bx}}$, to find an $\bx$ with a reasonable cost $\c_0 [\bx]$, while all constraints are feasible $\c_j [\bx] \leq 0$, $\forall j > 0$. Then, we can ask the question: can this sample decision $\bx$ be improved if we adjust the evaluation in the decision space by a particular amount $\bx + \Delta \bx$? If there is a $\Delta \bx$ for which $\c_0 [\bx] > \c_0 [\bx + \Delta\bx]$, while all constraints remain feasible $\c_j [\bx + \Delta \bx] \leq 0$, $\forall j > 0$, then the sample $\bx$ we started with was indeed not optimal, and we should adjust the decision to $\bx + \Delta \bx$.
 
 How to determine what $\Delta \bx$ should be? Keep in mind, we have assumed we are working with an expensive-to-evaluate problem $\mathcal{P}$, which only returns the information $\left\{\bc, \partial \bc, \underline{\overline{\bx}}\right\}=\mathcal{P}[\bx]$ upon evaluation at $\bx$. In practical terms, we will take this to mean that we want to compute a good change in the decision space $\Delta \bx$, without re-evaluating problem $\mathcal{P}$.
 
 Let us, in hope\footnote{or desperation.}, assume that the actual cost-and-constraint functions $\bc$ are (near) linear over the entire decision space $\underline{\overline{\bx}}$. That is, an analytic linear approximation of the cost-and-constraint functions $\bc$, in terms of $\Delta \bx$, is constructed
 \begin{equation}
-\textbf{v}[\Delta \bx] = \bc + \partial \bc \cdot \Delta \bx \:,
+\textbf{v}[\Delta \bx] = \bc + \partial \bc \cdot  \Delta \bx   \:,
 \end{equation}
 with first derivatives accordingly
 \begin{equation}
 \partial \textbf{v}[\Delta \bx] = \partial \bc \:.
 \end{equation}
-In general, the first-order approximation of the cost-and-constraint functions $\textbf{v}$ is only equal\footnote{Equal in zero-- and first-order information.} to the actual cost-and-constraint functions $\bc$ at $\bx$---i.e., with $\Delta \bx=\textbf{0}$---and representative in a infinitely small region around $\bx$. In the light of this, we introduce a lower $\Delta \underline{\bx}$ and upper $\Delta \overline{\bx}$ bound on the change $\Delta \bx$ we allow ourselves in the decision space.
+In general, the first-order approximation of the cost-and-constraint functions $\textbf{v}$ is only equal\footnote{Equal in zero-- and first-order information.} to the actual cost-and-constraint functions $\bc$ at $\bx$---i.e., with $\Delta \bx=\textbf{0}$---and representative in a infinitely small region around $\bx$. In the light of this, we introduce a lower $\Delta \underline{\bx}$ and upper $\Delta \overline{\bx}$ bound on the change $\Delta \bx$ we allow ourselves in the decision space $\underline{\overline{\bx}}$.
 That is, we have arrived at a subproblem 
 \begin{align}
 \label{d:eqn:p}
@@ -156,39 +156,42 @@ In general, however, linear approximations $\bv$ of the cost-and-constraint func
 
 What can we do...?
 
-\section{Decision space transformations and introduction of curvature information}
+\subsection{Decision space transformations}
 
-Let us assume that we notice, by observation, that the cost-and-constraint functions $\bc$ have a particular proportional relationship to points in the decision space $\bx$. For example, we might notice\footnote{and/or know, based on knowledge on the nature of the problem $\mathcal{P}$.} that the cost-and-constraint functions $\bc$ have a reciprocal-like relation to our decision variables, \emph{i.e.} $\bc \sim 1/\bx$. Can we exploit this to improve the change $\Delta \bx$ in the decision space we attempt to make? Yes, we can imagine applying an analytic transformation (mapping) to the decision space $\by = \by[\bx]$, and formulating the approximate cost-and-constraint functions $\textbf{v}$ in terms of it
+Let us assume that we notice, by observation, that the cost-and-constraint functions $\bc$ have a particular proportional relationship to decisions $\bx$ in the decision space $\underline{\overline{\bx}}$. For example, we might notice\footnote{and/or know, based on knowledge on the nature of the problem $\mathcal{P}$.} that the cost-and-constraint functions $\bc$ have a reciprocal-like relation to our decision variables, \emph{i.e.} $\bc \sim 1/\bx$. Can we exploit this to improve the change $\Delta \bx$ in the decision space we attempt to make? Yes, we can imagine applying an analytic transformation (mapping) to the decision space $\by = \by[\bx]$, and formulating the approximate cost-and-constraint functions $\textbf{v}$ in terms of it
 \begin{equation}
 \label{eq:intvar}
-    \textbf{v} = \bc + \Delta \by \cdot \partial_{\by} \bc \:.
+    \textbf{v} = \bc +   \partial_{\by} \bc \cdot \Delta \by \:.
 \end{equation}
 That is, we hope that the transformation of the decions space from $\bx \to \by$ has worked to `linearise' the cost-and-constraint functions $\bc$. Rewriting Eq. (\ref{eq:intvar}) in terms of the first-order information supplied by problem $\mathcal{P}$, we see that
 \begin{equation}
-    \textbf{v} = \bc + \Delta \by \cdot \partial_{\bx}^{-1} \by \cdot \partial \bc \:,
+    \textbf{v} = \bc + \partial \bc \cdot \partial_{\bx}^{-1} \by \cdot  \Delta \by    \:,
 \end{equation}
 with the derivative of the analytic mapping $\by = \by[\bx]$ easy to compute
 \begin{equation}
     \partial_{\bx}^{-1} \by = \left. 1 \Big/ \frac{\partial \by}{\partial \bx}\right. \: .
 \end{equation}
+Note that  $\partial_{\bx}^{-1}\by$ is an $n \times n$ square matrix (although in practice, typically, only diagonal terms are utilised).
 
 How does this help us? Consider again the example of the reciprocal transformation $\by = 1/ \bx$. In this case
 \begin{equation}
-\partial_{\bx}^{-1} \by = - \bx^2 \: ,
+\partial_{\bx}^{-1} \by = - \bx_{\bI}^2   \: ,
 \end{equation}
-and hence
+with $_\bI$ indicating that the array is cast along the diagonal of the correspondingly sized square identity matrix. Hence
 \begin{equation}
-    \textbf{v} = \bc + \Delta \by \cdot (-\bx^2) \cdot \partial \bc \:.
+    \textbf{v} = \bc + \partial \bc  \cdot (-\bx_\bI^2) \cdot \Delta \by  \:.
 \end{equation}
-The approximate cost-and-constraint functions $\textbf{v}$ may be re-written in terms of the original decision space $\bx$ and the change $\Delta \bx$, yielding
+The approximate cost-and-constraint functions $\textbf{v}$ may be re-written in terms of the original decision space $\bx$ and the change $\Delta \bx$, which yields
 \begin{equation}
-    \textbf{v} = \bc + \left( \frac{1}{ \bx + \Delta\bx} - \frac{1}{\bx} \right) \cdot (-\bx^2) \cdot \partial \bc \:,
+    \textbf{v} = \bc + \partial \bc \cdot (-\bx_\bI^2)  \cdot \left( \frac{1}{ \bx + \Delta\bx} - \frac{1}{\bx} \right)   \:,
 \end{equation}
-which may be rewritten as
+and, is the same as
 \begin{equation}
-    \textbf{v} = \bc + \Delta \bx \cdot \left( \frac{\bx}{\bx + \Delta \bx} \right) \cdot \partial \bc \:.
+    \textbf{v} = \bc + \partial \bc  \cdot \left( \frac{\bx}{\bx + \Delta \bx} \right)_{\bI}\cdot \Delta \bx   \:.
 \end{equation}
-Notice how the term in brackets $(\cdots)$ has introduced a nonlinearity (or curvature) in the approximate cost-and-constraint functions $\textbf{v}$, with respect to $\Delta \bx$. Keep in mind, the evaluation of problem $\mathcal{P} [\bx]$ is constant while we repeatedly evaluate (and solve) subproblem $\mathcal{S}[\Delta \bx]$. 
+Notice how the term in brackets $(\cdots)$ has introduced a nonlinearity (or `curvature') in the approximate cost-and-constraint functions $\textbf{v}$, with respect to $\Delta \bx$. Keep in mind, the evaluation of problem $\mathcal{P} [\bx]$ is constant while we repeatedly evaluate (and solve) subproblem $\mathcal{S}[\Delta \bx]$, to compute the change in the decision space $\Delta \bx$. 
+
+\subsection{Curvature information}
 
 \bigskip
 
