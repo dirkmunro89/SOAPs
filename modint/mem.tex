@@ -100,7 +100,7 @@
 
 \subsection{Introduction}
 
-Assume we have an optimization problem $\mathcal{P}$ and an array of scalar decision variables $\bx$. The array of decision variables is assumed to be continuous and of length $n$, $\bx \in \mathbb{R}^n$. What is meant (herein\footnote{It is open to (largely academic) debate whether or not the definition implied here-in is traditionally correct. Traditionally, the `output' of the optimization problem $\mathcal{P}$ may be seen to be the decision variables at solution of the problem $\bx^\ast$. Herein we follow a more practical interpretation, insofar as we say that the problem $\mathcal{P}$ itself does not provide the solution $\bx^\ast$ as `output' (which is true).}) by `an optimization problem $\mathcal{P}$'? We will attempt a modern description, from a solution-method point-of-view. We assume that $\mathcal{P}$ is programmatic (numeric) entity, which may be evaluated with an array of particular decision (input) variable values $\bx$, $\mathcal{P}[\bx]$, and, in so doing, the problem returns the following information
+Assume we have an optimization problem $\mathcal{P}$ and an array of scalar decision variables $\bx$. Each decision variable is assumed to be continuous, and collected in an array of length $n$; \emph{i.e.} $\bx \in \mathbb{R}^n$. What is meant (herein\footnote{It is open to (largely academic) debate whether or not the definition implied here-in is traditionally correct. Traditionally, the `output' of the optimization problem $\mathcal{P}$ may be seen to be the decision variables at solution of the problem $\bx^\ast$. Herein we follow a more practical interpretation, insofar as we say that the problem $\mathcal{P}$ itself does not provide the solution $\bx^\ast$ as `output' (which is true).}) by `an optimization problem $\mathcal{P}$'? We will attempt a modern description, from a solution-method point-of-view. We assume that $\mathcal{P}$ is programmatic (numeric) entity, which may be evaluated with an array of particular decision (input) variable values $\bx$, $\mathcal{P}[\bx]$, and, in so doing, the problem returns the following information
 \begin{align}
 \label{d:eqn:p}
  ~\left\{ ~
@@ -123,7 +123,7 @@ That is
 
 In other words, beyond the information we can collect from the quantities returned for particular evaluations $\left\{\bc, \partial \bc, \underline{\overline{\bx}}\right\}=\mathcal{P}[\bx]$ we have no further information of the problem $\mathcal{P}$, except for what can be deduced from the upstream assumptions (and knowledge of the nature of the problem). Moreover, in general, a single evaluation of problem $\mathcal{P}[\bx]$ is considered computationally expensive, insofar as it is non-trivially costly to evaluate in terms of computational resources---\emph{e.g.}, simulation-based, with multiple, potentially large-scale finite-element analyses.
 
-How to find a candidate optimum solution $\bx^\ast$ of problem $\mathcal{P}$?  Well, we can start by sampling the decision space $\underline{\overline{\bx}}$, to find an $\bx$ with a reasonable cost $\c_0 [\bx]$, while all constraints are feasible $\c_j [\bx] \leq 0$, $\forall j > 0$. Then, we can ask the question: can this sample decision $\bx$ be improved if we adjust the evaluation in the decision space by a particular amount $\bx + \Delta \bx$? If there is a $\Delta \bx$ for which $\c_0 [\bx] > \c_0 [\bx + \Delta\bx]$, while all constraints remain feasible $\c_j [\bx + \Delta \bx] \leq 0$, $\forall j > 0$, then the sample $\bx$ we started with was indeed not optimal, and we should adjust the decision to $\bx + \Delta \bx$.
+How to find a candidate\footnote{In general the optimization problem is assumed to be multi-modal.} optimum solution $\bx^\ast$ of problem $\mathcal{P}$?  Well, we can start by sampling the decision space $\underline{\overline{\bx}}$, to find an $\bx$ with a reasonable cost $\c_0 [\bx]$, while all constraints are feasible $\c_j [\bx] \leq 0$, $\forall j > 0$. Then, we can ask the question: can this sample decision $\bx$ be improved if we adjust the evaluation in the decision space by a particular amount $\bx + \Delta \bx$? If there is a $\Delta \bx$ for which $\c_0 [\bx] > \c_0 [\bx + \Delta\bx]$, while all constraints remain feasible $\c_j [\bx + \Delta \bx] \leq 0$, $\forall j > 0$, then the sample $\bx$ we started with was indeed not optimal, and we should adjust the decision to $\bx + \Delta \bx$.
 
 How to determine what $\Delta \bx$ should be? Keep in mind, we have assumed we are working with an expensive-to-evaluate problem $\mathcal{P}$, which only returns the information $\left\{\bc, \partial \bc, \underline{\overline{\bx}}\right\}=\mathcal{P}[\bx]$ upon evaluation at $\bx$. In practical terms, we will take this to mean that we want to compute a good change in the decision space $\Delta \bx$, without re-evaluating problem $\mathcal{P}$.
 
@@ -131,7 +131,7 @@ Let us, in hope\footnote{or desperation.}, assume that the actual cost-and-const
 \begin{equation}
 \textbf{v}[\Delta \bx] = \bc + \partial \bc \cdot  \Delta \bx   \:,
 \end{equation}
-with first derivatives accordingly
+with first derivatives following accordingly
 \begin{equation}
 \partial \textbf{v}[\Delta \bx] = \partial \bc \:.
 \end{equation}
@@ -154,7 +154,7 @@ We may thus, upon solving subproblem $\mathcal{S}$, update the decision to $\bx 
 
 In general, however, linear approximations $\bv$ of the cost-and-constraint functions $\bc$ may result in changes $\Delta \bx$ in the decision space which violates the constraints $\c_j[\bx + \Delta \bx] > 0 \: \forall j > 0$, increases in the cost function $\c_0[\bx + \Delta \bx]$, very restrictive allowable decision changes $\Delta \underline{\overline{\bx}}$ resulting in excessive, expensive evaluations of problem $\mathcal{P}$, and/or complete failure of the procedure to converge to a reasonable solution $\bx^\ast$ of problem $\mathcal{P}$.
 
-What can we do...?
+What can we do?
 
 \subsection{Decision space transformations}
 
@@ -189,7 +189,7 @@ and, is the same as
 \begin{equation}
     \textbf{v} = \bc + \partial \bc  \cdot \left( \frac{\bx}{\bx + \Delta \bx} \right)_{\bI}\cdot \Delta \bx   \:.
 \end{equation}
-Notice how the term in brackets $(\cdots)$ has introduced a nonlinearity (or `curvature') in the approximate cost-and-constraint functions $\textbf{v}$, with respect to $\Delta \bx$. Keep in mind, the evaluation of problem $\mathcal{P} [\bx]$ is constant while we repeatedly evaluate (and solve) subproblem $\mathcal{S}[\Delta \bx]$, to compute the change in the decision space $\Delta \bx$. 
+Notice how the term in brackets $(\cdots)$ has introduced a nonlinearity (or `curvature') in the approximate cost-and-constraint functions $\textbf{v}$, with respect to $\Delta \bx$. Keep in mind, the evaluation of problem $\mathcal{P} [\bx]$ is constant while we repeatedly evaluate (and solve) subproblem $\mathcal{S}[\Delta \bx]$---which remains cheap to evaluate---to compute the change in the decision space $\Delta \bx$. 
 
 \subsection{Curvature information}
 
@@ -201,7 +201,7 @@ DRAFTING FOLLOWS...
 
 Remains cheap to evaluate, and may be solved in polynomial time.
 
-Now show curvature; introduce it in the subproblem output. And then show approx of approx, wherein curvature is constant wrt $\Delta \bx$
+Now show curvature in terms of Taylor; introduce it in the subproblem output. And then show approx of approx, wherein curvature is constant wrt $\Delta \bx$
 
 \newpage
 
