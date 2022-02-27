@@ -7,6 +7,7 @@
 \usepackage{array} 
 \usepackage{paralist}
 \usepackage{verbatim}
+\usepackage[implicit=false]{hyperref}
 
 %\usepackage{subfig}
 \usepackage{tikz}
@@ -89,7 +90,7 @@
 \changeoperator{sum}
 \changeoperator{prod}
 
-\title{A modern interpretation of sequential approximate optimization}
+\title{On a modern interpretation of sequential approximate optimization}
 \author{Dirk Munro (Hamburg, Germany)}
 \date{\today } 
 % Activate to display a given date or no date (if empty),
@@ -97,8 +98,10 @@
 
 \begin{document}
 \maketitle
+\vspace{-5mm}
+\emph{This note is intended as a general yet simple introduction to the subject. No novelty beyond the interpretation, description (and notation) is introduced. The list of citations would not be reasonably complete without those referenced in the \textbf{Background}, in closure of the note.}
 
-\subsection{Introduction}
+\section{Introduction}
 
 Assume we have an optimization problem $\mathcal{P}$ and an array of scalar decision variables $\bx$. Each decision variable is assumed to be continuous, and collected in an array of length $n$; \emph{i.e.} $\bx \in \mathbb{R}^n$. What is meant (herein\footnote{It is open to (largely academic) debate whether or not the definition implied here-in is traditionally correct. Traditionally, the `output' of the optimization problem $\mathcal{P}$ may be seen to be the decision variables at solution of the problem $\bx^\ast$. Herein we follow a more practical interpretation, insofar as we say that the problem $\mathcal{P}$ itself does not provide the solution $\bx^\ast$ as `output' (which is true).}) by `an optimization problem $\mathcal{P}$'? We will attempt a modern description, from a solution-method point-of-view. We assume that $\mathcal{P}$ is programmatic (numeric) entity, which may be evaluated with an array of particular decision (input) variable values $\bx$, $\mathcal{P}[\bx]$, and, in so doing, the problem returns the following information
 \begin{align}
@@ -113,17 +116,17 @@ Assume we have an optimization problem $\mathcal{P}$ and an array of scalar deci
 That is 
 \begin{enumerate}[label=(\roman*)]
   \item an array of scalar-valued cost-and-constraint functions $\bc$, of length $m$. We will adopt the convention that the first entry $\c_0$ is a scalar-valued objective (cost) to be minimised, and the following $m-1$ entries are scalar-valued constraint function values, with values of $\c_j \leq 0$ denoting feasibility; \emph{i.e.} adherence to constraint $j$, and violation otherwise;
-  \item assuming each cost and constraint function is continuously differentiable, the first order derivatives of each, to each decision variable, $\dc$, with
+  \item assuming each cost and constraint function is (at least once) continuously differentiable, the first order derivatives of each, to each decision variable, $\dc$, with
 \begin{equation}
-\mathbf{\partial c }_j = \left( \frac{\partial \c_j}{\partial \x_1 } \:,  \frac{\partial \c_j}{\partial \x_2} \: , \ldots,  \frac{\partial \c_j}{\partial \x_n} \: \right) \quad \text{for} \quad j = 0,1, \ldots, m \:.
+\mathbf{\partial c }_j = \left( \frac{\partial \c_j}{\partial \x_1 } \:,  \frac{\partial \c_j}{\partial \x_2} \: , \ldots,  \frac{\partial \c_j}{\partial \x_n} \: \right) \quad \text{for} \quad j = 0,1, \ldots, m \:;
 \end{equation}
-  \item the  lower $\underline{\bx}$ and upper $\overline{\bx}$ bounds of the decision space, respectively, denoted by $\underline{\overline{\bx}}$.
+  \item the  lower $\underline{\bx}$ and upper $\overline{\bx}$ bounds\footnote{It is again interesting (but somewhat arbitrary) whether or not the (global) bounds on the decision space $\bx$ is taken to be defined in, and provided by, the problem $\mathcal{P}$. Practically, it is perhaps useful to interpret the bounds provided by problem $\mathcal{P}$ as restrictions on the extent of the decision space $\bx$ which follow naturally from the character of the decision variables---\emph{e.g.} the range of thickness (greater than zero, but not infinite) permitted to a structural member. But of course, the decision / optimization algorithm, which operates on the information provided by problem $\mathcal{P}$, may (and typically will) operate in a smaller decision space, overwriting the bounds provided by problem $\mathcal{P}$.} of the decision space, respectively, denoted by $\underline{\overline{\bx}}$.
   %upon evaluation with a particular $\bx$, that the problem $\mathcal{P}$ returns the remaining decision space (from the current evaluation point $\bx$) to the lower-bound of each variable $\Delta \underline{\bx}$, and likewise the remaining decision space to the upper-bound $\Delta \overline{\bx}$, collected in $\Delta \underline{\overline{\bx}}$.
 \end{enumerate}
 
-In other words, beyond the information we can collect from the quantities returned for particular evaluations $\left\{\bc, \partial \bc, \underline{\overline{\bx}}\right\}=\mathcal{P}[\bx]$ we have no further information of the problem $\mathcal{P}$, except for what can be deduced from the upstream assumptions (and knowledge of the nature of the problem). Moreover, in general, a single evaluation of problem $\mathcal{P}[\bx]$ is considered computationally expensive, insofar as it is non-trivially costly to evaluate in terms of computational resources---\emph{e.g.}, simulation-based, with multiple, potentially large-scale finite-element analyses.
+In other words, beyond the information we can collect from the quantities returned for particular evaluations $\left\{\bc, \partial \bc, \underline{\overline{\bx}}\right\}=\mathcal{P}[\bx]$ we have no further information of the problem $\mathcal{P}$, except for what can be deduced from the upstream assumptions (and knowledge of the nature of the problem). Moreover, in general, a single evaluation of problem $\mathcal{P}[\bx]$ is considered computationally expensive---or inconvenient, at least---insofar as it is non-trivially costly to evaluate in terms of computational resources and/or available channels of computational integration:  simulation-based, with multiple, potentially large-scale finite-element analyses, but also computationally cheap (\emph{e.g.} reduced-order) analyses, which sit behind licensed applications and/or require significant network communications (\emph{e.g.} cloud-based microservices).
 
-How to find a candidate\footnote{In general the optimization problem is assumed to be multi-modal.} optimum solution $\bx^\ast$ of problem $\mathcal{P}$?  Well, we can start by sampling the decision space $\underline{\overline{\bx}}$, to find an $\bx$ with a reasonable cost $\c_0 [\bx]$, while all constraints are feasible $\c_j [\bx] \leq 0$, $\forall j > 0$. Then, we can ask the question: can this sample decision $\bx$ be improved if we adjust the evaluation in the decision space by a particular amount $\bx + \Delta \bx$? If there is a $\Delta \bx$ for which $\c_0 [\bx] > \c_0 [\bx + \Delta\bx]$, while all constraints remain feasible $\c_j [\bx + \Delta \bx] \leq 0$, $\forall j > 0$, then the sample $\bx$ we started with was indeed not optimal, and we should adjust the decision to $\bx + \Delta \bx$.
+How to find a candidate\footnote{In general the optimization problem is assumed to be multi-modal. The topic is discussed, and a solution method is proposed, in \cite{munro2022}.} optimum solution $\bx^\ast$ of problem $\mathcal{P}$?  Well, we can start by sampling the decision space $\underline{\overline{\bx}}$, to find an $\bx$ with a reasonable cost $\c_0 [\bx]$, while all constraints are feasible $\c_j [\bx] \leq 0$, $\forall j > 0$. Then, we can ask the question: can this sample decision $\bx$ be improved if we adjust the evaluation in the decision space by a particular amount $\bx + \Delta \bx$? If there is a $\Delta \bx$ for which $\c_0 [\bx] > \c_0 [\bx + \Delta\bx]$, while all constraints remain feasible $\c_j [\bx + \Delta \bx] \leq 0$, $\forall j > 0$, then the sample $\bx$ we started with was indeed not optimal, and we should adjust the decision to $\bx + \Delta \bx$.
 
 How to determine what $\Delta \bx$ should be? Keep in mind, we have assumed we are working with an expensive-to-evaluate problem $\mathcal{P}$, which only returns the information $\left\{\bc, \partial \bc, \underline{\overline{\bx}}\right\}=\mathcal{P}[\bx]$ upon evaluation at $\bx$. In practical terms, we will take this to mean that we want to compute a good change in the decision space $\Delta \bx$, without re-evaluating problem $\mathcal{P}$.
 
@@ -156,7 +159,7 @@ In general, however, linear approximations $\bv$ of the cost-and-constraint func
 
 What can we do?
 
-\subsection{Decision space transformations}
+\section{Decision space transformations}
 
 Let us assume that we notice, by observation, that the cost-and-constraint functions $\bc$ have a particular proportional relationship to decisions $\bx$ in the decision space $\underline{\overline{\bx}}$. For example, we might notice\footnote{and/or know, based on knowledge on the nature of the problem $\mathcal{P}$.} that the cost-and-constraint functions $\bc$ have a reciprocal-like relation to our decision variables, \emph{i.e.} $\bc \sim 1/\bx$. Can we exploit this to improve the change $\Delta \bx$ in the decision space we attempt to make? Yes, we can imagine applying an analytic transformation (mapping) to the decision space $\by = \by[\bx]$, and formulating the approximate cost-and-constraint functions $\textbf{v}$ in terms of it
 \begin{equation}
@@ -191,8 +194,47 @@ and, is the same as
 \end{equation}
 Notice how the term in brackets $(\cdots)$ has introduced a nonlinearity (or `curvature') in the approximate cost-and-constraint functions $\textbf{v}$, with respect to $\Delta \bx$. Keep in mind, the evaluation of problem $\mathcal{P} [\bx]$ is constant while we repeatedly evaluate (and solve) subproblem $\mathcal{S}[\Delta \bx]$---which remains cheap to evaluate---to compute the change in the decision space $\Delta \bx$. 
 
-\subsection{Curvature information}
+Similarly, a decision space transformation may be of the form $\y_i = \x_i^a$, with $a$ any real number. In this case
+\begin{equation}
+\partial_{\bx}^{-1} \by = \frac {1}{a} \bx_{\bI}^{1-a}   \: ,
+\end{equation}
+and hence
+\begin{equation}
+    \v = \bc + \partial \bc \cdot \frac {1}{a}  \bx_\bI^{1-a}  \cdot \left( (\bx + \Delta\bx)^a - \bx^a \right)   \:,
+\end{equation}
+which may be evaluated easily as is. First derivate follows analytically ($\bx$ is constant, keep in mind; so in effect its a derivate to $\Delta \bx$)
+\begin{equation}
+\partial\v[\bx + \Delta \bx] = \partial \bc \cdot (\bx^{1-a}) \cdot (\bx + \Delta \bx)^{a-1} \:,
+\end{equation}
+noticing that it is equal at $\Delta \bx = \0$.
 
+\section{Curvature information}
+As pointed out, the introduction of decision space transformations serve to introduce nonlinearity in the sub-problem level approximation of the cost-and-constraint functions. Consider the Taylor series expansion of the approximate cost-and-constraint functions 
+\begin{equation}
+\mathbf{\nu} = \v[\bx] + \frac{1}{1!}\partial \bv \cdot (\bx + \Delta \bx) + \frac{1}{2!}\partial^2 \bv \cdot (\bx + \Delta \bx)^2 + \frac{1}{3!}\partial^3 \bv \cdot (\bx + \Delta \bx)^3 + \ldots ,
+\end{equation}
+Consider up to first nonlinear term
+\begin{equation}
+\mathbf{\nu}[\bx + \Delta \bx] = \bv[\bx] + \partial \bv \cdot (\bx + \Delta \bx) + \frac{1}{2}\partial^2 \bv \cdot (\bx + \Delta \bx)^2 \: , 
+\end{equation}
+with the second-derivative now easy to compute (not typically) (throughout, imagine taking a derivative to $\Delta \bx$)
+\begin{equation}
+\partial^2 \bv[\bx + \Delta \bx] = \partial \bc \cdot (a-1)\bx^{1-a} \cdot (\bx+\Delta\bx)^{a-2} \: ,
+\end{equation}
+which, at the current decision point $\Delta \bx = \0$ reduces to
+\begin{equation}
+\partial^2 \bv[\bx] = \partial \bc \cdot \left(\frac{a-1}{\bx}\right)_\bI \: ,
+\end{equation}
+exactly like Groenwold \emph{et al.}~\cite{groenwold2010approximated}.
+
+If $\partial^2 \bc$ is obtainible from problem P (typically it is not), then this form can be used as is. In general, however, this is not possible.  
+
+\section{Quadratic programs}
+\cite{osqp} 
+
+Convex QPs have been studied since the 1950s [39], following from the seminal work
+on LPs started by Kantorovich [59]. Several solution methods for both LPs and QPs
+have been proposed and improved upon throughout the years.
 \bigskip
 
 DRAFTING FOLLOWS...
@@ -299,7 +341,15 @@ Eventually we arrive rather naturally at the necessary conditions: How far can w
 %Given the information from a particular evaluation(s) $\mathcal{P}[\bx]$, we can construct either a global or a local approximation of problem $\mathcal{P}$
 
 % BIBLIOGRAPHY
+
+\section*{Background}
+
+The introduction to the `Elements of Structural Optimization' by Haftka, G\"urdal and Kamat~\cite{haftka1990}. The review of sensitivity analysis in structural optimization by van Keulen, Haftka and Kim~\cite{keulen2005}. ... 
+
 \bibliographystyle{unsrt} 
 \addcontentsline{toc}{chapter}{References} 
 \bibliography{./bib.bib} 
+
+
+
 \end{document}

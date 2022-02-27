@@ -1,28 +1,33 @@
 \begin{thebibliography}{1}
 
-\bibitem{snyman1987}
-J.A. Snyman and L.P. Fatti.
-\newblock A multi-start global minimization algorithm with dynamic search
-  trajectories.
-\newblock {\em Journal of optimization theory and applications},
-  54(1):121--141, 1987.
+\bibitem{munro2022}
+{An interpretation of Bayesian global optimization as proposed by Snyman and
+  Fatti}.
+\newblock
+  \url{https://github.com/dirkmunro89/SOAPs/blob/main/bayopt/bay_20220104.pdf}.
+\newblock Accessed: 2022-02-27.
 
-\bibitem{dekking2005}
-F.M. Dekking, C.~Kraaikamp, H.~P. Lopuha{\"a}, and L.~E. Meester.
-\newblock {\em A modern introduction to probability and statistics:
-  understanding why and how}.
-\newblock Springer Science \& Business Media, 2005.
+\bibitem{groenwold2010approximated}
+A.A. Groenwold, L.F.P. Etman, and D.W. Wood.
+\newblock Approximated approximations for {SAO}.
+\newblock {\em Structural and Multidisciplinary Optimization}, 41(1):39--56,
+  2010.
 
-\bibitem{sigmund2001m}
-O.~Sigmund.
-\newblock A 99 line topology optimization code written in matlab.
-\newblock {\em Structural and multidisciplinary optimization}, 21(2):120--127,
-  2001.
+\bibitem{osqp}
+B.~Stellato, G.~Banjac, P.~Goulart, A.~Bemporad, and S.~Boyd.
+\newblock {OSQP}: an operator splitting solver for quadratic programs.
+\newblock {\em Mathematical Programming Computation}, 12(4):637--672, 2020.
 
-\bibitem{munro2018design}
-D.~Munro and A.A. Groenwold.
-\newblock On design-set restriction in sand topology optimization.
-\newblock {\em Structural and Multidisciplinary Optimization},
-  57(4):1579--1592, 2018.
+\bibitem{haftka1990}
+R.T. Haftka, Z.~G\"{u}rdal, and M.P. Kamat.
+\newblock {\em Elements of structural optimization}.
+\newblock Kluwer Academic Publishers, Dordrecht, The Netherlands, 1990.
+
+\bibitem{keulen2005}
+F.~Van~Keulen, R.T. Haftka, and N.H. Kim.
+\newblock Review of options for structural design sensitivity analysis. {Part
+  1: Linear systems}.
+\newblock {\em Computer methods in applied mechanics and engineering},
+  194(30):3213--3243, 2005.
 
 \end{thebibliography}
