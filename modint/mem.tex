@@ -204,22 +204,26 @@ Similarly, a decision space transformation may be generalised to the form $\by =
 \end{equation}
 and hence
 \begin{equation}
-    \bv = \bc + \partial \bc \cdot \frac {1}{a}  \bx_\bI^{1-a}  \cdot \left( (\bx + \Delta\bx)^a - \bx^a \right)   \:,
+    \bv[\Delta \bx] = \bc + \partial \bc \cdot \frac {1}{a}  \bx_\bI^{1-a}  \cdot \left( (\bx + \Delta\bx)^a - \bx^a \right)   \:,
 \end{equation}
 which is easily evaluated for different values of $\Delta \bx$, with any manner of estimate for $a$. The first derivates of the approximate cost-and-constraint functions $\bv$ follow readily
 \begin{equation}
 \partial\bv[\Delta \bx] = \partial \bc \cdot (\bx^{1-a}) \cdot (\bx + \Delta \bx)^{a-1} \:,
 \end{equation}
-with the first-order information of problem $\mathcal{P}$ at the current evaluation point $\bx$, $\partial \bc$, retrieved for $\Delta \bx = \0$. 
+with the first-order information of problem $\mathcal{P}$ at the current evaluation point $\bx$, $\partial \bc$, maintained
+\begin{equation}
+\partial\bv[ \0] = \partial \bc \:.
+\end{equation}
 
 \section{Taylor series expansions}
-The analytic nonlinearity introduced by the decision space transformation is conveniently unpacked by Taylor series expansion $\bm{\nu}$, of the transformed cost-and-constraints $\bv$, in terms of $\Delta \bx$, away from the current decision point $\bx$:
+
+The analytic nonlinearity introduced by the decision space transformation is conveniently unpacked by Taylor series expansion $\bm{\nu}$, of the transformed cost-and-constraints $\bv$, in terms of $\Delta \bx$, away from the current decision point $\bx$ (where $\Delta \bx=0$)
 \begin{equation}
-\bm{\nu}[\Delta \bx] = \bv[\bx] + \frac{1}{1!}\partial \bv \cdot (\bx + \Delta \bx) + \frac{1}{2!}\partial^2 \bv \cdot (\bx + \Delta \bx)^2 + \frac{1}{3!}\partial^3 \bv \cdot (\bx + \Delta \bx)^3 + \ldots .
+\bm{\nu}[\Delta \bx] = \bv[\0] + \frac{1}{1!}\partial \bv[\0] \cdot (\bx + \Delta \bx) + \frac{1}{2!}\partial^2 \bv [\0] \cdot (\bx + \Delta \bx)^2 + \frac{1}{3!}\partial^3 \bv[\0] \cdot (\bx + \Delta \bx)^3 + \ldots .
 \end{equation}
 For sake of simplicity, let us truncate after the first nonlinear (2nd) term
 \begin{equation}
-\bm{\nu}[\Delta \bx] = \bv[\bx] + \partial \bv \cdot (\bx + \Delta \bx) + \frac{1}{2}\partial^2 \bv \cdot (\bx + \Delta \bx)^2 \: , 
+\bm{\nu}[\Delta \bx] = \bv[\0] + \partial \bv[\0] \cdot (\bx + \Delta \bx) + \frac{1}{2}\partial^2 \bv[\0] \cdot (\bx + \Delta \bx)^2 \: , 
 \end{equation}
 noting that the second-derivative of the transformed cost-and-constraints $\bv$ is readily available
 \begin{equation}
@@ -229,12 +233,16 @@ and, at the current decision point $\Delta \bx = \0$, it reduces to
 \begin{equation}
 \partial^2 \bv[\0] = \partial \bc \cdot \left(\frac{a-1}{\bx}\right)_\bI \: .
 \end{equation}
-This notion of `approximated approximations' was first introduced, in this manner, by Groenwold \emph{et al.}~\cite{groenwold2010approximated}. In significant practical terms, the 2nd-order Taylor expansion allows for a completely flexible and general interface with common polynomial time (subproblem) solvers, which are typically fed (as cheaply as possible) by the first and second-order information of the subproblem at different values of $\Delta \bx$\footnote{Even if linear programming is applied to solve the subproblem $\mathcal{S}$, the (variable) first-order information $\partial \bm{\nu} [\Delta \bx] = \partial \bv + \partial^2 \bv \cdot (\bx + \Delta \bx)$ will be supplied, iteratively.}. 
+This notion of `approximated approximations' was first introduced, in this manner, by Groenwold \emph{et al.}~\cite{groenwold2010approximated}. In significant practical terms, the 2nd-order Taylor expansion allows for a completely flexible and general interface with common polynomial time (subproblem) solvers, which are typically fed (as cheaply as possible) by the first and second-order information of the subproblem at different values of $\Delta \bx$\footnote{Even if linear programming is applied to solve the subproblem $\mathcal{S}$, the (variable) first-order information $\partial \bm{\nu} [\Delta \bx] = \partial \bv[\0] + \partial^2 \bv[\0] \cdot (\bx + \Delta \bx)$ will be supplied, iteratively.}. 
+
+Comment on introduction of curvature information... and that pretty much anything can be done... also analytic, if available... QPQP .... cone programs...  dual methods ... 
 
 \section{Quadratic programs and the necesary conditions}
 
+Solution methods for the form 
+
 \emph{in rough drafting}
-Take the curvature as constant. Use only diagonal information. Ensure it is convex.
+If we use only diagonal information. Ensure it is positive definite. and formulate the hessian of the lagrangian ... 
 
 Then we arrive at a convenient computational `kernel': the quadratic program (QP)\footnote{Conceptually, the step-wise solving of QP problems in general, non-linear programming, can be seen as equivalent to the way in which a linear system-solve is the `kernel' in nonlinear structural analysis. That is the `kernel' of the Newton-Rhapson method.}. In simple terms, polynomial time solution methods for QPs are often the cheapest, fastest, simplest to implement, interface, and most readily available (to an average computational engineer), and ... for subproblem $\mathcal{S}$, given some straight-forward conditions. See for example the recently released implementation by Boyd and collaborators~\cite{osqp}.  
 
