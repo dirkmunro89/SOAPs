@@ -219,11 +219,11 @@ with the first-order information of problem $\mathcal{P}$ at the current evaluat
 
 The analytic nonlinearity introduced by the decision space transformation is conveniently unpacked by Taylor series expansion $\bm{\nu}$, of the transformed cost-and-constraints $\bv$, in terms of $\Delta \bx$, away from the current decision point $\bx$ (where $\Delta \bx=0$)
 \begin{equation}
-\bm{\nu}[\Delta \bx] = \bv[\0] + \frac{1}{1!}\partial \bv[\0] \cdot (\bx + \Delta \bx) + \frac{1}{2!}\partial^2 \bv [\0] \cdot (\bx + \Delta \bx)^2 + \frac{1}{3!}\partial^3 \bv[\0] \cdot (\bx + \Delta \bx)^3 + \ldots .
+\bm{\nu}[\Delta \bx] = \bv[\0] + \frac{1}{1!}\partial \bv[\0] \cdot  \Delta \bx + \frac{1}{2!}\partial^2 \bv [\0] \cdot \Delta \bx^2 + \frac{1}{3!}\partial^3 \bv[\0] \cdot \Delta \bx^3 + \ldots .
 \end{equation}
 For sake of simplicity, let us truncate after the first nonlinear (2nd) term
 \begin{equation}
-\bm{\nu}[\Delta \bx] = \bv[\0] + \partial \bv[\0] \cdot (\bx + \Delta \bx) + \frac{1}{2}\partial^2 \bv[\0] \cdot (\bx + \Delta \bx)^2 \: , 
+\bm{\nu}[\Delta \bx] = \bv[\0] + \partial \bv[\0] \cdot \Delta \bx + \frac{1}{2}\partial^2 \bv[\0] \cdot  \Delta \bx^2 \: , 
 \end{equation}
 noting that the second-derivative of the transformed cost-and-constraints $\bv$ is readily available
 \begin{equation}
@@ -239,7 +239,9 @@ Comment on introduction of curvature information... and that pretty much anythin
 
 \section{Quadratic programs and the necesary conditions}
 
-Solution methods for the form 
+Solution methods for the form
+
+in this way, the notion of decicsion space transformations become obsolete to some extent, in practical terms. Althopugh the notion of it may be used to estimate the second order information... 
 
 \emph{in rough drafting}
 If we use only diagonal information. Ensure it is positive definite. and formulate the hessian of the lagrangian ... 
