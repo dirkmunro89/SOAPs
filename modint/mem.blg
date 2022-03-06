@@ -3,60 +3,67 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: mem.aux
 The style file: unsrt.bst
 Database file #1: ./bib.bib
-You're missing a field name---line 492 of file ./bib.bib
+You're missing a field name---line 500 of file ./bib.bib
  :  
  :  % title={Laser engineered net shaping process for SAE 4140 low alloy steel},
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-I was expecting a `,' or a `}'---line 688 of file ./bib.bib
+You're missing a field name---line 654 of file ./bib.bib
+ : 
+ : %  url={https://books.google.de/books?id=Z7uFxViR19oC},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+I was expecting a `,' or a `}'---line 706 of file ./bib.bib
  : 
  : 017,
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-You're missing a field name---line 823 of file ./bib.bib
+You're missing a field name---line 841 of file ./bib.bib
  :  
  :  % volume={91},
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-You've used 5 entries,
+Warning--empty publisher in deutsch2011fabric
+Warning--empty year in deutsch2011fabric
+You've used 6 entries,
             1791 wiz_defined-function locations,
-            480 strings with 4432 characters,
-and the built_in function-call counts, 1095 in all, are:
-= -- 96
-> -- 51
+            483 strings with 4481 characters,
+and the built_in function-call counts, 1238 in all, are:
+= -- 105
+> -- 55
 < -- 0
-+ -- 19
-- -- 14
-* -- 81
-:= -- 176
-add.period$ -- 15
-call.type$ -- 5
++ -- 21
+- -- 15
+* -- 89
+:= -- 196
+add.period$ -- 17
+call.type$ -- 6
 change.case$ -- 4
 chr.to.int$ -- 0
-cite$ -- 5
-duplicate$ -- 42
-empty$ -- 110
-format.name$ -- 14
-if$ -- 238
+cite$ -- 8
+duplicate$ -- 52
+empty$ -- 129
+format.name$ -- 15
+if$ -- 270
 int.to.chr$ -- 0
-int.to.str$ -- 5
-missing$ -- 5
-newline$ -- 28
-num.names$ -- 4
-pop$ -- 17
+int.to.str$ -- 6
+missing$ -- 7
+newline$ -- 32
+num.names$ -- 5
+pop$ -- 26
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 14
+skip$ -- 16
 stack$ -- 0
 substring$ -- 75
-swap$ -- 5
+swap$ -- 6
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 0
-while$ -- 10
-width$ -- 6
-write$ -- 55
-(There were 3 error messages)
+warning$ -- 2
+while$ -- 11
+width$ -- 7
+write$ -- 62
+(There were 4 error messages)
