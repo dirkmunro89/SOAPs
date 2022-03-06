@@ -11,7 +11,7 @@ def dsim(n,m,x_k,aux,glo,out):
     x_k1=np.zeros(n,dtype=np.float64)
     x_k0=np.zeros(n,dtype=np.float64)
 #
-    d_x=1e-3
+    d_x=1e-4
 #
     for i in range(n):
         x_k1[:]=x_k; x_k1[i]=x_k1[i]+d_x

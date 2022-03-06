@@ -19,7 +19,7 @@ def sub_qpl_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
     a=np.zeros((m+1,n),dtype=np.float64)
 #
     if exp_set < 0e0:
-        a=np.ones((m,n),dtype=np.float64)*con_exp
+        a=np.ones((m+1,n),dtype=np.float64)*exp_set
     else:
         for i in range(n):
             for j in range(m+1):
@@ -27,9 +27,6 @@ def sub_qpl_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
                 if abs(x_k[i] - x_l[i]) < 1e-6:# or abs(x_k[i] - x_u[i]) < 1e-3:
                     a_tmp=1.0e0-x_l[i]#1e-3
                 a[j][i]=max(min(exp_max,a_tmp),exp_min)
-#
-#   print(a[0][0])
-#   print(a[1][0])
 #
     c0=np.zeros(n,dtype=np.float64)
     cj=np.zeros((m,n),dtype=np.float64)
@@ -41,6 +38,9 @@ def sub_qpl_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
             ddL[i]=ddL[i]+cj[j][i]*x_d[j]
         ddL[i]=ddL[i]+c0[i]
         ddL[i]=max(ddL[i],1e-3)
+#
+    print(ddL)
+    print(x_d)
 #
     for i in range(n):
         if mov_abs < 0e0:
@@ -54,6 +54,7 @@ def sub_qpl_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
     sol=minimize(qpl_dual,x_d,args=(n,m,x_k,g,dg,dx_l,dx_u, ddL), \
         jac=dqpl_dual,method='L-BFGS-B',bounds=tup_bds, options={'disp':False})
 #
+    print(sol)
     x_d[:]=sol.x
 #
     x=x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL)

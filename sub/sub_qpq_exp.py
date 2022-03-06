@@ -19,7 +19,7 @@ def sub_qpq_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
     a=np.zeros((m+1,n),dtype=np.float64)
 #
     if exp_set < 0e0:
-        a=np.ones((m,n),dtype=np.float64)*exp_set
+        a=np.ones((m+1,n),dtype=np.float64)*exp_set
     else:
         for i in range(n):
             for j in range(m+1):

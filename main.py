@@ -14,7 +14,7 @@ def loop(s):
     [n,m,x_p,x_l,x_u,c_e,c_i,c_v,f_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo,cpu]=init()
     if glo > 0: x_p = (np.random.rand(n)*(x_u-x_l) + x_l)#*0.5 + 0.25
     x_k=np.zeros(n,dtype=np.float64); x_1=np.zeros(n,dtype=np.float64)
-    x_2=np.zeros(n,dtype=np.float64); x_d=np.ones(m,dtype=np.float64)#*1e-6
+    x_2=np.zeros(n,dtype=np.float64); x_d=np.ones(m,dtype=np.float64)
     dg_k=np.zeros((m+1,n),dtype=np.float64); dg_1=np.zeros((m+1,n),dtype=np.float64)
     L_k=-np.zeros(n,dtype=np.float64); U_k=np.zeros(n,dtype=np.float64)
     g_k=np.zeros(m+1,dtype=np.float64); g_1=np.zeros(m+1,dtype=np.float64); cnv=0
@@ -65,13 +65,13 @@ def loop(s):
             np.savetxt('xopt_%d.txt'%s,x_p)
             if glo == 0: 
                 print('\nTermination at X = xopt_*.txt\n',flush=True)
-                print('...based on convergence limit and Euclidean norm of last step\n',flush=True) 
+                print('...based on convergence limit: Euclidean norm of last step\n',flush=True) 
             cnv=1; break
         if d_xi < c_i and max(g[1:]) < c_v:
             np.savetxt('xopt_%d.txt'%s,x_p)
             if glo == 0: 
                 print('\nTermination at X = xopt_*.txt\n',flush=True)
-                print('...based on convergence limit and Infinity norm of last step\n',flush=True) 
+                print('...based on convergence limit: Infinity norm of last step\n',flush=True) 
             cnv=1; break
         if k>1 and d_f0 < f_t and max(g[1:]) < c_v:
             np.savetxt('xopt_%d.txt'%s,x_p)
@@ -84,6 +84,7 @@ def loop(s):
     if k == m_k-1:
         if glo == 0: print('\nMax. Iter. at X = xopt_*.txt\n')
         cnv=0; np.savetxt('xnot_%d.txt'%s,x_p)
+        print(g)
 #
     [g,dg]=simu(n,m,x_p,aux,s,1)
 #
