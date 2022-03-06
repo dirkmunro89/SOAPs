@@ -144,8 +144,8 @@ def init():
     x_l=0.1*np.ones(n,dtype=np.float64)
     x_u=1e2*np.ones(n,dtype=np.float64)
 #
-    x_i[:N]=10.#5.
-    x_i[N:]=50.#40.
+    x_i[:N]=5.
+    x_i[N:]=40.
 #
     f_d=1
     c_e=1e-2
@@ -153,21 +153,21 @@ def init():
     c_v=1e-2
     f_t=0e0
     f_a=-1e8
-    m_k=2
+    m_k=200
 #
-    sub=31
+    sub=100
 #
     glo=0
     cpu=0
 #
-    mov_abs=1.0e0
+    mov_abs=0.1e0
     mov_rel=2e0
 #
     asy_fac=3e0/4e0  
     asy_adp=1e0/2e0
 #
-    exp_set=-1.0e0
-    exp_min=-1e0
+    exp_set=-6.0e0
+    exp_min=-6e0
     exp_max=1e0
 #
     aux=[N]

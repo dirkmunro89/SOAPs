@@ -15,6 +15,7 @@ from sub.sub_oc_comp import sub_oc_comp
 from sub.sub_oc_comp3 import sub_oc_comp3
 from sub.sub_oc_exp import sub_oc_exp
 from sub.sub_oc_qpl import sub_oc_qpl
+from sub.sub_osqp import sub_osqp
 #
 def subs(sub, n, m, x_k, x_d, x_l, x_u, g, dg, x_1, dg_1, x_2, L_k, U_k, k, mov, asy, exp, aux):
 #
@@ -48,6 +49,8 @@ def subs(sub, n, m, x_k, x_d, x_l, x_u, g, dg, x_1, dg_1, x_2, L_k, U_k, k, mov,
         [x_p,x_d,dx_l,dx_u]=sub_qpl_exp_ne_aml(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,x_2,dg_1,mov,exp)
     elif sub == 99:
         [x_p,x_d,dx_l,dx_u,L_k,U_k]=sub_usr(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,x_2,L_k,U_k,k,mov,asy,aux)
+    elif sub == 100:
+        [x_p,x_d,dx_l,dx_u]=sub_osqp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp,k)
     else:
         print('ERROR; subsolver not found')
         stop
