@@ -8,49 +8,42 @@ You're missing a field name---line 500 of file ./bib.bib
  :  % title={Laser engineered net shaping process for SAE 4140 low alloy steel},
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-You're missing a field name---line 654 of file ./bib.bib
- : 
- : %  url={https://books.google.de/books?id=Z7uFxViR19oC},
-(Error may have been on previous line)
-I'm skipping whatever remains of this entry
-I was expecting a `,' or a `}'---line 706 of file ./bib.bib
+I was expecting a `,' or a `}'---line 705 of file ./bib.bib
  : 
  : 017,
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-You're missing a field name---line 841 of file ./bib.bib
+You're missing a field name---line 840 of file ./bib.bib
  :  
  :  % volume={91},
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-Warning--empty publisher in deutsch2011fabric
-Warning--empty year in deutsch2011fabric
 You've used 6 entries,
             1791 wiz_defined-function locations,
-            483 strings with 4481 characters,
-and the built_in function-call counts, 1238 in all, are:
-= -- 105
+            485 strings with 4506 characters,
+and the built_in function-call counts, 1241 in all, are:
+= -- 108
 > -- 55
 < -- 0
 + -- 21
 - -- 15
-* -- 89
-:= -- 196
-add.period$ -- 17
+* -- 84
+:= -- 199
+add.period$ -- 18
 call.type$ -- 6
 change.case$ -- 4
 chr.to.int$ -- 0
-cite$ -- 8
+cite$ -- 6
 duplicate$ -- 52
 empty$ -- 129
 format.name$ -- 15
-if$ -- 270
+if$ -- 273
 int.to.chr$ -- 0
 int.to.str$ -- 6
 missing$ -- 7
-newline$ -- 32
+newline$ -- 33
 num.names$ -- 5
-pop$ -- 26
+pop$ -- 24
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
@@ -62,8 +55,8 @@ text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 2
+warning$ -- 0
 while$ -- 11
 width$ -- 7
-write$ -- 62
-(There were 4 error messages)
+write$ -- 65
+(There were 3 error messages)
