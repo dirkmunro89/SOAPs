@@ -23,7 +23,8 @@ def sub_qpl_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
     else:
         for i in range(n):
             for j in range(m+1):
-                a_tmp=1e0+np.log(dg_1[j][i]/dg[j][i])/np.log(x_1[i]/(x_k[i]+1e-6))
+#               a_tmp=1e0+np.log(dg_1[j][i]/dg[j][i])/np.log(x_1[i]/(x_k[i]+1e-6))
+                a_tmp=1e0+np.log((dg_1[j][i]+1e-6)/(dg[j][i]+1e-6))/np.log(x_1[i]/(x_k[i]+1e-6))
                 if abs(x_k[i] - x_l[i]) < 1e-6:# or abs(x_k[i] - x_u[i]) < 1e-3:
                     a_tmp=1.0e0-x_l[i]#1e-3
                 a[j][i]=max(min(exp_max,a_tmp),exp_min)
@@ -34,13 +35,10 @@ def sub_qpl_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
     for i in range(n):
         c0[i]=dg[0][i]/x_k[i]*(a[0][i]-1e0)
         for j in range(m):
-            cj[j][i]=dg[j][i]/x_k[i]*(a[j+1][i]-1e0)
+            cj[j][i]=dg[j+1][i]/x_k[i]*(a[j+1][i]-1e0)
             ddL[i]=ddL[i]+cj[j][i]*x_d[j]
         ddL[i]=ddL[i]+c0[i]
         ddL[i]=max(ddL[i],1e-3)
-#
-    print(ddL)
-    print(x_d)
 #
     for i in range(n):
         if mov_abs < 0e0:
@@ -54,7 +52,6 @@ def sub_qpl_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
     sol=minimize(qpl_dual,x_d,args=(n,m,x_k,g,dg,dx_l,dx_u, ddL), \
         jac=dqpl_dual,method='L-BFGS-B',bounds=tup_bds, options={'disp':False})
 #
-    print(sol)
     x_d[:]=sol.x
 #
     x=x_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, ddL)

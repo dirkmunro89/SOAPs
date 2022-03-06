@@ -159,7 +159,7 @@ def init():
     c_v=1e-2
     f_t=0e0
     f_a=-1e8
-    m_k=50
+    m_k=100
 #
     sub=100
 #
@@ -172,16 +172,9 @@ def init():
     asy_fac=3e0/4e0  
     asy_adp=1e0/2e0
 #
-    exp_set=-6.0e0
+    exp_set=1.0e0
     exp_min=-6e0
-    exp_max=1e0
-#
-    exp_set=-np.ones((m+1,n),dtype=np.float)
-    exp_set[0][:]=-1e0
-    for i in range(N):
-        exp_set[i+1][:N]=-1e0; exp_set[i+1][N:]=-3e0
-    exp_set[-1][:N]=-1e0; exp_set[-1][N:]=-3e0
-#   exp_set=-np.ones((m+1,n),dtype=np.float)
+    exp_max=2e0
 #
     aux=[N]
 #

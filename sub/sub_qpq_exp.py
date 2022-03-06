@@ -35,7 +35,7 @@ def sub_qpq_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
         c0[i]=-abs(dg[0][i]/x_k[i])*(a[0][i]-1e0)
         for j in range(m):
 #           cj[j][i]=(dg[j][i])/x_k[i]*(a[j+1][i]-1e0)
-            cj[j][i]=-abs(dg[j][i])/x_k[i]*(a[j+1][i]-1e0)
+            cj[j][i]=-abs(dg[j+1][i])/x_k[i]*(a[j+1][i]-1e0)
 #
     for i in range(n):
         if mov_abs < 0e0:

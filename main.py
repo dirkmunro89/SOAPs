@@ -38,7 +38,7 @@ def loop(s):
             
 #       Subproblem solve
         x_k[:]=x_p; dg_k[:]=dg; g_k[:]=g
-        [x_p,x_d,dx_l,dx_u,L_k,U_k]=subs(sub, n, m, x_k, x_d, x_l, x_u, g, dg, x_1, dg_1, \
+        [x_p,x_d,dx_l,dx_u,L_k,U_k]=subs(sub, n, m, x_k, x_d, x_l, x_u, g, dg, x_1, g_1, dg_1, \
         x_2 , L_k, U_k, k, mov, asy, exp, aux)
         x_2[:]=x_1; x_1[:]=x_k; dg_1[:]=dg_k; g_1[:]=g_k
 #
