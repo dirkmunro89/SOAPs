@@ -95,7 +95,7 @@
 \changeoperator{sum}
 \changeoperator{prod}
 
-\title{Problem solving by nonlinear mathematical programming}
+\title{Problem-solving by nonlinear mathematical programming}
 \author{Dirk Munro (Hamburg, Germany)}
 \date{\today } 
 % Activate to display a given date or no date (if empty),
@@ -114,12 +114,15 @@
 
 %\section{Foreword}
 
-\emph{This note is intended as a simple, general introduction to the subject of {sequential approximation optimization}, a general nonlinear mathematical programming paradigm. In particular, the subject is described from the solution-method's point of view, and an `optimization problem' is taken to be a well-defined representation of a \emph{problem}---in flirtation with the fundamental Deutschean sense of it~\cite{deutsch2011fabric}. No novelty beyond the interpretation, description (and notation) is introduced. The list of citations would not be reasonably complete without those referenced in the \textbf{Background}, in closure of the note.}
+\emph{This note is intended as an elementary introduction to the subject of {sequential approximation optimization}, a general nonlinear mathematical programming paradigm. In particular, the subject is described from the solution-method's point of view, and an `optimization problem' is taken to be a well-defined representation of any \emph{problem} %\footnote{``By a `problem' I do not necessarily mean a practical emergency, or a source of anxiety. I just mean a set of ideas that seem inadequete and worth trying to improve.''\cite{deutsch2011fabric}},
+in a practical setting. 
+%, in flirtation with the fundamental Deutschean sense of it~\cite{deutsch2011fabric}. 
+No novelty beyond the interpretation, description (and notation) is introduced. The list of citations would not be reasonably complete without those referenced in the \textbf{Background}, in closure of the note.}
 
 %(herein\footnote{It is open to (largely academic) debate whether or not the definition implied here-in is traditionally correct. Traditionally, the `output' of the optimization problem $\mathcal{P}$ may be seen to be the decision variables at solution of the problem $\bx^\ast$. Moreover, its open to interpreation whether or not the decision variables are defined by or indeed defines the problem $\mathcal{P}$. Herein we follow a practical interpretation, insofar as we say that the problem $\mathcal{P}$ itself does not provide the solution $\bx^\ast$ as `output' (which is true).})
 
 \section{Introduction}
-Assume we have a problem $\mathcal{P}$ and an array of scalar decision variables $\bx$. Each decision variable is assumed to be continuous\footnote{Discrete variables may always be relaxed to a continuous form, and driven to discrete solutions.}, and packed into an array of length $n$; \emph{i.e.} $\bx \in \mathbb{R}^n$. A particular point in the `decision space' will henceforth be represented by a particular collection of values in $\bx$. What is meant herein by `a problem $\mathcal{P}$'? We will assume that $\mathcal{P}$ is programmatic (numeric) entity, the interior workings of which is unknown, yet it may be evaluated with an array of particular decision (input) variable values $\bx$, $\mathcal{P}[\bx]$~\footnote{Through-out square brackets $[\cdot]$ will denote an operation of `to evaluate at'; and it may be used and dropped freely as is relevant to the description of a particular entity, in a particular context.}, and, in so doing, the problem returns the following information
+Assume we have a problem $\mathcal{P}$ and an array of scalar decision variables $\bx$. Each decision variable is assumed to be continuous\footnote{Discrete variables may always be relaxed to a continuous form, and driven to discrete solutions.}, and packed into an array of length $n$; \emph{i.e.} $\bx \in \mathbb{R}^n$. A particular point in the `decision space' will henceforth be represented by a particular collection of values in $\bx$. What is meant herein by `a problem $\mathcal{P}$'? We will assume that $\mathcal{P}$ is programmatic (numeric) entity, an analytic representation of which is not available, but it may be evaluated with an array of particular decision (input) variable values $\bx$, $\mathcal{P}[\bx]$~\footnote{Through-out square brackets $[\cdot]$ will denote an operation of `to evaluate at'; and it may be used and dropped freely as is relevant to the description of a particular entity, in a particular context.}, and, in so doing, the problem returns the following information
 \begin{align}
 \label{d:eqn:p}
  ~\left\{ ~
@@ -131,13 +134,13 @@ Assume we have a problem $\mathcal{P}$ and an array of scalar decision variables
 \end{align}
 That is 
 \begin{enumerate}[label=(\roman*)]
-  \item an array $\bc$ of (scalar function) values, of length $m$. We will adopt the convention that the first entry $\c_0$ is a scalar-valued objective (cost) to be \emph{minimised}, and the following $m-1$ entries denote constraint function values, with values of $\c_j \leq 0$ indicating \emph{feasibility}; \emph{i.e.} adherence to constraint $j$, and violation otherwise;
+  \item an array $\bc$ of (scalar function) values, of length $m$. We will adopt the convention that the first entry $\c_0$ is an objective (cost) to be \emph{minimised}, and the following $m-1$ entries denote constraint function values, with values of $\c_j \leq 0$ indicating \emph{feasibility}; \emph{i.e.} adherence to constraint $j$;
   %\footnote{Again it is open to interpretation whether or not these functions are defined by or indeed defines the problem $\mathcal{P}.$};
   \item assuming each cost-and-constraint function is (at least once) continuously differentiable, the first-order derivatives of each, to each decision variable, $\dc$, with
 \begin{equation}
 \mathbf{\partial c }_j = \left( \frac{\partial \c_j}{\partial \x_1 } \:,  \frac{\partial \c_j}{\partial \x_2} \: , \ldots,  \frac{\partial \c_j}{\partial \x_n} \: \right) \quad \text{for} \quad j = 0,1, \ldots, m \:;
 \end{equation}
-  \item the  lower $\underline{\bx}$ and upper $\overline{\bx}$ bounds
+  \item and the  lower $\underline{\bx}$ and upper $\overline{\bx}$ bounds
  %\footnote{It is again interesting (but somewhat arbitrary) whether or not the (global) bounds on the decision space $\underline{\overline{\bx}}$ is taken to be defined in, and provided by, the problem $\mathcal{P}$. Practically, it is perhaps useful to interpret the bounds provided by problem $\mathcal{P}$ as restrictions on the extent of the decision space $\underline{\overline{\bx}}$ which follow naturally from the physics or character of the decision variables---\emph{e.g.} the range of thickness (greater than zero, but not infinite) permitted to a structural member. But of course, the decision / optimization algorithm, which operates on the information provided by problem $\mathcal{P}$, may (and typically will) operate iteratively in smaller decision spaces, overwriting the bounds provided by problem $\mathcal{P}$.} 
  of the decision space, respectively, defining the entire decision space $\underline{\overline{\bx}}$.
   %upon evaluation with a particular $\bx$, that the problem $\mathcal{P}$ returns the remaining decision space (from the current evaluation point $\bx$) to the lower-bound of each variable $\Delta \underline{\bx}$, and likewise the remaining decision space to the upper-bound $\Delta \overline{\bx}$, collected in $\Delta \underline{\overline{\bx}}$.
@@ -145,7 +148,7 @@ That is
 
 In other words, beyond the information we can collect from the quantities returned for particular evaluations $\left\{\bc, \partial \bc, \underline{\overline{\bx}}\right\}=\mathcal{P}[\bx]$ we have no further information of the problem $\mathcal{P}$, except for what can be deduced from the upstream assumptions (and knowledge of the nature of the problem). Moreover, in general, a single evaluation of problem $\mathcal{P}[\bx]$ is considered computationally expensive---or inconvenient---insofar as it is non-trivially costly to evaluate. That is for example simulation-based, with multiple, potentially large-scale finite-element analyses, or computationally cheap (\emph{e.g.} reduced-order) analyses which rely on calls to licensed applications, or problem evaluations which require significant network communications.
 
-How to find a candidate\footnote{In general the problem is assumed to be multi-modal. That is, it may have many local optima, in addition to a global optimum. The topic is discussed, and a solution method is proposed, in Reference~\cite{munro2022}.} optimum solution $\bx^\ast$ of problem $\mathcal{P}$?  Well, we can start by sampling the decision space $\underline{\overline{\bx}}$, to find an $\bx$ with a reasonable cost $\c_0 [\bx]$, while all constraints are feasible $\c_j [\bx] \leq 0$, $\forall j > 0$. Then, we can ask the question: can this sample decision $\bx$ be improved if we adjust the evaluation in the decision space by a particular amount $\bx + \Delta \bx$? If there is a $\Delta \bx$ for which $\c_0 [\bx] > \c_0 [\bx + \Delta\bx]$, while all constraints remain feasible $\c_j [\bx + \Delta \bx] \leq 0$, $\forall j > 0$, then the sample $\bx$ we started with was indeed not optimal\footnote{Not even locally.}, and we should adjust the decision to $\bx + \Delta \bx$.
+How to find a candidate\footnote{In general the problem is assumed to be multi-modal. That is, it may have many local optima, in addition to one global optimum. The topic is discussed, and a solution method is proposed, in Reference~\cite{munro2022}.} optimum solution $\bx^\ast$ of problem $\mathcal{P}$?  Well, we can start by sampling the decision space $\underline{\overline{\bx}}$, to find an $\bx$ with a reasonable cost $\c_0 [\bx]$, while all constraints are feasible $\c_j [\bx] \leq 0$, $\forall j > 0$. Then, we can ask the question: can this sample decision $\bx$ be improved if we adjust the evaluation in the decision space by a particular amount $\bx + \Delta \bx$? If there is a $\Delta \bx$ for which $\c_0 [\bx] > \c_0 [\bx + \Delta\bx]$, while all constraints remain feasible $\c_j [\bx + \Delta \bx] \leq 0$, $\forall j > 0$, then the sample $\bx$ we started with was indeed not optimal\footnote{Not even locally.}, and we should adjust the decision to $\bx + \Delta \bx$.
 
 How to determine what $\Delta \bx$ should be? Keep in mind, we have assumed we are working with an expensive-to-evaluate problem $\mathcal{P}$, which only returns the information $\left\{\bc, \partial \bc, \underline{\overline{\bx}}\right\}=\mathcal{P}[\bx]$ upon evaluation at $\bx$. In practical terms, we will take this to mean that we want to compute a good change in the decision space $\Delta \bx$, without re-evaluating problem $\mathcal{P}$.
 
@@ -170,11 +173,11 @@ That is, we have arrived at a subproblem
 \end{aligned}\right\} =
 \mathcal{S} [\Delta \bx] \: ,
 \end{align}
-which is, importantly, unlike problem $\mathcal{P}$, very cheap to evaluate for different values of $\Delta \bx$, because an analytic approximation $\bv$ has been constructed. In general we say that a solution to problem $\mathcal{S}$---finding that $\Delta \bx$ in $\Delta \overline{\underline{\bx}}$ for which $\v_0$ is a minimum, while all $\v_j \leq 0$, $\forall j > 0$---is computable in polynomial time. Moreover, in practice, polynomial time solution methods are readily available.
+which is, importantly, unlike problem $\mathcal{P}$, very cheap to evaluate for different values of $\Delta \bx$ due to the construction of the an analytic approximation $\bv$. In general we say that a solution to problem $\mathcal{S}$---finding that $\Delta \bx$ in $\Delta \overline{\underline{\bx}}$ for which $\v_0$ is a minimum, while all $\v_j \leq 0$, $\forall j > 0$---is computable in polynomial time. Moreover, in practice, polynomial time solution methods are readily available.
 
 We may thus, upon solving subproblem $\mathcal{S}$, update the decision to $\bx \gets \bx + \Delta \bx$; repeat the evaluation of problem $\mathcal{P}$ at the new values of the decision variables $\left\{\bc, \partial \bc, \underline{\overline{\bx}}\right\}=\mathcal{P}[\bx]$, and repeat the construction and solution of subproblem $\mathcal{S}$. The process may be repeated until there is no change in the decision $\Delta \bx$ which improves the solution, and we may reasonable deduce that we have arrived at a candidate solution $\bx \to \bx^\ast$ of problem $\mathcal{P}$.
 
-In general, however, linear approximations $\bv$ of the cost-and-constraint functions $\bc$ may result in changes $\Delta \bx$ in the decision space which violates the constraints $\c_j[\bx + \Delta \bx] > 0 \: \forall j > 0$, increases the cost function $\c_0[\bx + \Delta \bx]$, very restrictive allowable decision changes $\Delta \underline{\overline{\bx}}$ resulting in excessive, expensive evaluations of problem $\mathcal{P}[\bx]$, and hence complete failure of the procedure to converge to a candidate solution $\bx^\ast$ of problem $\mathcal{P}$.
+In general, however, linear approximations $\bv$ of the cost-and-constraint functions $\bc$ may result in changes $\Delta \bx$ in the decision space which violates one or more constraints $\c_j[\bx + \Delta \bx] > 0$, increases the cost function $\c_0[\bx + \Delta \bx] > \c_0[\bx]$, permission of only restrictive allowable decision changes $\Delta \underline{\overline{\bx}}$, resulting in excessive, expensive evaluations of problem $\mathcal{P}[\bx]$, and hence failure of the procedure to converge to a reasonable candidate solution $\bx^\ast$ of problem $\mathcal{P}$.
 
 What can we do?
 
@@ -279,6 +282,7 @@ Eventually we arrive rather naturally at the necessary conditions: How far can w
 % BIBLIOGRAPHY
 
 \section*{Background}
+Philosophical background~\cite{deutsch2011fabric}.
 
 The introduction to the `Elements of Structural Optimization' by Haftka, G\"urdal and Kamat~\cite{haftka1990}. The review of sensitivity analysis in structural optimization by van Keulen, Haftka and Kim~\cite{keulen2005}. More to follow. 
 

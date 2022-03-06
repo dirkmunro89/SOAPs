@@ -153,6 +153,7 @@ def init():
 #
     sub=99 # set to conlin (20), to reproduce column 2 in TABLE 3; see sub_usr for SLP mod.
     glo=0
+    cpu=0
 #
     mov_abs=-0.1e0
     mov_rel=2e0
@@ -170,5 +171,5 @@ def init():
     exp={'exp_set': exp_set, 'exp_min': exp_min, 'exp_max': exp_max}
     asy={'asy_fac': asy_fac,'asy_adp': asy_adp}
 #
-    return n,m,x_i,x_l,x_u,c_e,c_i,c_v,f_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo
+    return n,m,x_i,x_l,x_u,c_e,c_i,c_v,f_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo,cpu
 #

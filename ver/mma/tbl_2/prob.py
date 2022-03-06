@@ -147,6 +147,7 @@ def init():
     m_k=40
 #
     glo=0
+    cpu=0
 #
     sub=11
 #
@@ -165,5 +166,5 @@ def init():
     asy={'asy_fac': asy_fac,'asy_adp': asy_adp}
     aux={}
 #
-    return n,m,x_i,x_l,x_u,c_e,c_i,c_v,f_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo
+    return n,m,x_i,x_l,x_u,c_e,c_i,c_v,f_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo,cpu
 

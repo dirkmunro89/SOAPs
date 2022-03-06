@@ -24,7 +24,7 @@ def loop(s):
         ('k', 'Obj', 'Vio', 'Mov', '|dX|', '||dX||', '|kkt|'),flush=True)
     for k in range(m_k):
 #
-#       Simulation: function and gradient values
+#       Problem evaluation: function and gradient values
         [g,dg]=simu(n,m,x_p,aux,s,0)
         if f_d == 1: # if finite diff. required
             dg[:]=dsim(n,m,x_p,aux,s,0)
