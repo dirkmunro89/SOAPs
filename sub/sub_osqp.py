@@ -19,29 +19,30 @@ def sub_osqp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp,k):
     dx_u=np.ones(n,dtype=np.float64)
     a=np.zeros((m+1,n),dtype=np.float64)
 #
-    if exp_set < 0e0:
-        a=np.ones((m+1,n),dtype=np.float64)*exp_set
-    else:
-        for i in range(n):
-            for j in range(m+1):
-                if k <= 1:
-                    a[j][i]=-1e0#max(min(exp_max,a_tmp),exp_min)
-                else:
-                    a_tmp=1e0+np.log(dg_1[j][i]/dg[j][i])/np.log(x_1[i]/(x_k[i]+1e-6))
-                    if abs(x_k[i] - x_l[i]) < 1e-6:# or abs(x_k[i] - x_u[i]) < 1e-3:
-                        a_tmp=1.0e0-x_l[i]#1e-3
-                    a[j][i]=max(min(exp_max,a_tmp),exp_min)
+    a[:]=exp_set
+#   if exp_set < 0e0:
+#       a=np.ones((m+1,n),dtype=np.float64)*exp_set
+#   else:
+#       for i in range(n):
+#           for j in range(m+1):
+#               if k <= 1:
+#                   a[j][i]=-1e0#max(min(exp_max,a_tmp),exp_min)
+#               else:
+#                   a_tmp=1e0+np.log(dg_1[j][i]/dg[j][i])/np.log(x_1[i]/(x_k[i]+1e-6))
+#                   if abs(x_k[i] - x_l[i]) < 1e-6:# or abs(x_k[i] - x_u[i]) < 1e-3:
+#                       a_tmp=1.0e0-x_l[i]#1e-3
+#                   a[j][i]=max(min(exp_max,a_tmp),exp_min)
 #
     c0=np.zeros(n,dtype=np.float64)
     cj=np.zeros((m,n),dtype=np.float64)
     ddL=np.zeros(n,dtype=np.float64)
     for i in range(n):
-        c0[i]=dg[0][i]/x_k[i]*(a[0][i]-1e0)
+        c0[i]=(dg[0][i])/x_k[i]*(a[0][i]-1e0)
         for j in range(m):
-            cj[j][i]=dg[j][i]/x_k[i]*(a[j+1][i]-1e0)
+            cj[j][i]=(dg[j][i])/x_k[i]*(a[j+1][i]-1e0)
             ddL[i]=ddL[i]+cj[j][i]*x_d[j]
         ddL[i]=ddL[i]+c0[i]
-        ddL[i]=max(abs(ddL[i]),1e-3)
+        ddL[i]=max((ddL[i]),1e-3)
 #
     for i in range(n):
         if mov_abs < 0e0:
@@ -61,7 +62,7 @@ def sub_osqp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp,k):
         tmp=np.append(tmp,[tmp2],axis=0)
     A=sparse.csc_matrix(tmp)
     u=-g[1:]
-    l=-np.ones(m,dtype=np.float64)*1e8
+    l=-np.ones(m,dtype=np.float64)*1e16
 #
     l=np.append(l,dx_l)
     u=np.append(u,dx_u)

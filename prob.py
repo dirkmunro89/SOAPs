@@ -70,6 +70,7 @@ def simu(n,m,x_p,aux,glo,out):
         y=P*S**2e0/E/I/2e0*(L-float(i+1)*S+2e0*S/3e0)+ya*S+y
         ya=P*S/E/I*(L-float(i+1)*S+S/2e0)+ya
 #
+    g[0]=g[0]/1e4
     g[-1]=y/ymax-1e0
 #
     return [g,dg]
@@ -136,16 +137,21 @@ def init():
 #
 #   Etmans Van der Plaats cantilever beam
 #
-    N=5
+    N=25
     n=2*N
     m=2*N+1
 #
     x_i=np.ones(n,dtype=np.float64)
-    x_l=0.1*np.ones(n,dtype=np.float64)
-    x_u=1e2*np.ones(n,dtype=np.float64)
+    x_l=np.ones(n,dtype=np.float64)
+    x_u=np.ones(n,dtype=np.float64)
+#
+    x_l[:N]=1e0
+    x_l[N:]=5e0
+    x_u[:N]=80e0
+    x_u[N:]=80e0
 #
     x_i[:N]=5.
-    x_i[N:]=40.
+    x_i[N:]=60.
 #
     f_d=1
     c_e=1e-2
@@ -153,7 +159,7 @@ def init():
     c_v=1e-2
     f_t=0e0
     f_a=-1e8
-    m_k=200
+    m_k=50
 #
     sub=100
 #
@@ -169,6 +175,13 @@ def init():
     exp_set=-6.0e0
     exp_min=-6e0
     exp_max=1e0
+#
+    exp_set=-np.ones((m+1,n),dtype=np.float)
+    exp_set[0][:]=-1e0
+    for i in range(N):
+        exp_set[i+1][:N]=-1e0; exp_set[i+1][N:]=-3e0
+    exp_set[-1][:N]=-1e0; exp_set[-1][N:]=-3e0
+#   exp_set=-np.ones((m+1,n),dtype=np.float)
 #
     aux=[N]
 #

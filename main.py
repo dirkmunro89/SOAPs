@@ -31,6 +31,11 @@ def loop(s):
         if k == 0: dg_1[:]=dg; x_1[:]=x_p
         d_f0=abs(g[0]-g_1[0])/abs(g[0])
 #
+#       if g[0]>g_1[0] and k>0:
+#           mov['mov_abs']=mov['mov_abs']/2e0
+#       else:
+#           mov['mov_abs']=mov['mov_abs']*1.1e0
+            
 #       Subproblem solve
         x_k[:]=x_p; dg_k[:]=dg; g_k[:]=g
         [x_p,x_d,dx_l,dx_u,L_k,U_k]=subs(sub, n, m, x_k, x_d, x_l, x_u, g, dg, x_1, dg_1, \
@@ -40,8 +45,8 @@ def loop(s):
 #       Metrics; infinity, Euclidean norm, max KKT viol., and effective move limit
         d_xi=max(abs(x_p-x_k));d_xe=np.linalg.norm(x_p-x_k);kkt=np.zeros(n);mov_min=1e8;mov_max=-1e8
         for i in range(n):
-            mov_min=min(mov_min, dx_u[i]-dx_l[i])
-            mov_max=max(mov_max, dx_u[i]-dx_l[i])
+            mov_min=mov['mov_abs']#min(mov_min, dx_u[i]-dx_l[i])
+            mov_max=mov['mov_abs']#max(mov_max, dx_u[i]-dx_l[i])
             if (x_p[i]-x_l[i])>1e-6 and (x_u[i]-x_p[i])>1e-6: 
                 kkt[i]= kkt[i] + dg[0][i]
                 for j in range(m): 
@@ -49,10 +54,10 @@ def loop(s):
         d_kkt=max(abs(kkt))
 #
 #       Screen output
-        if glo==0: print('%3d%14.3e%9.3f%11.1e|%5.1e%11.1e%11.1e%11.1e'%\
+        if glo==0: print('%3d%14.3e%9.0e%11.1e|%5.1e%11.1e%11.1e%11.1e'%\
             (k, g[0], max(g[1:]),mov_min,mov_max,d_xi,d_xe,d_kkt),flush=True)
         else:
-            if k%100 == 0: print('! %3d%14.3e%9.3f%11.1e|%5.1e%11.1e%11.1e%11.1e'%\
+            if k%100 == 0: print('! %3d%14.3e%9.0e%11.1e|%5.1e%11.1e%11.1e%11.1e'%\
             (k, g[0], max(g[1:]),mov_min,mov_max,d_xi,d_xe,d_kkt),flush=True)
 #
 #       Termination
