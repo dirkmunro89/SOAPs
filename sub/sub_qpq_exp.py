@@ -23,7 +23,7 @@ def sub_qpq_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
     else:
         for i in range(n):
             for j in range(m+1):
-                a_tmp=1e0+np.log(abs((dg_1[j][i])/(dg[j][i])))/np.log(x_1[i]/(x_k[i]+1e-6))
+                a_tmp=1e0+np.log(abs((dg_1[j][i]+1e-6)/(dg[j][i]+1e-6)))/np.log(x_1[i]/(x_k[i]+1e-6))
                 if abs(x_k[i] - x_l[i]) < 1e-6:# or abs(x_k[i] - x_u[i]) < 1e-3:
                     a_tmp=1.0e0-x_l[i]#1e-3
                 a[j][i]=max(min(exp_max,a_tmp),exp_min)
@@ -92,8 +92,10 @@ def con_qpq_dual(x_d, n, m, x_k, g, dg, dx_l, dx_u, c0, cj):
     W = g[0]
     for i in range(n):
         W = W + dg[0][i]*(x[i]-x_k[i]) + ddL[i]/2e0*(x[i]-x_k[i])**2e0
-        for j in range(m):
-            W = W + x_d[j]*(g[j+1] + dg[j+1][i]*(x[i]-x_k[i]))
+    for j in range(m):
+        W = W + x_d[j]*g[j+1]
+        for i in range(n): 
+            W = W + x_d[j]*dg[j+1][i]*(x[i]-x_k[i])
 #
     return -W
 #

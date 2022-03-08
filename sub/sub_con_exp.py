@@ -6,7 +6,7 @@ from scipy.optimize import minimize
 #
 # CONLIN: dual subproblem
 #
-def sub_con_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
+def sub_con_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp,k):
 #
     mov_rel=mov['mov_rel']
     mov_abs=mov['mov_abs']
@@ -23,10 +23,13 @@ def sub_con_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp):
         a=np.ones(n,dtype=np.float64)*exp_max
         for i in range(n):
             for j in range(m+1):
-                a_tmp=1e0+np.log(abs(dg_1[j][i]/dg[j][i]))/np.log(x_1[i]/(x_k[i]+1e-6))
-                if abs(x_k[i] - x_l[i]) < 1e-6:# or abs(x_k[i] - x_u[i]) < 1e-3:
-                    a_tmp=1.0e0-x_l[i]#1e-3
-                a[i]=max(min(a[i],a_tmp),exp_min)
+                if k <= 1:
+                    a[i]=-1e0
+                else:
+                    a_tmp=1e0+np.log((dg_1[j][i]+1e-6)/(dg[j][i]+1e-6))/np.log(x_1[i]/(x_k[i]+1e-6))
+                    if abs(x_k[i] - x_l[i]) < 1e-6:# or abs(x_k[i] - x_u[i]) < 1e-3:
+                        a_tmp=1.0e0-x_l[i]#1e-3
+                    a[i]=max(min(a[i],a_tmp),exp_min)
 #
     for i in range(n):
         if mov_abs < 0e0:

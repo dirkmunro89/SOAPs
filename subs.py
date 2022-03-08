@@ -38,11 +38,11 @@ def subs(sub, n, m, x_k, x_d, x_l, x_u, g, dg, x_1, g_1,dg_1, x_2, L_k, U_k, k, 
     elif sub == 20:
         [x_p,x_d,dx_l,dx_u]=sub_con(n,m,x_k,x_d,x_l,x_u,g,dg,mov)
     elif sub == 21:
-        [x_p,x_d,dx_l,dx_u]=sub_con_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp)
+        [x_p,x_d,dx_l,dx_u]=sub_con_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp,k)
     elif sub == 30:
         [x_p,x_d,dx_l,dx_u]=sub_qpq_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp)
     elif sub == 31:
-        [x_p,x_d,dx_l,dx_u]=sub_qpl_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp)
+        [x_p,x_d,dx_l,dx_u]=sub_qpl_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp,k)
     elif sub == 32:
         [x_p,x_d,dx_l,dx_u]=sub_qpl_exp_ne(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp)
     elif sub == 33:

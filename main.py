@@ -13,8 +13,8 @@ def loop(s):
 #   Initializations
     [n,m,x_p,x_l,x_u,c_e,c_i,c_v,f_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo,cpu]=init()
     if glo > 0: x_p = (np.random.rand(n)*(x_u-x_l) + x_l)#*0.5 + 0.25
-    x_k=np.zeros(n,dtype=np.float64); x_1=np.zeros(n,dtype=np.float64)
-    x_2=np.zeros(n,dtype=np.float64); x_d=np.ones(m,dtype=np.float64)
+    dx=np.zeros(n,dtype=np.float64);x_k=np.zeros(n,dtype=np.float64);x_1=np.zeros(n,dtype=np.float64)
+    x_2=np.zeros(n,dtype=np.float64); x_d=np.ones(m,dtype=np.float64)*1e4
     dg_k=np.zeros((m+1,n),dtype=np.float64); dg_1=np.zeros((m+1,n),dtype=np.float64)
     L_k=-np.zeros(n,dtype=np.float64); U_k=np.zeros(n,dtype=np.float64)
     g_k=np.zeros(m+1,dtype=np.float64); g_1=np.zeros(m+1,dtype=np.float64); cnv=0
@@ -31,16 +31,14 @@ def loop(s):
         if k == 0: dg_1[:]=dg; x_1[:]=x_p
         d_f0=abs(g[0]-g_1[0])/abs(g[0])
 #
-#       if g[0]>g_1[0] and k>0:
-#           mov['mov_abs']=mov['mov_abs']/2e0
-#       else:
-#           mov['mov_abs']=mov['mov_abs']*1.1e0
-            
 #       Subproblem solve
         x_k[:]=x_p; dg_k[:]=dg; g_k[:]=g
         [x_p,x_d,dx_l,dx_u,L_k,U_k]=subs(sub, n, m, x_k, x_d, x_l, x_u, g, dg, x_1, g_1, dg_1, \
         x_2 , L_k, U_k, k, mov, asy, exp, aux)
         x_2[:]=x_1; x_1[:]=x_k; dg_1[:]=dg_k; g_1[:]=g_k
+#
+#       Decision variables update (in subsolve)
+#       x_p[:] = x_k + dx
 #
 #       Metrics; infinity, Euclidean norm, max KKT viol., and effective move limit
         d_xi=max(abs(x_p-x_k));d_xe=np.linalg.norm(x_p-x_k);kkt=np.zeros(n);mov_min=1e8;mov_max=-1e8
