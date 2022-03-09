@@ -12,7 +12,7 @@ Verification examples available in ./ver/
 
 ## Requirements and Execution
 
-For the optimization algorithm, Numpy, Scipy and Joblib packages are required. For the topology optimization examples, Matplotlib and CVXOPT (used for linear FE solve) is required in addition.
+For the optimization algorithm, Numpy, Scipy, Joblib and OSQP packages are required. For the topology optimization examples, Matplotlib and CVXOPT (used for linear FE solve) is required in addition.
 
 Tested on Ubuntu 20.04 LTS with
 
