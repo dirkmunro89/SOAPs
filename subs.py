@@ -15,7 +15,9 @@ from sub.sub_oc_comp import sub_oc_comp
 from sub.sub_oc_comp3 import sub_oc_comp3
 from sub.sub_oc_exp import sub_oc_exp
 from sub.sub_oc_qpl import sub_oc_qpl
+from sub.sub_qpl_exp_nc import sub_qpl_exp_nc
 from sub.sub_osqp import sub_osqp
+from sub.sub_oslp import sub_oslp
 #
 def subs(sub, n, m, x_k, x_d, x_l, x_u, g, dg, x_1, g_1,dg_1, x_2, L_k, U_k, k, mov, asy, exp, aux):
 #
@@ -40,17 +42,21 @@ def subs(sub, n, m, x_k, x_d, x_l, x_u, g, dg, x_1, g_1,dg_1, x_2, L_k, U_k, k, 
     elif sub == 21:
         [x_p,x_d,dx_l,dx_u]=sub_con_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp,k)
     elif sub == 30:
-        [x_p,x_d,dx_l,dx_u]=sub_qpq_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp)
+        [x_p,x_d,dx_l,dx_u]=sub_qpq_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp,k)
     elif sub == 31:
         [x_p,x_d,dx_l,dx_u]=sub_qpl_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp,k)
     elif sub == 32:
-        [x_p,x_d,dx_l,dx_u]=sub_qpl_exp_ne(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp)
-    elif sub == 33:
-        [x_p,x_d,dx_l,dx_u]=sub_qpl_exp_ne_aml(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,x_2,dg_1,mov,exp)
+        [x_p,x_d,dx_l,dx_u]=sub_qpl_exp_nc(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp,k)
+#   elif sub == 32:
+#       [x_p,x_d,dx_l,dx_u]=sub_qpl_exp_ne(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp)
+#   elif sub == 33:
+#       [x_p,x_d,dx_l,dx_u]=sub_qpl_exp_ne_aml(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,x_2,dg_1,mov,exp)
     elif sub == 99:
         [x_p,x_d,dx_l,dx_u,L_k,U_k]=sub_usr(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,x_2,L_k,U_k,k,mov,asy,aux)
     elif sub == 100:
         [x_p,x_d,dx_l,dx_u]=sub_osqp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,g_1,dg_1,mov,exp,k)
+    elif sub == 101:
+        [x_p,x_d,dx_l,dx_u]=sub_oslp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,g_1,dg_1,mov)
     else:
         print('ERROR; subsolver not found')
         stop

@@ -100,7 +100,8 @@ def simu(n,m,x_p,aux,glo,out):
 #   21  :   CONLIN with adaptive exponent
 #   30  :   QCQP reciprocal adaptive
 #   31  :   QPLP reciprocal adaptive
-#   100 :   OSCP QP reciprocal adaptive
+#   100 :   OSQP QP reciprocal adaptive
+#   101 :   LP; solved with OSQP with exact zero Hessian
 #
 #   Suproblem parameters
 #
@@ -122,6 +123,11 @@ def simu(n,m,x_p,aux,glo,out):
 #
 #   30,31   :   mov_*       :       Same as 20
 #           :   exp_*       :       Same as 21
+#
+#   101     :   mov_*       :       Same as 20
+#           :   exp_*       :       Same as 21
+#
+#   101     :   mov_*       :       Same as 20
 #
 #   Global flags and parameters
 #
@@ -160,9 +166,9 @@ def init():
     c_v=1e-2
     f_t=0e0
     f_a=-1e8
-    m_k=30
+    m_k=100
 #
-    sub=100 # 31 works with non-convex approxes; implement
+    sub=30
 #
     glo=0
     cpu=0
