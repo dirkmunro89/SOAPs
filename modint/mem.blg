@@ -3,60 +3,63 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: mem.aux
 The style file: unsrt.bst
 Database file #1: ./bib.bib
-You're missing a field name---line 500 of file ./bib.bib
+You're missing a field name---line 507 of file ./bib.bib
  :  
  :  % title={Laser engineered net shaping process for SAE 4140 low alloy steel},
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-I was expecting a `,' or a `}'---line 705 of file ./bib.bib
+I was expecting a `,' or a `}'---line 734 of file ./bib.bib
  : 
  : 017,
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-You're missing a field name---line 840 of file ./bib.bib
+You're missing a field name---line 869 of file ./bib.bib
  :  
  :  % volume={91},
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-You've used 6 entries,
+Warning--empty booktitle in etman2009diagonal
+Warning--empty year in etman2009diagonal
+Warning--empty year in etman2006sequential
+You've used 26 entries,
             1791 wiz_defined-function locations,
-            485 strings with 4506 characters,
-and the built_in function-call counts, 1241 in all, are:
-= -- 108
-> -- 55
-< -- 0
-+ -- 21
-- -- 15
-* -- 84
-:= -- 199
-add.period$ -- 18
-call.type$ -- 6
-change.case$ -- 4
+            601 strings with 7769 characters,
+and the built_in function-call counts, 5976 in all, are:
+= -- 545
+> -- 241
+< -- 1
++ -- 91
+- -- 65
+* -- 448
+:= -- 937
+add.period$ -- 78
+call.type$ -- 26
+change.case$ -- 24
 chr.to.int$ -- 0
-cite$ -- 6
-duplicate$ -- 52
-empty$ -- 129
-format.name$ -- 15
-if$ -- 273
+cite$ -- 29
+duplicate$ -- 249
+empty$ -- 607
+format.name$ -- 65
+if$ -- 1306
 int.to.chr$ -- 0
-int.to.str$ -- 6
-missing$ -- 7
-newline$ -- 33
-num.names$ -- 5
-pop$ -- 24
+int.to.str$ -- 26
+missing$ -- 27
+newline$ -- 133
+num.names$ -- 25
+pop$ -- 65
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 16
+skip$ -- 94
 stack$ -- 0
-substring$ -- 75
-swap$ -- 6
-text.length$ -- 0
+substring$ -- 479
+swap$ -- 37
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 0
-while$ -- 11
-width$ -- 7
-write$ -- 65
+warning$ -- 3
+while$ -- 64
+width$ -- 28
+write$ -- 281
 (There were 3 error messages)

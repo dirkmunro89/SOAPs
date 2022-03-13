@@ -169,7 +169,7 @@ def init():
     f_a=-1e8
     m_k=100
 #
-    sub=32
+    sub=30#2
 #
     glo=0
     cpu=0

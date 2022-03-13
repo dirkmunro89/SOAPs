@@ -9,6 +9,8 @@
 \usepackage{verbatim}
 \usepackage[implicit=false]{hyperref}
 
+\usepackage[nocompress]{cite}
+
 %\usepackage{subfig}
 \usepackage{tikz}
 \usepackage{amsmath,bm}
@@ -117,7 +119,7 @@
 \emph{This note is intended as an elementary introduction to the subject of {sequential approximate optimization}, a general nonlinear mathematical programming paradigm. In particular, the subject is described from the solution-method's point of view, and an `optimization problem' is taken to be a well-defined representation of any \emph{problem} %\footnote{``By a `problem' I do not necessarily mean a practical emergency, or a source of anxiety. I just mean a set of ideas that seem inadequete and worth trying to improve.''\cite{deutsch2011fabric}},
 in a practical setting. 
 %, in flirtation with the fundamental Deutschean sense of it~\cite{deutsch2011fabric}. 
-No novelty beyond the interpretation, description (and notation) is introduced. The list of citations would not be reasonably complete without those referenced in the \textbf{Background}, in closure of the note.}
+No novelty beyond the interpretation, description and notation is introduced. The list of citations would not be reasonably complete without those referenced in the \textbf{Background}, in closure of the note.}
 
 %(herein\footnote{It is open to (largely academic) debate whether or not the definition implied here-in is traditionally correct. Traditionally, the `output' of the optimization problem $\mathcal{P}$ may be seen to be the decision variables at solution of the problem $\bx^\ast$. Moreover, its open to interpreation whether or not the decision variables are defined by or indeed defines the problem $\mathcal{P}$. Herein we follow a practical interpretation, insofar as we say that the problem $\mathcal{P}$ itself does not provide the solution $\bx^\ast$ as `output' (which is true).})
 
@@ -188,11 +190,11 @@ Let us assume that we notice, by observation, that the cost-and-constraint funct
 \label{eq:intvar}
     \textbf{v} = \bc +   \partial_{\by} \bc \cdot \Delta \by \:.
 \end{equation}
-That is, we hope that the transformation of the decions space from $\bx \to \by$ has worked to `linearise' the cost-and-constraint functions $\bc$. Rewriting Eq. (\ref{eq:intvar}) in terms of the first-order information supplied by problem $\mathcal{P}$, we retrieve
+That is, we hope that the transformation of the decisions space from $\bx \to \by$ has worked to `linearise' the cost-and-constraint functions $\bc$. Rewriting Eq. (\ref{eq:intvar}) in terms of the first-order information supplied by problem $\mathcal{P}$, we retrieve
 \begin{equation}
     \textbf{v} = \bc + \partial \bc \cdot \partial_{\bx}^{-1} \by \cdot  \Delta \by    \:,
 \end{equation}
-with the derivative of the analytic mapping $\by = \by[\bx]$ easy to compute
+with the (inverted) derivative of the analytic mapping $\by = \by[\bx]$ easy to compute
 \begin{equation}
     \partial_{\bx}^{-1} \by = \left. 1 \Big/ \frac{\partial \by}{\partial \bx}\right. \: .
 \end{equation}
@@ -214,9 +216,9 @@ and, is the same as
 \begin{equation}
     \textbf{v} = \bc + \partial \bc  \cdot \left( \frac{\bx}{\bx + \Delta \bx} \right)_{\bI}\cdot \Delta \bx   \:.
 \end{equation}
-Notice how the term in brackets $(\cdots)$ has introduced an analytically available nonlinearity (or `curvature') in the approximate cost-and-constraint functions $\textbf{v}$, with respect to $\Delta \bx$. Keep in mind, the evaluation of problem $\mathcal{P} [\bx]$ is constant while we evaluate (and solve) subproblem $\mathcal{S}$---which remains computationally cheap---to compute the change in the decision space $\Delta \bx$.
+Notice how the term in brackets $(\cdots)$ has introduced an analytically available nonlinearity (or `curvature') in the approximate cost-and-constraint functions $\textbf{v}$, with respect to $\Delta \bx$. Keep in mind, the evaluation of problem $\mathcal{P} [\bx]$ is constant while we evaluate (and solve) subproblem $\mathcal{S}$---which remains computationally cheap and convenient---to compute a change in the decision space $\Delta \bx$.
 
-Similarly, for example, the decision space transformation may be generalised to the form $\by = \bx_\bI^p$, with $p$ any real number. In this case
+Furthermore, a decision space transformation may be generalized to the form $\by = \bx_\bI^p$, with $p$ any real number. In this case
 \begin{equation}
 \partial_{\bx}^{-1} \by = \frac {1}{p} \bx_{\bI}^{1-p}   \: ,
 \end{equation}
@@ -233,7 +235,39 @@ with the first-order information of problem $\mathcal{P}$ at the current evaluat
 \partial\bv[ \0] = \partial \bc \:.
 \end{equation}
 
-\section{Taylor series expansions}
+Needs mentioning here:
+\begin{equation}
+\label{eq:d2p}
+\partial^2 \bv[\Delta \bx] = \partial \bc \cdot (p-1)\bx_\bI^{1-p} \cdot (\bx+\Delta\bx)^{p-2} \: ,
+\end{equation}
+
+If the cost-and-constraint functions $\bc$ do indeed have a reciprocal relation to the decision variables $\bx$, or a form captured and estimated by the generalisation above, then we can expect a more accurate approximate representation of the cost-and-constraint functions $\bv$, improved estimates of the change required in the decision space $\Delta \bx$, and, ultimately, faster and more efficient solution (fewer evaluations) of the problem $\mathcal{P}$.
+
+\section{Convex problems}
+
+Will have to mention duality... because CONLIN cooks it up so that analytic form of primal in terms of dual is available... 
+
+These is however a caveat. Beyond the cheap-to-evaluate analytic representation of the cost-and-constraint functions $\bv$ (which makes sense in its own right), we require the subproblem $\mathcal{S}$ to be \emph{convex} in order to solve it efficiently (in polynomial time) with commonly available computational methods. In general, the subproblem $\mathcal{S}$ is convex if it has a convex objective (cost) function\footnote{Formal definition.} $\c_0$, and if the feasible region described by the constraints $\c_j \le 0$, $\forall j$, is a convex set\footnote{Formal definition}. As we will see, this is often (made) easy to guarantee via particular constructions of subproblem $\mathcal{S}$.
+
+A classical and well-known construction of this form is due to Fleury \emph{et al.}, as developed for Aerospace engineering applications in the 1980's~\cite{fleury1986structural}. Fleury and co-workers devised the method of \emph{convex linearisation} (or `CONLIN', for short) for problems of structural weight minimisation subject to displacement and stress constraints~\cite{fleury1989conlin}. 
+
+In this setting, convexity of subproblem $\mathcal{S}$ is guaranteed by enforcing positive semi-definiteness of each cost-and-constraint function $\bv$, by judicious selection\footnote{Mention conservatism and seperability.} of the decision space mapping $\by = \by[\bx]$. In this context, an individual function $\v_j$ is convex if its second derivative $\partial^2\v_j$ is greater than equal to zero over its domain of defintion $\Delta \bx \in \Delta \underline{\overline{\bx}}$. 
+
+A convenient way to illustrate is by revisiting the generalisation $\by = \bx_\bI^\bp$. (Note bold p and mention different functions.) Consider again Equation (\ref{eq:d2p}). In CONLIN this is achieved by chosing $\bp$ according to the signs of the first-order information $\partial \bc$, as queried from problem $\mathcal{P}$. If $\partial_i \c_j > 0$, then $\p_{ij} = 1$, otherwise $\p_{ij}=-1$. 
+
+Consider the second-order approximate information, due to a mapping of a single decision variable, with respect to a single function ... 
+\begin{equation}
+\partial_{i}^2 \v_j[\Delta \x_i] = \partial_i \c_j \cdot (\p-1)\x_i^{1-\p} \cdot (\x_i +\Delta\x_i)^{\p-2}
+\end{equation}
+That is ... 
+
+
+
+\textcolor{red}{One of the first generalized examples of such an approach / make use of this property... aimed specifically at weight minimization of structural configurations ...  CONLIN~\cite{fleury1986structural,fleury1989conlin} ... mention convexity conditions ... reciprocal and linear ... }
+
+
+
+\section{Taylor series expansions and quadratically constrained quadratic programs}
 
 The analytic nonlinearity introduced by the decision space transformation is conveniently unpacked by Taylor series expansion $\bm{\nu}$, of the transformed cost-and-constraints $\bv$, in terms of $\Delta \bx$ (away from the current decision point $\bx$, where $\Delta \bx=0$)
 \begin{equation}
@@ -251,20 +285,33 @@ and, at the current decision point $\Delta \bx = \0$, it reduces to
 \begin{equation}
 \partial^2 \bv[\0] = \partial \bc \cdot \left(\frac{p-1}{\bx}\right)_\bI \: .
 \end{equation}
-This notion of `approximated approximations' (approximation of decision space mappings) was first introduced, in this manner, by Groenwold \emph{et al.}~\cite{groenwold2010approximated}. In significant practical terms, the 2nd-order Taylor expansion allows for a completely flexible and general interface with common polynomial time (subproblem) solvers, which are typically fed with the first and second-order information of subproblem $\mathcal{S}$\footnote{Even if linear programming is applied to solve the subproblem $\mathcal{S}$, the (variable) first-order information $\partial \bm{\nu} [\Delta \bx] = \partial \bv[\0] + \partial^2 \bv[\0] \cdot \Delta \bx$ is supplied, iteratively.}. 
+This notion of `approximated approximations' (approximation of decision space mappings) was first introduced, in this manner, by Groenwold \emph{et al.}~\cite{groenwold2010approximated}. In significant practical terms, the 2nd-order Taylor expansion allows for a flexible and general interface with common, state-of-the-art polynomial time (subproblem) solvers, which are fed with the first and (approximate) second-order information of problem $\mathcal{P}$, as formulated in sequential subproblems $\mathcal{S}$. %\footnote{Even if linear programming is applied to solve the subproblem $\mathcal{S}$, the (variable) first-order information $\partial \bm{\nu} [\Delta \bx] = \partial \bv[\0] + \partial^2 \bv[\0] \cdot \Delta \bx$ is supplied, iteratively.}. 
 
-We can therefore redefine subproblem S as ... 
+We can therefore extend subproblem $\mathcal{S}$ as ... 
 
-with v the approximations (footnote; open to interpretation whether this is defined by subproblem S, or indeed, if this is estimated from the outside). 
 
-Quadratically constrained quadratic program. Historically, dual solution methods are available, given particular kinds of approximations / decision space transformations. Cone program solution methods.
+\begin{align}
+ ~\left\{ ~
+\begin{aligned}
+\bnu &= (\nu_0, \nu_1, \ldots, \nu_m )\\
+\partial \bnu & = (\dbnu_0 , \dbnu_1 , \ldots,\dbnu_m  ) \\
+%\partial^{2}\!\bv[\0] & = (\ddv_0 , \ddv_1 , \ldots,\ddv_m  )|_{\Delta \bx = \0} \\
+\Delta \underline{\overline{\bx}} & = ( \Delta \underline{\bx} , \: \Delta \overline{\bx} ) \:
+\end{aligned}\right\} =
+\mathcal{S} [ \: \Delta \bx, \: \bv[\0] = \bc, \: \partial \bv[\0] = \partial \bc, \: \partial^2 \bv [\0] \: ] \: ,
+\end{align}
+
+that is ... describe input and output.... describe solution by dual .... 
+
+%with v the approximations (footnote; open to interpretation whether this is defined by subproblem S, or indeed, if this is estimated from the outside). 
+
+Quadratically constrained quadratic program~\cite{boyd2004convex} traditionally solved by dual method due to Falk~\cite{falk1969lagrange}. Modern primal-dual second-order cone program solvers remain illusive... IBM CPlex... \cite{cplex2009v12} to the authors knowledge.
 
 \section{Quadratic programs and the necessary conditions}
 
 Introduce as simplification to arrive at common 
 
 ~\cite{osqp}
-
 
 Solution methods for the form
 
@@ -279,12 +326,25 @@ TO BE COMPLETED
 
 Eventually we arrive rather naturally at the necessary conditions: How far can we go, before we have to evaluate the problem again..? Keeping in mind, that we can not afford to evaluate the problem an excessive number of times... etc. etc. Move limits and estimates of nonlinear information (surrogate functions/problems, second order estimates).... upon convergence / when we can stop, we get something for free: the necessary conditions are satisfied / we have arrived at the necessary conditions in a rather practical way. Done.
 
+\section*{Example: The Van der Plaats cantilever beam}
+
+To be completed. Implementation near complete.
+
 % BIBLIOGRAPHY
 
 \section*{Background}
-Philosophical background~\cite{deutsch2011fabric}.
 
-The introduction to the `Elements of Structural Optimization' by Haftka, G\"urdal and Kamat~\cite{haftka1990}. The review of sensitivity analysis in structural optimization by van Keulen, Haftka and Kim~\cite{keulen2005}. More to follow. 
+In draft; more to follow. Fadel 1990. Duysinx. (Perhaps write in terms of `contributions'.)
+
+The introduction to the `Elements of Structural Optimization' by Haftka, G\"urdal and Kamat~\cite{haftka1990}. The review of sensitivity analysis in structural optimization by van Keulen, Haftka and Kim~\cite{keulen2005}. 
+
+Fleury \cite{fleury1986structural,fleury1989conlin} and Svanberg \cite{Svanberg1987method}
+
+The objected orientated framework present by Jacobs, Etman and van Keulen~\cite{jacobs2004framework}. \cite{groenwold2011saoi}. The works of Groenwold and collaborators on approximation concepts~\cite{groenwold2010quadratic,groenwold2010approximated,groenwold2008equivalence,groenwold2007incomplete,etman2012first,lutchman2014using,groenwold2008sequential,etman2009diagonal,wood2009non,etman2006sequential}, and the citations therein.
+
+Simple descriptions of enforced convergence and termination and algorithmic representations~\cite{groenwold2010conditional,groenwold2009globally,park2014globally,svanberg2002class}.
+
+Finally, the reader is invited to peruse Chapter 3 (\emph{Problem-solving}), in the \emph{Fabric of Reality} (David Deutsch) for a philosophical basis in the Popperian spirit. 
 
 \bibliographystyle{unsrt} 
 \addcontentsline{toc}{chapter}{References} 

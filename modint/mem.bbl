@@ -1,9 +1,4 @@
-\begin{thebibliography}{1}
-
-\bibitem{deutsch2011fabric}
-D.~Deutsch.
-\newblock {\em The Fabric of Reality}.
-\newblock Penguin Books Limited, 2011.
+\begin{thebibliography}{10}
 
 \bibitem{munro2022}
 {An interpretation of Bayesian global optimization as proposed by Snyman and
@@ -12,11 +7,38 @@ D.~Deutsch.
   \url{https://github.com/dirkmunro89/SOAPs/blob/main/bayopt/bay_20220104.pdf}.
 \newblock Accessed: 2022-02-27.
 
+\bibitem{fleury1986structural}
+C.~Fleury and V.~Braibant.
+\newblock Structural optimization: a new dual method using mixed variables.
+\newblock {\em International journal for numerical methods in engineering},
+  23(3):409--428, 1986.
+
+\bibitem{fleury1989conlin}
+C.~Fleury.
+\newblock {CONLIN}: an efficient dual optimizer based on convex approximation
+  concepts.
+\newblock {\em Structural optimization}, 1(2):81--89, 1989.
+
 \bibitem{groenwold2010approximated}
 A.A. Groenwold, L.F.P. Etman, and D.W. Wood.
 \newblock Approximated approximations for {SAO}.
 \newblock {\em Structural and Multidisciplinary Optimization}, 41(1):39--56,
   2010.
+
+\bibitem{boyd2004convex}
+S.~Boyd and L.~Vandenberghe.
+\newblock {\em Convex optimization}.
+\newblock Cambridge university press, 2004.
+
+\bibitem{falk1969lagrange}
+J.E. Falk.
+\newblock Lagrange multipliers and nonconvex programs.
+\newblock {\em SIAM Journal on Control}, 7(4):534--545, 1969.
+
+\bibitem{cplex2009v12}
+{Cplex, IBM ILOG}.
+\newblock {V12. 1: User’s Manual for CPLEX}.
+\newblock {\em International Business Machines Corporation}, 46(53):157, 2009.
 
 \bibitem{osqp}
 B.~Stellato, G.~Banjac, P.~Goulart, A.~Bemporad, and S.~Boyd.
@@ -34,5 +56,108 @@ F.~Van~Keulen, R.T. Haftka, and N.H. Kim.
   1: Linear systems}.
 \newblock {\em Computer methods in applied mechanics and engineering},
   194(30):3213--3243, 2005.
+
+\bibitem{Svanberg1987method}
+K.~Svanberg.
+\newblock The method of moving asymptotes—a new method for structural
+  optimization.
+\newblock {\em International journal for numerical methods in engineering},
+  24(2):359--373, 1987.
+
+\bibitem{jacobs2004framework}
+J.H. Jacobs, L.F.P. Etman, F.~Van~Keulen, and J.E. Rooda.
+\newblock Framework for sequential approximate optimization.
+\newblock {\em Structural and Multidisciplinary Optimization}, 27(5):384--400,
+  2004.
+
+\bibitem{groenwold2011saoi}
+A.A. Groenwold and L.F.P. Etman.
+\newblock {SAOi}: an algorithm for very large scale optimal design.
+\newblock In {\em Proceedings of the 9th World Congress on Structural and
+  Multidisciplinary Optimization (WCSMO-9), 13-17 Juni 2011, Shizuoka, Japan},
+  2011.
+
+\bibitem{groenwold2010quadratic}
+A.A. Groenwold and L.F.P. Etman.
+\newblock A quadratic approximation for structural topology optimization.
+\newblock {\em International Journal for Numerical Methods in Engineering},
+  82(4):505--524, 2010.
+
+\bibitem{groenwold2008equivalence}
+A.A. Groenwold and L.F.P. Etman.
+\newblock On the equivalence of optimality criterion and sequential approximate
+  optimization methods in the classical topology layout problem.
+\newblock {\em International journal for numerical methods in engineering},
+  73(3):297--316, 2008.
+
+\bibitem{groenwold2007incomplete}
+A.A. Groenwold, L.F.P. Etman, J.A. Snyman, and J.E. Rooda.
+\newblock Incomplete series expansion for function approximation.
+\newblock {\em Structural and Multidisciplinary Optimization}, 34(1):21--40,
+  2007.
+
+\bibitem{etman2012first}
+L.F.P. Etman, A.A. Groenwold, and J.E. Rooda.
+\newblock First-order sequential convex programming using approximate diagonal
+  qp subproblems.
+\newblock {\em Structural and Multidisciplinary Optimization}, 45(4):479--488,
+  2012.
+
+\bibitem{lutchman2014using}
+S.L. Lutchman, A.A. Groenwold, P.~Gauch{\'e}, and S.~Bode.
+\newblock On using a gradient-based method for heliostat field layout
+  optimization.
+\newblock {\em Energy Procedia}, 49:1429--1438, 2014.
+
+\bibitem{groenwold2008sequential}
+A.A. Groenwold and L.F.P. Etman.
+\newblock Sequential approximate optimization using dual subproblems based on
+  incomplete series expansions.
+\newblock {\em Structural and Multidisciplinary Optimization}, 36(6):547--570,
+  2008.
+
+\bibitem{etman2009diagonal}
+L.F.P. Etman, A.A. Groenwold, and J.E. Rooda.
+\newblock On diagonal qp subproblems for sequential approximate optimization.
+\newblock Citeseer.
+
+\bibitem{wood2009non}
+D.W. Wood and A.A. Groenwold.
+\newblock Non-convex dual forms based on exponential intervening variables,
+  with application to weight minimization.
+\newblock {\em International journal for numerical methods in engineering},
+  80(12):1544--1572, 2009.
+
+\bibitem{etman2006sequential}
+L.F.P. Etman, A.A. Groenwold, and J.~Rooda.
+\newblock Sequential approximate optimization in an {NLP} filter framework.
+\newblock In {\em 11th AIAA/ISSMO Multidisciplinary Analysis and Optimization
+  Conference}, page 7078.
+
+\bibitem{groenwold2010conditional}
+A.A. Groenwold and L.F.P. Etman.
+\newblock On the conditional acceptance of iterates in sao algorithms based on
+  convex separable approximations.
+\newblock {\em Structural and Multidisciplinary Optimization}, 42(2):165--178,
+  2010.
+
+\bibitem{groenwold2009globally}
+A.A. Groenwold, D.W. Wood, L.F.P. Etman, and S.~Tosserams.
+\newblock Globally convergent optimization algorithm using conservative convex
+  separable diagonal quadratic approximations.
+\newblock {\em AIAA journal}, 47(11):2649, 2009.
+
+\bibitem{park2014globally}
+S.~Park, S.H. Jeong, G.H. Yoon, A.A. Groenwold, and D-H. Choi.
+\newblock A globally convergent sequential convex programming using an enhanced
+  two-point diagonal quadratic approximation for structural optimization.
+\newblock {\em Structural and Multidisciplinary Optimization}, 50(5):739--753,
+  2014.
+
+\bibitem{svanberg2002class}
+K.~Svanberg.
+\newblock A class of globally convergent optimization methods based on
+  conservative convex separable approximations.
+\newblock {\em SIAM journal on optimization}, 12(2):555--573, 2002.
 
 \end{thebibliography}
