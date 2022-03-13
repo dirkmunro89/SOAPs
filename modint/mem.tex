@@ -234,42 +234,32 @@ with the first-order information of problem $\mathcal{P}$ at the current evaluat
 \begin{equation}
 \partial\bv[ \0] = \partial \bc \:.
 \end{equation}
-
-Needs mentioning here:
+Note moreover that second-order information is likewise available
 \begin{equation}
 \label{eq:d2p}
-\partial^2 \bv[\Delta \bx] = \partial \bc \cdot (p-1)\bx_\bI^{1-p} \cdot (\bx+\Delta\bx)^{p-2} \: ,
+\partial^2 \bv[\Delta \bx] = \partial \bc \cdot (p-1)\bx_\bI^{1-p} \cdot (\bx+\Delta\bx)^{p-2} \: .
 \end{equation}
 
 If the cost-and-constraint functions $\bc$ do indeed have a reciprocal relation to the decision variables $\bx$, or a form captured and estimated by the generalisation above, then we can expect a more accurate approximate representation of the cost-and-constraint functions $\bv$, improved estimates of the change required in the decision space $\Delta \bx$, and, ultimately, faster and more efficient solution (fewer evaluations) of the problem $\mathcal{P}$.
 
-\section{Convex problems}
+\section{Convex subproblems}
 
-Will have to mention duality... because CONLIN cooks it up so that analytic form of primal in terms of dual is available... 
-
-These is however a caveat. Beyond the cheap-to-evaluate analytic representation of the cost-and-constraint functions $\bv$ (which makes sense in its own right), we require the subproblem $\mathcal{S}$ to be \emph{convex} in order to solve it efficiently (in polynomial time) with commonly available computational methods. In general, the subproblem $\mathcal{S}$ is convex if it has a convex objective (cost) function\footnote{Formal definition.} $\c_0$, and if the feasible region described by the constraints $\c_j \le 0$, $\forall j$, is a convex set\footnote{Formal definition}. As we will see, this is often (made) easy to guarantee via particular constructions of subproblem $\mathcal{S}$.
+There are however some caveats to take care of. Beyond the cheap-to-evaluate analytic representation of the cost-and-constraint functions $\bv$ (which makes sense in its own right), we require the subproblem $\mathcal{S}$ to be \emph{convex} in order to solve it efficiently (in polynomial time) with commonly available computational methods. In general, the subproblem $\mathcal{S}$ is convex if it has a convex objective (cost) function\footnote{Formal definition.} $\c_0$, and if the feasible region described by the constraints $\c_j \le 0$, $\forall j$, is a convex set\footnote{Formal definition}. As we will see, this is often (made) easy to guarantee via particular constructions of subproblem $\mathcal{S}$.
 
 A classical and well-known construction of this form is due to Fleury \emph{et al.}, as developed for Aerospace engineering applications in the 1980's~\cite{fleury1986structural}. Fleury and co-workers devised the method of \emph{convex linearisation} (or `CONLIN', for short) for problems of structural weight minimisation subject to displacement and stress constraints~\cite{fleury1989conlin}. 
 
-In this setting, convexity of subproblem $\mathcal{S}$ is guaranteed by enforcing positive semi-definiteness of each cost-and-constraint function $\bv$, by judicious selection\footnote{Mention conservatism and seperability.} of the decision space mapping $\by = \by[\bx]$. In this context, an individual function $\v_j$ is convex if its second derivative $\partial^2\v_j$ is greater than equal to zero over its domain of defintion $\Delta \bx \in \Delta \underline{\overline{\bx}}$. 
-
-A convenient way to illustrate is by revisiting the generalisation $\by = \bx_\bI^\bp$. (Note bold p and mention different functions.) Consider again Equation (\ref{eq:d2p}). In CONLIN this is achieved by chosing $\bp$ according to the signs of the first-order information $\partial \bc$, as queried from problem $\mathcal{P}$. If $\partial_i \c_j > 0$, then $\p_{ij} = 1$, otherwise $\p_{ij}=-1$. 
-
-Consider the second-order approximate information, due to a mapping of a single decision variable, with respect to a single function ... 
+In CONLIN, convexity of subproblem $\mathcal{S}$ is guaranteed by enforcing positive semi-definiteness of each cost-and-constraint function $\bv$, by judicious selection\footnote{Mention...} of the decision space mapping $\by = \by[\bx]$. %In this context, an individual function $\v_j$ is convex if its second derivatives $\partial_i^2\v_j$, with respect to all decision variables $i$, is greater than equal to zero in the decision space subdomain $\Delta \bx \in \Delta \underline{\overline{\bx}}$.
+To illustrate this, consider the second-order information due to a mapping of a single decision variable $\x_i$, in the context of a single function $\v_j$, in terms of the generalised exponential (refer earlier) (\ref{eq:d2p})  
 \begin{equation}
-\partial_{i}^2 \v_j[\Delta \x_i] = \partial_i \c_j \cdot (\p-1)\x_i^{1-\p} \cdot (\x_i +\Delta\x_i)^{\p-2}
+\partial_{i}^2 \v_j[\Delta \x_i] = \partial_i \c_j \cdot (\p-1)\x_i^{1-\p} \cdot (\x_i +\Delta\x_i)^{\p-2} .
 \end{equation}
-That is ... 
+Convex linearisation is achieved by selecting $\p=1$ if $\partial_i \c_j \ge 0$ and $\p=-1$ otherwise\footnote{Mention duality and analytic form, only available of this is done... Later we generalise.... }. It is clear to see how this guarantees $\partial_{i}^2 \v_j[\Delta \x_i] > 0 $. 
 
-
-
-\textcolor{red}{One of the first generalized examples of such an approach / make use of this property... aimed specifically at weight minimization of structural configurations ...  CONLIN~\cite{fleury1986structural,fleury1989conlin} ... mention convexity conditions ... reciprocal and linear ... }
-
-
+%A convenient way to illustrate is by revisiting the generalisation $\by = \bx_\bI^\bp$. (Note bold p and mention different functions.) Consider again Equation (\ref{eq:d2p}). In CONLIN this is achieved by chosing $\bp$ according to the signs of the first-order information $\partial \bc$, as queried from problem $\mathcal{P}$. If $\partial_i \c_j > 0$, then $\p_{ij} = 1$, otherwise $\p_{ij}=-1$. 
 
 \section{Taylor series expansions and quadratically constrained quadratic programs}
 
-The analytic nonlinearity introduced by the decision space transformation is conveniently unpacked by Taylor series expansion $\bm{\nu}$, of the transformed cost-and-constraints $\bv$, in terms of $\Delta \bx$ (away from the current decision point $\bx$, where $\Delta \bx=0$)
+The analytic nonlinearity introduced by the decision space transformation, and how it acts to introduce approximations of the ....  is conveniently unpacked by Taylor series expansion $\bm{\nu}$, of the transformed cost-and-constraints $\bv$, in terms of $\Delta \bx$ (away from the current decision point $\bx$, where $\Delta \bx=0$)
 \begin{equation}
 \bm{\nu}[\Delta \bx] = \bv[\0] + \frac{1}{1!}\partial \bv[\0] \cdot  \Delta \bx + \frac{1}{2!}\partial^2 \bv [\0] \cdot \Delta \bx^2 + \frac{1}{3!}\partial^3 \bv[\0] \cdot \Delta \bx^3 + \ldots .
 \end{equation}
@@ -287,8 +277,9 @@ and, at the current decision point $\Delta \bx = \0$, it reduces to
 \end{equation}
 This notion of `approximated approximations' (approximation of decision space mappings) was first introduced, in this manner, by Groenwold \emph{et al.}~\cite{groenwold2010approximated}. In significant practical terms, the 2nd-order Taylor expansion allows for a flexible and general interface with common, state-of-the-art polynomial time (subproblem) solvers, which are fed with the first and (approximate) second-order information of problem $\mathcal{P}$, as formulated in sequential subproblems $\mathcal{S}$. %\footnote{Even if linear programming is applied to solve the subproblem $\mathcal{S}$, the (variable) first-order information $\partial \bm{\nu} [\Delta \bx] = \partial \bv[\0] + \partial^2 \bv[\0] \cdot \Delta \bx$ is supplied, iteratively.}. 
 
-We can therefore extend subproblem $\mathcal{S}$ as ... 
+Mention now generalised relation to CONLIN. Mention how easily convexity is enforced.
 
+We can therefore extend subproblem $\mathcal{S}$ as ... 
 
 \begin{align}
  ~\left\{ ~
@@ -309,22 +300,20 @@ Quadratically constrained quadratic program~\cite{boyd2004convex} traditionally 
 
 \section{Quadratic programs and the necessary conditions}
 
-Introduce as simplification to arrive at common 
+Introduce as simplification to arrive at common~\cite{osqp}. Will have to introduce Lagrangian somehow.... massage in terms of necessary conditions.
 
-~\cite{osqp}
+%solution methods for the form
 
-Solution methods for the form
-
-in this way, the notion of decicsion space transformations become obsolete to some extent, in practical terms. Althopugh the notion of it may be used to estimate the second order information... 
+%in this way, the notion of decicsion space transformations become obsolete to some extent, in practical terms. Althopugh the notion of it may be used to estimate the second order information... 
 
 \emph{in rough drafting}
-If we use only diagonal information. Ensure it is positive definite. and formulate the hessian of the lagrangian ... 
+%If we use only diagonal information. Ensure it is positive definite. and formulate the hessian of the lagrangian ... 
 
-Then we arrive at a convenient computational `kernel': the quadratic program (QP)\footnote{Conceptually, the step-wise solving of QP problems in general, non-linear programming, can be seen as equivalent to the way in which a linear system-solve is the `kernel' in nonlinear structural analysis. That is the `kernel' of the Newton-Rhapson method.}. In simple terms, polynomial time solution methods for QPs are often the cheapest, fastest, simplest to implement, interface, and most readily available (to an average computational engineer), and ... for subproblem $\mathcal{S}$, given some straight-forward conditions. See for example the recently released implementation by Boyd and collaborators~\cite{osqp}.  
+%Then we arrive at a convenient computational `kernel': the quadratic program (QP)\footnote{Conceptually, the step-wise solving of QP problems in general, non-linear programming, can be seen as equivalent to the way in which a linear system-solve is the `kernel' in nonlinear structural analysis. That is the `kernel' of the Newton-Rhapson method.}. In simple terms, polynomial time solution methods for QPs are often the cheapest, fastest, simplest to implement, interface, and most readily available (to an average computational engineer), and ... for subproblem $\mathcal{S}$, given some straight-forward conditions. See for example the recently released implementation by Boyd and collaborators~\cite{osqp}.  
 
-TO BE COMPLETED
+%TO BE COMPLETED
 
-Eventually we arrive rather naturally at the necessary conditions: How far can we go, before we have to evaluate the problem again..? Keeping in mind, that we can not afford to evaluate the problem an excessive number of times... etc. etc. Move limits and estimates of nonlinear information (surrogate functions/problems, second order estimates).... upon convergence / when we can stop, we get something for free: the necessary conditions are satisfied / we have arrived at the necessary conditions in a rather practical way. Done.
+Eventually we arrive rather naturally at the necessary conditions (introduce at the top, and loop back): How far can we go, before we have to evaluate the problem again..? Keeping in mind, that we can not afford to evaluate the problem an excessive number of times... etc. etc. Move limits and estimates of nonlinear information (surrogate functions/problems, second order estimates).... upon convergence / when we can stop, we get something for free: the necessary conditions are satisfied / we have arrived at the necessary conditions in a rather practical way. Done.
 
 \section*{Example: The Van der Plaats cantilever beam}
 
