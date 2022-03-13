@@ -98,6 +98,7 @@ def simu(n,m,x_p,aux,glo,out):
 #   13  :   Same as 11, but with constraint relaxation (as per Svanberg 1987)
 #   20  :   CONLIN
 #   21  :   CONLIN with adaptive exponent
+#   29  :   QCQP of CONLIN
 #   30  :   QCQP reciprocal adaptive
 #   31  :   QPLP reciprocal adaptive
 #   100 :   OSQP QP reciprocal adaptive
@@ -124,7 +125,7 @@ def simu(n,m,x_p,aux,glo,out):
 #   30,31   :   mov_*       :       Same as 20
 #           :   exp_*       :       Same as 21
 #
-#   101     :   mov_*       :       Same as 20
+#   100     :   mov_*       :       Same as 20
 #           :   exp_*       :       Same as 21
 #
 #   101     :   mov_*       :       Same as 20
@@ -168,7 +169,7 @@ def init():
     f_a=-1e8
     m_k=100
 #
-    sub=30
+    sub=32
 #
     glo=0
     cpu=0

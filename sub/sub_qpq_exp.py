@@ -28,15 +28,14 @@ def sub_qpq_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp,k):
                     tmp1=np.log((dg_1[j][i]+1e-6)/(dg[j][i]+1e-6))
                     tmp2=np.log(x_1[i]/(x_k[i]+1e-6))
                     a_tmp=1e0+tmp1/tmp2
-                    #np.log((dg_1[j][i]+1e-6)/(dg[j][i]+1e-6))/np.log(x_1[i]/(x_k[i]+1e-6))
                     a[j][i]=max(min(exp_max,a_tmp),exp_min)
 #
     c0=np.zeros(n,dtype=np.float64)
     cj=np.zeros((m,n),dtype=np.float64)
     for i in range(n):
-        c0[i]=max( ( (dg[0][i]/x_k[i])*(a[0][i]-1e0) )   , 1e-3)
+        c0[i]=max( ( (dg[0][i]/x_k[i])*(a[0][i]-1e0) )   , 1e-6)
         for j in range(m):
-            cj[j][i]=max( ( (dg[j][i])/x_k[i]*(a[j+1][i]-1e0) ) , 1e-3)
+            cj[j][i]=max( ( (dg[j+1][i])/x_k[i]*(a[j+1][i]-1e0) ) , 1e-6)
 #
     for i in range(n):
         if mov_abs < 0e0:
@@ -50,7 +49,7 @@ def sub_qpq_exp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp,k):
     sol=minimize(con_qpq_dual,x_d,args=(n,m,x_k,g,dg,dx_l,dx_u, c0, cj), \
         jac=dcon_qpq_dual,method='L-BFGS-B',bounds=tup_bds, options={'disp':False})
 #
-    if sol.status != 0: print('Warning; subproblem')
+    if sol.status != 0 or sol.success != True : print('Warning; subproblem')
 #
     x_d[:]=sol.x
 #

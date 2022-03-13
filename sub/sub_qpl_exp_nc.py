@@ -37,7 +37,7 @@ def sub_qpl_exp_nc(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,dg_1,mov,exp,k):
             cj[j][i]=dg[j+1][i]/x_k[i]*(a[j+1][i]-1e0)
             ddL[i]=ddL[i]+cj[j][i]*x_d[j]
         ddL[i]=ddL[i]+c0[i]
-        ddL[i]=max(ddL[i],1e-2)
+        ddL[i]=max(ddL[i],1e-3)
 #
     for i in range(n):
         if mov_abs < 0e0:
