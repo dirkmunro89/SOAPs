@@ -22,11 +22,10 @@ from scipy.optimize import minimize
 #
 def simu(n,m,x_p,aux,glo,out):
 #
-#   call Abaqus
+    g=np.zeros((1+m),dtype=np.float64)
+    dg=np.zeros((1+m,n),dtype=np.float64)
 #
-    if out == 1:
-        # make analysis specific output / figures etc.
-        # glo gives the sample number if multi-start is active; else 0
+#   Call abaqus
 #
     return [g,dg]
 #
@@ -53,8 +52,11 @@ def simu(n,m,x_p,aux,glo,out):
 #   13  :   Same as 11, but with constraint relaxation (as per Svanberg 1987)
 #   20  :   CONLIN
 #   21  :   CONLIN with adaptive exponent
+#   29  :   QCQP of CONLIN
 #   30  :   QCQP reciprocal adaptive
 #   31  :   QPLP reciprocal adaptive
+#   100 :   OSQP QP reciprocal adaptive
+#   101 :   LP; solved with OSQP with exact zero Hessian
 #
 #   Suproblem parameters
 #
@@ -77,6 +79,11 @@ def simu(n,m,x_p,aux,glo,out):
 #   30,31   :   mov_*       :       Same as 20
 #           :   exp_*       :       Same as 21
 #
+#   100     :   mov_*       :       Same as 20
+#           :   exp_*       :       Same as 21
+#
+#   101     :   mov_*       :       Same as 20
+#
 #   Global flags and parameters
 #
 #   f_d=1   :   activate gradient calculation via finite differences (dont if 0)
@@ -90,39 +97,41 @@ def simu(n,m,x_p,aux,glo,out):
 #
 def init():
 #
-    n=1
-    m=1
+    n=#
+    m=#
 #
-    x_i=5e0*np.ones(n,dtype=np.float64)
-    x_l=1e-6*np.ones(n,dtype=np.float64)
-    x_u=10e0*np.ones(n,dtype=np.float64)
+    x_i=np.ones(n,dtype=np.float64)
+    x_l=np.ones(n,dtype=np.float64)
+    x_u=np.ones(n,dtype=np.float64)
 #
-    f_d=0
+    f_d=1
     c_e=1e-2
     c_i=1e-2
-    c_v=1e-1
+    c_v=1e-2
     f_t=0e0
     f_a=-1e8
-    m_k=20
+    m_k=100
 #
-    sub=10
+    sub=100#2
+#
     glo=0
+    cpu=0
 #
-    mov_abs=-0.1e0
+    mov_abs=0.1e0
     mov_rel=2e0
 #
-    asy_fac=3e0/4e0#*1e-6
+    asy_fac=3e0/4e0  
     asy_adp=1e0/2e0
 #
-    exp_set=2e0
-    exp_min=-6e0
-    exp_max=-0.1
+    exp_set=1.0e0
+    exp_min=-3e0
+    exp_max=3e0
+#
+    aux=[]
 #
     mov={'mov_abs': mov_abs, 'mov_rel': mov_rel}
     exp={'exp_set': exp_set, 'exp_min': exp_min, 'exp_max': exp_max}
     asy={'asy_fac': asy_fac,'asy_adp': asy_adp}
-    aux={}
 #
-    return n,m,x_i,x_l,x_u,c_e,c_i,c_v,f_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo
+    return n,m,x_i,x_l,x_u,c_e,c_i,c_v,f_t,f_a,m_k,f_d,sub,mov,asy,exp,aux,glo,cpu
 #
-
