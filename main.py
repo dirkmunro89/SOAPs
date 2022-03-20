@@ -20,8 +20,8 @@ def loop(s):
     g_k=np.zeros(m+1,dtype=np.float64); g_1=np.zeros(m+1,dtype=np.float64); cnv=0
 #
 #   Screen output
-    if glo==0: print(('\n%3s%14s%9s%13s%17s%11s%11s')%\
-        ('k', 'Obj', 'Vio', 'Mov', '|dX|', '||dX||', '|kkt|'),flush=True)
+    if glo==0: print(('\n%3s%14s%9s%13s%13s%11s%11s%11s')%\
+        ('k', 'Obj', 'Vio', 'Mov', 'Bou', '|dX|', '||dX||', '|kkt|'),flush=True)
     for k in range(m_k):
 #
 #       Problem evaluation: function and gradient values
@@ -42,21 +42,25 @@ def loop(s):
 #
 #       Metrics; infinity, Euclidean norm, max KKT viol., and effective move limit
         d_xi=max(abs(x_p-x_k));d_xe=np.linalg.norm(x_p-x_k);kkt=np.zeros(n);mov_min=1e8;mov_max=-1e8
+        n_l=0; n_u=0
         for i in range(n):
-            mov_min=mov['mov_abs']#min(mov_min, dx_u[i]-dx_l[i])
-            mov_max=mov['mov_abs']#max(mov_max, dx_u[i]-dx_l[i])
+            mov_min=min(mov_min, dx_u[i]-dx_l[i])
+            mov_max=max(mov_max, dx_u[i]-dx_l[i])
             if (x_p[i]-x_l[i])>1e-6 and (x_u[i]-x_p[i])>1e-6: 
                 kkt[i]= kkt[i] + dg[0][i]
                 for j in range(m): 
                     kkt[i] = kkt[i] + x_d[j]*dg[j+1][i]
-        d_kkt=max(abs(kkt))
+            elif (x_p[i]-x_l[i])<=1e-6: n_l=n_l+1
+            elif (x_u[i]-x_p[i])>=1e-6: n_u=n_u+1
+#           else: print('Strange')
+        bdd=(n_l+n_u)/n; d_kkt=max(abs(kkt))
 #
 #       Screen output
-        if glo==0: print('%3d%14.3e%9.0e%11.1e|%5.1e%11.1e%11.1e%11.1e'%\
-            (k, g[0], max(g[1:]),mov_min,mov_max,d_xi,d_xe,d_kkt),flush=True)
+        if glo==0: print('%3d%14.3e%9.0e%11.1e|%5.1e%7.2f%11.1e%11.1e%11.1e'%\
+            (k, g[0], max(g[1:]),mov_min,mov_max,bdd,d_xi,d_xe,d_kkt),flush=True)
         else:
-            if k%100 == 0: print('! %3d%14.3e%9.0e%11.1e|%5.1e%11.1e%11.1e%11.1e'%\
-            (k, g[0], max(g[1:]),mov_min,mov_max,d_xi,d_xe,d_kkt),flush=True)
+            if k%100 == 0: print('%3d%14.3e%9.0e%11.1e|%5.1e%7.2f%11.1e%11.1e%11.1e'%\
+            (k, g[0], max(g[1:]),mov_min,mov_max,bdd,d_xi,d_xe,d_kkt),flush=True)
 #
 #       Termination
         if g[1] < c_v and g[0] < (1.+1e-3)*(f_a) and glo==0:

@@ -16,7 +16,9 @@ from sub.sub_oc_qpl import sub_oc_qpl
 from sub.sub_qpl_exp_nc import sub_qpl_exp_nc
 from sub.sub_osqp import sub_osqp
 from sub.sub_oslp import sub_oslp
+from sub.sub_oslp_aml import sub_oslp_aml
 from sub.sub_qpq_con import sub_qpq_con
+from sub.sub_osqp_sph import sub_osqp_sph
 #
 def subs(sub, n, m, x_k, x_d, x_l, x_u, g, dg, x_1, g_1,dg_1, x_2, L_k, U_k, k, mov, asy, exp, aux):
 #
@@ -58,6 +60,10 @@ def subs(sub, n, m, x_k, x_d, x_l, x_u, g, dg, x_1, g_1,dg_1, x_2, L_k, U_k, k, 
         [x_p,x_d,dx_l,dx_u]=sub_osqp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,g_1,dg_1,mov,exp,k)
     elif sub == 101:
         [x_p,x_d,dx_l,dx_u]=sub_oslp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,g_1,dg_1,mov)
+    elif sub == 102:
+        [x_p,x_d,dx_l,dx_u]=sub_osqp_sph(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,g_1,dg_1,mov,k)
+    elif sub == 999:
+        [x_p,x_d,dx_l,dx_u]=sub_oslp_aml(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,x_2,k,mov)
     else:
         print('ERROR; subsolver not found')
         stop

@@ -7,39 +7,30 @@ from scipy import sparse
 #
 # Generalised QP (curv approx): dual subproblem
 #
-def sub_osqp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,g_1,dg_1,mov,exp,k):
+def sub_osqp_sph(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,g_1,dg_1,mov,k):
 #
     mov_rel=mov['mov_rel']
     mov_abs=mov['mov_abs']
-    exp_set=exp['exp_set']
-    exp_min=exp['exp_min']
-    exp_max=exp['exp_max']
 #
     dx_l=np.ones(n,dtype=np.float64)
     dx_u=np.ones(n,dtype=np.float64)
     a=np.zeros((m+1,n),dtype=np.float64)
 #
-    if exp_set < 0e0:
-        a=np.ones((m+1,n),dtype=np.float64)*exp_set
-    else:
-        for i in range(n):
-            for j in range(m+1):
-                if k <= 1:
-                    a[j][i]=1e0#-1e0
-                else:
-                    a_tmp=np.log(abs(dg_1[j][i]+1e-6)/abs(dg[j][i]+1e-6))
-                    a_tmp=1e0+a_tmp/max(np.log((x_1[i]+1e-6)/(x_k[i]+1e-6)),1e-6)
-                    a[j][i]=max(min(exp_max,a_tmp),exp_min)
-#
-    c0=np.zeros(n,dtype=np.float64)
-    cj=np.zeros((m,n),dtype=np.float64)
     ddL=np.zeros(n,dtype=np.float64)
-    for i in range(n):
-        c0[i]=(dg[0][i])/(x_k[i]+1e-6)*(a[0][i]-1e0)
+#
+    c=np.zeros(m+1,dtype=np.float64)
+    dnm=np.linalg.norm(x_1-x_k)**2e0
+    if k > 0:
         for j in range(m):
-            cj[j][i]=(dg[j+1][i])/(x_k[i]+1e-6)*(a[j+1][i]-1e0)
-            ddL[i]=ddL[i]+cj[j][i]*x_d[j]
-        ddL[i]=ddL[i]+c0[i]
+            c[j]=g_1[j]-g[j]
+            for i in range(n):
+                c[j]=c[j]-dg[j][i]*(x_1[i]-x_k[i])
+            c[j]=c[j]/dnm
+#
+    for i in range(n):
+        ddL[i]=c[0]
+        for j in range(m):
+            ddL[i]=ddL[i]+c[j+1]*x_d[j]
         ddL[i]=max(ddL[i],0e0)
 #
     for i in range(n):
@@ -52,8 +43,7 @@ def sub_osqp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,g_1,dg_1,mov,exp,k):
 #
     J=dg[0]; ind = np.array(range(n))
     Q=sparse.csc_matrix((ddL, (ind, ind)), shape=(n, n))
-    tmp=np.zeros((n,n))
-    np.fill_diagonal(tmp,1e0)
+    tmp=np.zeros((n,n)); np.fill_diagonal(tmp,1e0)
     A=sparse.csc_matrix(np.append(dg[1:],tmp,axis=0))
     u=-g[1:]; l=-np.ones(m,dtype=np.float64)*1e16
 #
@@ -63,6 +53,9 @@ def sub_osqp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,g_1,dg_1,mov,exp,k):
     prob = osqp.OSQP()
     prob.setup(Q, J, A, l, u,verbose=False)
     res=prob.solve()
+#
+    if res.info.status != 'solved':
+        print('WARNING')
 #
     x_d[:]=res.y[:m]
     x=x_k+np.maximum(np.minimum(res.x,dx_u),dx_l)

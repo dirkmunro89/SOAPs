@@ -172,14 +172,14 @@ def init():
     x_u=1e0*np.ones(n,dtype=np.float64)
 #
     f_d=0
-    c_e=1e0
+    c_e=1e-1
     c_i=1e-6
     c_v=1e-1
     f_t=0e0
     f_a=-1e8
     m_k=99
 #
-    sub=999
+    sub=102#999
     glo=0
     cpu=0
 #
