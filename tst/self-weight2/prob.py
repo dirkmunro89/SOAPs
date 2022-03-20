@@ -142,8 +142,9 @@ def simu(n,m,x_p,aux,glo,out):
 #   31  :   QPLP reciprocal adaptive
 #   100 :   OSQP QP reciprocal adaptive
 #   101 :   LP; solved with OSQP with exact zero Hessian
-#   102 :   OSQP QP spherical quadratic approximation
+#   900 :   OSQP QP spherical quadratic approximation
 #   999 :   LP with AML; solved with OSQP with exact zero Hessian
+#   1000:   OSQP QP spherical quadratic approximation with AML
 #
 #   Suproblem parameters
 #
@@ -194,12 +195,13 @@ def init():
     f_a=-1e8
     m_k=99
 #
-    sub=100#999
+    sub=1000#999#999
     glo=0
     cpu=0
 #
     mov_abs=0.2e0
     mov_rel=2e0
+    mov_fct=0.5e0*np.ones(n,dtype=np.float64)
 #
     asy_fac=1e0/2e0
     asy_adp=1e0/2e0
@@ -208,7 +210,7 @@ def init():
     exp_min=-6e0 
     exp_max=-1e0
 #
-    mov={'mov_abs': mov_abs, 'mov_rel': mov_rel}
+    mov={'mov_abs': mov_abs, 'mov_rel': mov_rel, 'mov_fct': mov_fct}
     exp={'exp_set': exp_set, 'exp_min': exp_min, 'exp_max': exp_max}
     asy={'asy_fac': asy_fac,'asy_adp': asy_adp}
 #

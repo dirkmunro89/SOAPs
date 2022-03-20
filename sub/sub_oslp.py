@@ -25,16 +25,12 @@ def sub_oslp(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,g_1,dg_1,mov):
             dx_l[i] = max(x_k[i]-mov_abs*(x_u[i]-x_l[i]),x_l[i]) - x_k[i]
             dx_u[i] = min(x_k[i]+mov_abs*(x_u[i]-x_l[i]),x_u[i]) - x_k[i]
 #
-    J=dg[0]
-    ind = np.array(range(n))
+    J=dg[0]; ind = np.array(range(n))
     Q=sparse.csc_matrix((ddL, (ind, ind)), shape=(n, n))
-    tmp=dg[1:]
-    for i in range(n):
-        tmp2=np.zeros(n)
-        tmp2[i]=1
-        tmp=np.append(tmp,[tmp2],axis=0)
-    A=sparse.csc_matrix(tmp)
+    tmp=np.zeros((n,n),dtype=np.float64); np.fill_diagonal(tmp,1e0)
+    A=sparse.csc_matrix(np.append(dg[1:],tmp,axis=0))
     u=-g[1:]; l=-np.ones(m,dtype=np.float64)*1e16
+    l=np.append(l,dx_l); u=np.append(u,dx_u)
 #
     l=np.append(l,dx_l); u=np.append(u,dx_u)
 #

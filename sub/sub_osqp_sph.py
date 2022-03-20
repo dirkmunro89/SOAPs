@@ -25,7 +25,9 @@ def sub_osqp_sph(n,m,x_k,x_d,x_l,x_u,g,dg,x_1,g_1,dg_1,mov,k):
             c[j]=g_1[j]-g[j]
             for i in range(n):
                 c[j]=c[j]-dg[j][i]*(x_1[i]-x_k[i])
-            c[j]=c[j]/dnm
+            c[j]=c[j]/dnm #factor 2 to be checked; incorporate as parameter
+#
+    print(c)
 #
     for i in range(n):
         ddL[i]=c[0]

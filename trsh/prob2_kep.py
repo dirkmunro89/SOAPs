@@ -51,8 +51,12 @@ def simu(n,m,x_p,aux,glo,out):
     f[:,0] = f_tmp
 #
     # Setup and solve FE problem
-#   sK=((KE.flatten()[np.newaxis]).T*(  (0.1*xPhys + 0.9*xPhys**penal)*Emax  )).flatten(order='F')
-    sK=((KE.flatten()[np.newaxis]).T*(Emin+(xPhys)**penal*(Emax-Emin))).flatten(order='F')
+#
+#   MATERIAL LAW AS PER KOPPEN
+    sK=((KE.flatten()[np.newaxis]).T*(Emin+(0.1*xPhys+0.9*xPhys**penal)*(Emax-Emin))).flatten(order='F')
+#
+#   STANDARD MATERIAL LAW
+#   sK=((KE.flatten()[np.newaxis]).T*(Emin+(xPhys)**penal*(Emax-Emin))).flatten(order='F')
 #
     K = coo_matrix((sK,(iK,jK)),shape=(ndof,ndof)).tocsc()
     # Remove constrained dofs from matrix and convert to coo
@@ -67,10 +71,17 @@ def simu(n,m,x_p,aux,glo,out):
     ce[:] = (np.dot(u[edofMat].reshape(nelx*nely,8),KE) * u[edofMat].reshape(nelx*nely,8) ).sum(1)
 #
 #
-#   obj=( Emax*( 0.1*xPhys + 0.9*xPhys**penal  )*ce ).sum()
-    obj=( (Emin+xPhys**penal*(Emax-Emin))*ce ).sum()
-#   dc[:]=-1e0*Emax*(0.1 + 0.9*penal*xPhys**(penal-1))*ce
-    dc[:]=(-penal*xPhys**(penal-1)*(Emax-Emin))*ce
+#   MATERIAL LAW AS PER KOPPEN
+    obj=( (Emin + (0.1*xPhys + 0.9*xPhys**penal)*(Emax-Emin))*ce ).sum()
+#
+#   STANDARD MATERIAL LAW
+#   obj=( (Emin+xPhys**penal*(Emax-Emin))*ce ).sum()
+#
+#   MATERIAL LAW AS PER KOPPEN
+    dc[:]=-1e0*(Emax-Emin)*(0.1 + 0.9*penal*xPhys**(penal-1))*ce
+#
+#   STANDARD MATERIAL LAW
+#   dc[:]=(-penal*xPhys**(penal-1)*(Emax-Emin))*ce
 #
 #
     dc[:] -= u[edofMat[:, 1], 0] * 1e0 / 2
@@ -129,9 +140,10 @@ def simu(n,m,x_p,aux,glo,out):
 #   21  :   CONLIN with adaptive exponent
 #   30  :   QCQP reciprocal adaptive
 #   31  :   QPLP reciprocal adaptive
-#   900 :   OSQP QP spherical quadratic approximation
+#   100 :   OSQP QP reciprocal adaptive
+#   101 :   LP; solved with OSQP with exact zero Hessian
+#   102 :   OSQP QP spherical quadratic approximation
 #   999 :   LP with AML; solved with OSQP with exact zero Hessian
-#   1000:   OSQP QP spherical quadratic approximation with AML
 #
 #   Suproblem parameters
 #
@@ -175,14 +187,14 @@ def init():
     x_u=1e0*np.ones(n,dtype=np.float64)
 #
     f_d=0
-    c_e=1e-2
-    c_i=1e-1
+    c_e=1e-1
+    c_i=1e-6
     c_v=1e-1
     f_t=0e0
     f_a=-1e8
     m_k=99
 #
-    sub=900
+    sub=1000#999#999
     glo=0
     cpu=0
 #
@@ -193,9 +205,9 @@ def init():
     asy_fac=1e0/2e0
     asy_adp=1e0/2e0
 #
-    exp_set=-1e0
-    exp_min=-3e0 
-    exp_max=3e0
+    exp_set=1e0
+    exp_min=-6e0 
+    exp_max=-1e0
 #
     mov={'mov_abs': mov_abs, 'mov_rel': mov_rel, 'mov_fct': mov_fct}
     exp={'exp_set': exp_set, 'exp_min': exp_min, 'exp_max': exp_max}
