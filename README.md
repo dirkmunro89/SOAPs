@@ -1,6 +1,8 @@
 # SOAPs
 **S**equential **O**ptimization **A**pproximate sub**P**roblem**s**
 
+DEVELOPMENT HAS, FOR THE TIME BEING, SHIFTED TO [99problems](https://github.com/dirkmunro89/99problems), WHICH WILL EVENTUALLY REPLACE THE CONTENTS OF THIS REPO.
+
 THIS REPO IS UNDER CONSTRUCTION; THE CODE IS SUBJECT TO TESTING AND CLEANING
 
 Verification examples available in ./ver/
